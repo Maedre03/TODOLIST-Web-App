@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TodoList.Api/TodoList.Api.csproj" />
+    <Project Path="src/TodoList.Application/TodoList.Application.csproj" />
+    <Project Path="src/TodoList.Domain/TodoList.Domain.csproj" />
+    <Project Path="src/TodoList.Infrastructure/TodoList.Infrastructure.csproj" />
+  </Folder>
+</Solution>

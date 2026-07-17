@@ -1,0 +1,37 @@
+# Visual Studio / .NET
+[Oo]bj/
+[Bb]in/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+packages/
+TestResults/
+*.log
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+.npm/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environments
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+.vscode/
+
+# Other
+*.sqlite
+*.db
