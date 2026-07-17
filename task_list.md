@@ -117,9 +117,9 @@ The HTTP interface. Thin layer — just receives requests and delegates to Appli
 - [x] Add `[Authorize]` attribute to protect endpoints
 
 ### Middleware
-- [ ] **Global Exception Handling Middleware** — catch all unhandled exceptions, return structured JSON error (never expose stack traces to clients)
-- [ ] **Request Logging Middleware** — log every incoming HTTP request
-- [ ] **CORS Middleware** — allow Angular frontend to call the API
+- [x] **Global Exception Handling Middleware** — catch all unhandled exceptions, return structured JSON error (never expose stack traces to clients)
+- [x] **Request Logging Middleware** — log every incoming HTTP request
+- [x] **CORS Middleware** — allow Angular frontend to call the API
 
 ### Cross-Cutting Configuration
 - [ ] Configure **JWT Authentication** in `Program.cs`
