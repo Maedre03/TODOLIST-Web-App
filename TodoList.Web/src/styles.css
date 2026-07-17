@@ -1,1 +1,379 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   TodoList Web App — Global Design System
+   ============================================================
+   This file defines the complete visual foundation of the app.
+   All CSS custom properties (variables), resets, typography,
+   and utility classes live here.
+
+   Design philosophy: Dark-first, premium SaaS aesthetic.
+   ============================================================ */
+
+/* ── Google Fonts ────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── PrimeNG Icons ──────────────────────────────────────────── */
+@import 'primeicons/primeicons.css';
+
+/* ── CSS Custom Properties (Design Tokens) ──────────────────── */
+:root {
+  /* ── Surface Colors (dark mode — higher number = deeper) ── */
+  --surface-ground:    #0B0D11;   /* Page background (Level 0) */
+  --surface-section:   #111318;   /* Sidebar, sections (Level 1) */
+  --surface-card:      #1A1D24;   /* Cards, panels (Level 2) */
+  --surface-overlay:   #22262F;   /* Hover states, modals (Level 3) */
+  --surface-border:    #2A2E38;   /* Borders, dividers */
+  --surface-hover:     #2A2E38;   /* Hover background */
+
+  /* ── Text Colors ─────────────────────────────────────────── */
+  --text-color:          #E8EAF0; /* Primary text (off-white) */
+  --text-color-secondary:#8B8FA3; /* Secondary/muted text */
+  --text-color-disabled: #4A4E5A; /* Disabled text */
+
+  /* ── Accent Colors (Violet) ──────────────────────────────── */
+  --primary-color:       #8B5CF6; /* Primary brand color */
+  --primary-color-hover: #A78BFA; /* Lighter on hover */
+  --primary-color-press: #7C3AED; /* Darker on press */
+  --primary-color-text:  #FFFFFF; /* Text on primary bg */
+
+  /* ── Status Colors (desaturated for dark mode) ───────────── */
+  --color-success:  #34D399;
+  --color-warning:  #FBBF24;
+  --color-danger:   #F87171;
+  --color-info:     #60A5FA;
+
+  /* ── Priority Colors ─────────────────────────────────────── */
+  --priority-high-bg:    rgba(248, 113, 113, 0.15);
+  --priority-high-text:  #FCA5A5;
+  --priority-medium-bg:  rgba(251, 191, 36, 0.15);
+  --priority-medium-text:#FDE68A;
+  --priority-low-bg:     rgba(96, 165, 250, 0.15);
+  --priority-low-text:   #93C5FD;
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs:    0.75rem;     /* 12px */
+  --font-size-sm:    0.8125rem;   /* 13px */
+  --font-size-base:  0.875rem;    /* 14px */
+  --font-size-md:    1rem;        /* 16px */
+  --font-size-lg:    1.375rem;    /* 22px */
+  --font-size-xl:    1.75rem;     /* 28px */
+
+  /* ── Spacing Scale (4px base) ────────────────────────────── */
+  --space-1:  0.25rem;   /* 4px */
+  --space-2:  0.5rem;    /* 8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+
+  /* ── Border Radius ───────────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+
+  /* ── Shadows (subtle for dark mode) ──────────────────────── */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+
+  /* ── Transitions ─────────────────────────────────────────── */
+  --transition-fast:   150ms ease-out;
+  --transition-base:   200ms ease-out;
+  --transition-slow:   300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --sidebar-width:     240px;
+  --sidebar-collapsed: 64px;
+  --topbar-height:     60px;
+}
+
+
+/* ── Global Reset & Base ────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-color);
+  background-color: var(--surface-ground);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-color-hover);
+}
+
+
+/* ── Typography ─────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+h1 { font-size: var(--font-size-xl); font-weight: 700; }
+h2 { font-size: var(--font-size-lg); }
+h3 { font-size: var(--font-size-md); }
+
+p {
+  color: var(--text-color-secondary);
+  line-height: 1.6;
+}
+
+
+/* ── Custom Scrollbar (dark themed) ─────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-color-disabled);
+}
+
+
+/* ── Focus Styles (accessible in dark mode) ─────────────────── */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+
+/* ── Skeleton Loading Animation ─────────────────────────────── */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-card) 25%,
+    var(--surface-overlay) 50%,
+    var(--surface-card) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+
+/* ── Fade In Animation (for page content) ───────────────────── */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-slow) forwards;
+}
+
+/* Staggered entrance for list items */
+.stagger-item {
+  opacity: 0;
+  animation: fadeIn var(--transition-slow) forwards;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 50ms; }
+.stagger-item:nth-child(3) { animation-delay: 100ms; }
+.stagger-item:nth-child(4) { animation-delay: 150ms; }
+.stagger-item:nth-child(5) { animation-delay: 200ms; }
+.stagger-item:nth-child(6) { animation-delay: 250ms; }
+.stagger-item:nth-child(7) { animation-delay: 300ms; }
+.stagger-item:nth-child(8) { animation-delay: 350ms; }
+.stagger-item:nth-child(9) { animation-delay: 400ms; }
+.stagger-item:nth-child(10) { animation-delay: 450ms; }
+
+
+/* ── Slide Out Animation (for deleting items) ───────────────── */
+@keyframes slideOut {
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+.slide-out {
+  animation: slideOut 200ms ease-in forwards;
+}
+
+
+/* ── Priority Badge Styles ──────────────────────────────────── */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.priority-badge.high {
+  background: var(--priority-high-bg);
+  color: var(--priority-high-text);
+}
+
+.priority-badge.medium {
+  background: var(--priority-medium-bg);
+  color: var(--priority-medium-text);
+}
+
+.priority-badge.low {
+  background: var(--priority-low-bg);
+  color: var(--priority-low-text);
+}
+
+
+/* ── PrimeNG Dark Mode Overrides ────────────────────────────── */
+
+/* Make PrimeNG inputs match our dark theme */
+.p-inputtext,
+.p-textarea,
+.p-password input,
+.p-select {
+  background: var(--surface-card) !important;
+  border-color: var(--surface-border) !important;
+  color: var(--text-color) !important;
+}
+
+.p-inputtext:focus,
+.p-textarea:focus,
+.p-password input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* PrimeNG button overrides */
+.p-button {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500 !important;
+  transition: all var(--transition-base) !important;
+}
+
+.p-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.p-button:active {
+  transform: translateY(0);
+}
+
+/* PrimeNG dialog/modal overrides */
+.p-dialog {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: var(--surface-card) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+  color: var(--text-color) !important;
+}
+
+.p-dialog .p-dialog-content {
+  background: var(--surface-card) !important;
+  color: var(--text-color) !important;
+}
+
+/* PrimeNG toast overrides */
+.p-toast .p-toast-message {
+  border-radius: var(--radius-md) !important;
+  backdrop-filter: blur(12px);
+}
+
+/* PrimeNG paginator overrides */
+.p-paginator {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-color-secondary) !important;
+}
+
+/* PrimeNG calendar/datepicker overrides */
+.p-datepicker {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--surface-border) !important;
+  color: var(--text-color) !important;
+}
+
+
+/* ── Utility Classes ────────────────────────────────────────── */
+.text-primary   { color: var(--primary-color) !important; }
+.text-secondary { color: var(--text-color-secondary) !important; }
+.text-success   { color: var(--color-success) !important; }
+.text-warning   { color: var(--color-warning) !important; }
+.text-danger    { color: var(--color-danger) !important; }
+
+.bg-surface-ground  { background: var(--surface-ground) !important; }
+.bg-surface-section { background: var(--surface-section) !important; }
+.bg-surface-card    { background: var(--surface-card) !important; }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
