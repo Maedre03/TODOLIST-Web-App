@@ -5,4 +5,7 @@
     <Project Path="src/TodoList.Domain/TodoList.Domain.csproj" />
     <Project Path="src/TodoList.Infrastructure/TodoList.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TodoList.UnitTests/TodoList.UnitTests.csproj" />
+  </Folder>
 </Solution>

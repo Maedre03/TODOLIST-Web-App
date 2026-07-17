@@ -1,0 +1,1475 @@
+{
+  "TodoList.Domain.dll": {
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Exceptions/DomainException.cs": {
+      "TodoList.Domain.Exceptions.DomainException": {
+        "System.Void TodoList.Domain.Exceptions.DomainException::.ctor(System.String)": {
+          "Lines": {
+            "9": 7,
+            "10": 7,
+            "11": 7
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Exceptions/EmailAlreadyInUseException.cs": {
+      "TodoList.Domain.Exceptions.EmailAlreadyInUseException": {
+        "System.Void TodoList.Domain.Exceptions.EmailAlreadyInUseException::.ctor(System.String)": {
+          "Lines": {
+            "9": 1,
+            "10": 1,
+            "11": 1
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Exceptions/InvalidCredentialsException.cs": {
+      "TodoList.Domain.Exceptions.InvalidCredentialsException": {
+        "System.Void TodoList.Domain.Exceptions.InvalidCredentialsException::.ctor()": {
+          "Lines": {
+            "9": 2,
+            "10": 2,
+            "11": 2
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Exceptions/TodoNotFoundException.cs": {
+      "TodoList.Domain.Exceptions.TodoNotFoundException": {
+        "System.Void TodoList.Domain.Exceptions.TodoNotFoundException::.ctor(System.Guid)": {
+          "Lines": {
+            "9": 4,
+            "10": 4,
+            "11": 4
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Exceptions/UnauthorizedTodoAccessException.cs": {
+      "TodoList.Domain.Exceptions.UnauthorizedTodoAccessException": {
+        "System.Void TodoList.Domain.Exceptions.UnauthorizedTodoAccessException::.ctor(System.Guid,System.Guid)": {
+          "Lines": {
+            "9": 0,
+            "10": 0,
+            "11": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Events/TodoCreatedEvent.cs": {
+      "TodoList.Domain.Events.TodoCreatedEvent": {
+        "System.DateTime TodoList.Domain.Events.TodoCreatedEvent::get_OccurredOn()": {
+          "Lines": {
+            "11": 11
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Entities.Todo TodoList.Domain.Events.TodoCreatedEvent::get_Todo()": {
+          "Lines": {
+            "12": 1
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Events.TodoCreatedEvent::.ctor(TodoList.Domain.Entities.Todo)": {
+          "Lines": {
+            "14": 11,
+            "15": 11,
+            "16": 11,
+            "17": 11
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Entities/Todo.cs": {
+      "TodoList.Domain.Entities.Todo": {
+        "System.String TodoList.Domain.Entities.Todo::get_Title()": {
+          "Lines": {
+            "12": 31
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Domain.Entities.Todo::get_Description()": {
+          "Lines": {
+            "13": 31
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Domain.Entities.Todo::get_IsCompleted()": {
+          "Lines": {
+            "14": 21
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Domain.Entities.Todo::get_Priority()": {
+          "Lines": {
+            "15": 20
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Domain.Entities.Todo::get_DueDate()": {
+          "Lines": {
+            "16": 20
+          },
+          "Branches": []
+        },
+        "System.Guid TodoList.Domain.Entities.Todo::get_CreatedByUserId()": {
+          "Lines": {
+            "21": 13
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Entities.User TodoList.Domain.Entities.Todo::get_CreatedByUser()": {
+          "Lines": {
+            "26": 11
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Entities.Todo::.ctor()": {
+          "Lines": {
+            "31": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Entities.Todo::.ctor(System.String,System.String,TodoList.Domain.Enums.Priority,System.Nullable`1<System.DateTime>,System.Guid)": {
+          "Lines": {
+            "36": 11,
+            "37": 11,
+            "38": 11,
+            "39": 11,
+            "40": 11,
+            "41": 11,
+            "42": 11,
+            "43": 11,
+            "44": 11,
+            "45": 11,
+            "46": 11,
+            "48": 11,
+            "49": 11
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Entities/User.cs": {
+      "TodoList.Domain.Entities.User": {
+        "System.String TodoList.Domain.Entities.User::get_Username()": {
+          "Lines": {
+            "11": 10
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Domain.Entities.User::get_Email()": {
+          "Lines": {
+            "12": 10
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Domain.Entities.User::get_PasswordHash()": {
+          "Lines": {
+            "13": 14
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.ICollection`1<TodoList.Domain.Entities.Todo> TodoList.Domain.Entities.User::get_Todos()": {
+          "Lines": {
+            "18": 5
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Entities.User::.ctor()": {
+          "Lines": {
+            "23": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Entities.User::.ctor(System.String,System.String,System.String)": {
+          "Lines": {
+            "28": 4,
+            "29": 4,
+            "30": 4,
+            "31": 4,
+            "32": 4,
+            "33": 4,
+            "34": 4,
+            "35": 4,
+            "36": 4
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Domain/Common/Entity.cs": {
+      "TodoList.Domain.Common.Entity`1": {
+        "TId TodoList.Domain.Common.Entity`1::get_Id()": {
+          "Lines": {
+            "13": 39
+          },
+          "Branches": []
+        },
+        "System.DateTime TodoList.Domain.Common.Entity`1::get_CreatedAt()": {
+          "Lines": {
+            "18": 22
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Domain.Common.Entity`1::get_UpdatedAt()": {
+          "Lines": {
+            "23": 0
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Domain.Common.Entity`1::get_IsDeleted()": {
+          "Lines": {
+            "29": 17
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IReadOnlyCollection`1<TodoList.Domain.Common.IDomainEvent> TodoList.Domain.Common.Entity`1::get_DomainEvents()": {
+          "Lines": {
+            "36": 3
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Common.Entity`1::AddDomainEvent(TodoList.Domain.Common.IDomainEvent)": {
+          "Lines": {
+            "42": 11,
+            "43": 11,
+            "44": 11
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Common.Entity`1::ClearDomainEvents()": {
+          "Lines": {
+            "50": 0,
+            "51": 0,
+            "52": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Common.Entity`1::RemoveDomainEvent(TodoList.Domain.Common.IDomainEvent)": {
+          "Lines": {
+            "58": 0,
+            "59": 0,
+            "60": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Domain.Common.Entity`1::.ctor()": {
+          "Lines": {
+            "31": 15
+          },
+          "Branches": []
+        }
+      }
+    }
+  },
+  "TodoList.Application.dll": {
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/DependencyInjection.cs": {
+      "TodoList.Application.DependencyInjection": {
+        "Microsoft.Extensions.DependencyInjection.IServiceCollection TodoList.Application.DependencyInjection::AddApplicationServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)": {
+          "Lines": {
+            "12": 0,
+            "13": 0,
+            "15": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "24": 0,
+            "25": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Queries/GetTodosPaged/GetTodosPagedQuery.cs": {
+      "TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery": {
+        "System.Int32 TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery::get_PageNumber()": {
+          "Lines": {
+            "12": 5
+          },
+          "Branches": []
+        },
+        "System.Int32 TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery::get_PageSize()": {
+          "Lines": {
+            "13": 5
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery::get_SearchTerm()": {
+          "Lines": {
+            "14": 3
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery::get_SortBy()": {
+          "Lines": {
+            "15": 3
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQuery::get_SortDescending()": {
+          "Lines": {
+            "16": 3
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Queries/GetTodosPaged/GetTodosPagedQueryHandler.cs": {
+      "TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 1,
+            "21": 1,
+            "22": 1,
+            "23": 1,
+            "24": 1
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler/<>c": {
+        "TodoList.Application.Common.DTOs.TodoDto TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler/<>c::<Handle>b__3_0(TodoList.Domain.Entities.Todo)": {
+          "Lines": {
+            "37": 3,
+            "38": 3,
+            "39": 3,
+            "40": 3,
+            "41": 3,
+            "42": 3,
+            "43": 3,
+            "44": 3,
+            "45": 3,
+            "46": 3
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler/<Handle>d__3": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetTodosPaged.GetTodosPagedQueryHandler/<Handle>d__3::MoveNext()": {
+          "Lines": {
+            "27": 1,
+            "28": 1,
+            "29": 1,
+            "30": 1,
+            "31": 1,
+            "32": 1,
+            "33": 1,
+            "34": 1,
+            "35": 1,
+            "48": 1,
+            "49": 1
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Queries/GetTodoById/GetTodoByIdQuery.cs": {
+      "TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQuery": {
+        "System.Guid TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQuery::get_Id()": {
+          "Lines": {
+            "10": 5
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Queries/GetTodoById/GetTodoByIdQueryHandler.cs": {
+      "TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQueryHandler": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQueryHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "19": 2,
+            "20": 2,
+            "21": 2,
+            "22": 2,
+            "23": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQueryHandler/<Handle>d__3": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetTodoById.GetTodoByIdQueryHandler/<Handle>d__3::MoveNext()": {
+          "Lines": {
+            "26": 2,
+            "27": 2,
+            "29": 2,
+            "30": 1,
+            "31": 1,
+            "34": 1,
+            "35": 1,
+            "36": 1,
+            "37": 1,
+            "38": 1,
+            "39": 1,
+            "40": 1,
+            "41": 1,
+            "42": 1,
+            "43": 1,
+            "44": 1
+          },
+          "Branches": [
+            {
+              "Line": 29,
+              "Offset": 191,
+              "EndOffset": 193,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 29,
+              "Offset": 191,
+              "EndOffset": 211,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Queries/GetAllTodos/GetAllTodosQueryHandler.cs": {
+      "TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 2,
+            "21": 2,
+            "22": 2,
+            "23": 2,
+            "24": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler/<>c": {
+        "TodoList.Application.Common.DTOs.TodoDto TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler/<>c::<Handle>b__3_0(TodoList.Domain.Entities.Todo)": {
+          "Lines": {
+            "30": 4,
+            "31": 4,
+            "32": 4,
+            "33": 4,
+            "34": 4,
+            "35": 4,
+            "36": 4,
+            "37": 4,
+            "38": 4,
+            "39": 4
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler/<Handle>d__3": {
+        "System.Void TodoList.Application.Features.Todos.Queries.GetAllTodos.GetAllTodosQueryHandler/<Handle>d__3::MoveNext()": {
+          "Lines": {
+            "27": 2,
+            "28": 2,
+            "40": 2
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/UpdateTodo/UpdateTodoCommand.cs": {
+      "TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand": {
+        "System.Guid TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::get_Id()": {
+          "Lines": {
+            "11": 9
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::get_Title()": {
+          "Lines": {
+            "12": 8
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::get_Description()": {
+          "Lines": {
+            "13": 8
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::get_Priority()": {
+          "Lines": {
+            "14": 8
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::get_DueDate()": {
+          "Lines": {
+            "15": 17
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommand::.ctor(System.Guid,System.String,System.String,TodoList.Domain.Enums.Priority,System.Nullable`1<System.DateTime>)": {
+          "Lines": {
+            "10": 8
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/UpdateTodo/UpdateTodoCommandHandler.cs": {
+      "TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandHandler": {
+        "System.Void TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Domain.Repositories.IUnitOfWork,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 2,
+            "21": 2,
+            "22": 2,
+            "23": 2,
+            "24": 2,
+            "25": 2,
+            "26": 2,
+            "27": 2,
+            "28": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "31": 2,
+            "33": 2,
+            "35": 2,
+            "36": 1,
+            "37": 1,
+            "41": 1,
+            "42": 1,
+            "43": 1,
+            "44": 1,
+            "47": 1,
+            "50": 1,
+            "53": 1,
+            "54": 1
+          },
+          "Branches": [
+            {
+              "Line": 35,
+              "Offset": 202,
+              "EndOffset": 204,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 35,
+              "Offset": 202,
+              "EndOffset": 222,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/UpdateTodo/UpdateTodoCommandValidator.cs": {
+      "TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandValidator": {
+        "System.Void TodoList.Application.Features.Todos.Commands.UpdateTodo.UpdateTodoCommandValidator::.ctor()": {
+          "Lines": {
+            "11": 6,
+            "12": 6,
+            "13": 6,
+            "14": 6,
+            "16": 6,
+            "17": 6,
+            "18": 6,
+            "20": 6,
+            "21": 6,
+            "23": 6,
+            "24": 6,
+            "26": 6,
+            "27": 6,
+            "28": 12,
+            "29": 6
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/ToggleTodoComplete/ToggleTodoCompleteCommand.cs": {
+      "TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommand": {
+        "System.Guid TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommand::get_Id()": {
+          "Lines": {
+            "9": 5
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/ToggleTodoComplete/ToggleTodoCompleteCommandHandler.cs": {
+      "TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommandHandler": {
+        "System.Void TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommandHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Domain.Repositories.IUnitOfWork,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 2,
+            "21": 2,
+            "22": 2,
+            "23": 2,
+            "24": 2,
+            "25": 2,
+            "26": 2,
+            "27": 2,
+            "28": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Todos.Commands.ToggleTodoComplete.ToggleTodoCompleteCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "31": 2,
+            "32": 2,
+            "34": 2,
+            "35": 1,
+            "36": 1,
+            "40": 1,
+            "42": 1,
+            "43": 1,
+            "45": 1,
+            "46": 1
+          },
+          "Branches": [
+            {
+              "Line": 34,
+              "Offset": 202,
+              "EndOffset": 204,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 34,
+              "Offset": 202,
+              "EndOffset": 222,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/DeleteTodo/DeleteTodoCommand.cs": {
+      "TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommand": {
+        "System.Guid TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommand::get_Id()": {
+          "Lines": {
+            "9": 5
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/DeleteTodo/DeleteTodoCommandHandler.cs": {
+      "TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommandHandler": {
+        "System.Void TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommandHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Domain.Repositories.IUnitOfWork,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 2,
+            "21": 2,
+            "22": 2,
+            "23": 2,
+            "24": 2,
+            "25": 2,
+            "26": 2,
+            "27": 2,
+            "28": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Todos.Commands.DeleteTodo.DeleteTodoCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "31": 2,
+            "32": 2,
+            "34": 2,
+            "35": 1,
+            "36": 1,
+            "39": 1,
+            "41": 1,
+            "43": 1,
+            "44": 1
+          },
+          "Branches": [
+            {
+              "Line": 34,
+              "Offset": 202,
+              "EndOffset": 204,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 34,
+              "Offset": 202,
+              "EndOffset": 222,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/CreateTodo/CreateTodoCommand.cs": {
+      "TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand": {
+        "System.String TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand::get_Title()": {
+          "Lines": {
+            "11": 9
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand::get_Description()": {
+          "Lines": {
+            "12": 9
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand::get_Priority()": {
+          "Lines": {
+            "13": 9
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand::get_DueDate()": {
+          "Lines": {
+            "14": 19
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommand::.ctor(System.String,System.String,TodoList.Domain.Enums.Priority,System.Nullable`1<System.DateTime>)": {
+          "Lines": {
+            "10": 8
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/CreateTodo/CreateTodoCommandHandler.cs": {
+      "TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandHandler": {
+        "System.Void TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandHandler::.ctor(TodoList.Domain.Repositories.ITodoRepository,TodoList.Domain.Repositories.IUnitOfWork,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "20": 1,
+            "21": 1,
+            "22": 1,
+            "23": 1,
+            "24": 1,
+            "25": 1,
+            "26": 1,
+            "27": 1,
+            "28": 1
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "31": 1,
+            "33": 1,
+            "34": 1,
+            "35": 1,
+            "36": 1,
+            "37": 1,
+            "38": 1,
+            "39": 1,
+            "42": 1,
+            "45": 1,
+            "48": 1,
+            "49": 1
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Todos/Commands/CreateTodo/CreateTodoCommandValidator.cs": {
+      "TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandValidator": {
+        "System.Void TodoList.Application.Features.Todos.Commands.CreateTodo.CreateTodoCommandValidator::.ctor()": {
+          "Lines": {
+            "11": 7,
+            "12": 7,
+            "13": 7,
+            "14": 7,
+            "15": 7,
+            "17": 7,
+            "18": 7,
+            "20": 7,
+            "21": 7,
+            "23": 7,
+            "24": 7,
+            "25": 14,
+            "26": 7
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Auth/Commands/RegisterUser/RegisterUserCommand.cs": {
+      "TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommand": {
+        "System.String TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommand::get_Username()": {
+          "Lines": {
+            "9": 41
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Auth/Commands/RegisterUser/RegisterUserCommandHandler.cs": {
+      "TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandHandler": {
+        "System.Void TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandHandler::.ctor(TodoList.Domain.Repositories.IUserRepository,TodoList.Domain.Repositories.IUnitOfWork,TodoList.Application.Common.Interfaces.IPasswordHasher)": {
+          "Lines": {
+            "21": 2,
+            "22": 2,
+            "23": 2,
+            "24": 2,
+            "25": 2,
+            "26": 2,
+            "27": 2,
+            "28": 2,
+            "29": 2
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "32": 2,
+            "34": 2,
+            "35": 1,
+            "36": 1,
+            "40": 1,
+            "43": 1,
+            "46": 1,
+            "47": 1,
+            "50": 1,
+            "51": 1
+          },
+          "Branches": [
+            {
+              "Line": 34,
+              "Offset": 180,
+              "EndOffset": 182,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 34,
+              "Offset": 180,
+              "EndOffset": 200,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Auth/Commands/RegisterUser/RegisterUserCommandValidator.cs": {
+      "TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandValidator": {
+        "System.Void TodoList.Application.Features.Auth.Commands.RegisterUser.RegisterUserCommandValidator::.ctor()": {
+          "Lines": {
+            "10": 7,
+            "11": 7,
+            "12": 7,
+            "13": 7,
+            "14": 7,
+            "15": 7,
+            "17": 7,
+            "18": 7,
+            "19": 7,
+            "20": 7,
+            "22": 7,
+            "23": 7,
+            "24": 7,
+            "25": 7
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Auth/Commands/LoginUser/LoginUserCommand.cs": {
+      "TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommand": {
+        "System.String TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommand::get_Email()": {
+          "Lines": {
+            "8": 15
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Features/Auth/Commands/LoginUser/LoginUserCommandHandler.cs": {
+      "TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommandHandler": {
+        "System.Void TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommandHandler::.ctor(TodoList.Domain.Repositories.IUserRepository,TodoList.Application.Common.Interfaces.IPasswordHasher,TodoList.Application.Common.Interfaces.IJwtTokenService)": {
+          "Lines": {
+            "19": 3,
+            "20": 3,
+            "21": 3,
+            "22": 3,
+            "23": 3,
+            "24": 3,
+            "25": 3,
+            "26": 3,
+            "27": 3
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommandHandler/<Handle>d__4": {
+        "System.Void TodoList.Application.Features.Auth.Commands.LoginUser.LoginUserCommandHandler/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "30": 3,
+            "32": 3,
+            "35": 3,
+            "36": 2,
+            "37": 2,
+            "41": 1,
+            "42": 1
+          },
+          "Branches": [
+            {
+              "Line": 35,
+              "Offset": 168,
+              "EndOffset": 170,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 2
+            },
+            {
+              "Line": 35,
+              "Offset": 168,
+              "EndOffset": 213,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 1
+            },
+            {
+              "Line": 35,
+              "Offset": 218,
+              "EndOffset": 220,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 2
+            },
+            {
+              "Line": 35,
+              "Offset": 218,
+              "EndOffset": 227,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Models/ApiResponse.cs": {
+      "TodoList.Application.Common.Models.ApiResponse`1": {
+        "System.Boolean TodoList.Application.Common.Models.ApiResponse`1::get_Success()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Common.Models.ApiResponse`1::get_Message()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "T TodoList.Application.Common.Models.ApiResponse`1::get_Data()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IDictionary`2<System.String,System.String[]> TodoList.Application.Common.Models.ApiResponse`1::get_Errors()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        },
+        "TodoList.Application.Common.Models.ApiResponse`1<T> TodoList.Application.Common.Models.ApiResponse`1::SuccessResponse(T,System.String)": {
+          "Lines": {
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0
+          },
+          "Branches": []
+        },
+        "TodoList.Application.Common.Models.ApiResponse`1<T> TodoList.Application.Common.Models.ApiResponse`1::ErrorResponse(System.String,System.Collections.Generic.IDictionary`2<System.String,System.String[]>)": {
+          "Lines": {
+            "27": 0,
+            "28": 0,
+            "29": 0,
+            "30": 0,
+            "31": 0,
+            "32": 0,
+            "33": 0,
+            "34": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Models/DomainEventNotification.cs": {
+      "TodoList.Application.Common.Models.DomainEventNotification`1": {
+        "TDomainEvent TodoList.Application.Common.Models.DomainEventNotification`1::get_DomainEvent()": {
+          "Lines": {
+            "18": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Common.Models.DomainEventNotification`1::.ctor(TDomainEvent)": {
+          "Lines": {
+            "13": 0,
+            "14": 0,
+            "15": 0,
+            "16": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Models/PaginatedList.cs": {
+      "TodoList.Application.Common.Models.PaginatedList`1": {
+        "System.Collections.Generic.IReadOnlyList`1<T> TodoList.Application.Common.Models.PaginatedList`1::get_Items()": {
+          "Lines": {
+            "12": 1
+          },
+          "Branches": []
+        },
+        "System.Int32 TodoList.Application.Common.Models.PaginatedList`1::get_PageNumber()": {
+          "Lines": {
+            "13": 3
+          },
+          "Branches": []
+        },
+        "System.Int32 TodoList.Application.Common.Models.PaginatedList`1::get_TotalPages()": {
+          "Lines": {
+            "14": 2
+          },
+          "Branches": []
+        },
+        "System.Int32 TodoList.Application.Common.Models.PaginatedList`1::get_TotalCount()": {
+          "Lines": {
+            "15": 1
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Application.Common.Models.PaginatedList`1::get_HasPreviousPage()": {
+          "Lines": {
+            "25": 1
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Application.Common.Models.PaginatedList`1::get_HasNextPage()": {
+          "Lines": {
+            "26": 1
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Common.Models.PaginatedList`1::.ctor(System.Collections.Generic.IReadOnlyList`1<T>,System.Int32,System.Int32,System.Int32)": {
+          "Lines": {
+            "17": 1,
+            "18": 1,
+            "19": 1,
+            "20": 1,
+            "21": 1,
+            "22": 1,
+            "23": 1
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Mappings/TodoMappingProfile.cs": {
+      "TodoList.Application.Common.Mappings.TodoMappingProfile": {
+        "System.Void TodoList.Application.Common.Mappings.TodoMappingProfile::.ctor()": {
+          "Lines": {
+            "9": 0,
+            "10": 0,
+            "11": 0,
+            "12": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Mappings/UserMappingProfile.cs": {
+      "TodoList.Application.Common.Mappings.UserMappingProfile": {
+        "System.Void TodoList.Application.Common.Mappings.UserMappingProfile::.ctor()": {
+          "Lines": {
+            "8": 0,
+            "9": 0,
+            "11": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Exceptions/ValidationException.cs": {
+      "TodoList.Application.Common.Exceptions.ValidationException": {
+        "System.Collections.Generic.IDictionary`2<System.String,System.String[]> TodoList.Application.Common.Exceptions.ValidationException::get_Errors()": {
+          "Lines": {
+            "27": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Common.Exceptions.ValidationException::.ctor()": {
+          "Lines": {
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0
+          },
+          "Branches": []
+        },
+        "System.Void TodoList.Application.Common.Exceptions.ValidationException::.ctor(System.Collections.Generic.IEnumerable`1<FluentValidation.Results.ValidationFailure>)": {
+          "Lines": {
+            "20": 0,
+            "21": 0,
+            "22": 0,
+            "23": 0,
+            "24": 0,
+            "25": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/DTOs/CreateTodoRequest.cs": {
+      "TodoList.Application.Common.DTOs.CreateTodoRequest": {
+        "System.String TodoList.Application.Common.DTOs.CreateTodoRequest::get_Title()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Common.DTOs.CreateTodoRequest::get_Description()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Application.Common.DTOs.CreateTodoRequest::get_Priority()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Application.Common.DTOs.CreateTodoRequest::get_DueDate()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/DTOs/TodoDto.cs": {
+      "TodoList.Application.Common.DTOs.TodoDto": {
+        "System.Guid TodoList.Application.Common.DTOs.TodoDto::get_Id()": {
+          "Lines": {
+            "11": 5
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Common.DTOs.TodoDto::get_Title()": {
+          "Lines": {
+            "12": 13
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Common.DTOs.TodoDto::get_Description()": {
+          "Lines": {
+            "13": 10
+          },
+          "Branches": []
+        },
+        "System.Boolean TodoList.Application.Common.DTOs.TodoDto::get_IsCompleted()": {
+          "Lines": {
+            "14": 5
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Application.Common.DTOs.TodoDto::get_Priority()": {
+          "Lines": {
+            "15": 6
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Application.Common.DTOs.TodoDto::get_DueDate()": {
+          "Lines": {
+            "16": 5
+          },
+          "Branches": []
+        },
+        "System.DateTime TodoList.Application.Common.DTOs.TodoDto::get_CreatedAt()": {
+          "Lines": {
+            "17": 5
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/DTOs/UpdateTodoRequest.cs": {
+      "TodoList.Application.Common.DTOs.UpdateTodoRequest": {
+        "System.String TodoList.Application.Common.DTOs.UpdateTodoRequest::get_Title()": {
+          "Lines": {
+            "11": 0
+          },
+          "Branches": []
+        },
+        "System.String TodoList.Application.Common.DTOs.UpdateTodoRequest::get_Description()": {
+          "Lines": {
+            "12": 0
+          },
+          "Branches": []
+        },
+        "TodoList.Domain.Enums.Priority TodoList.Application.Common.DTOs.UpdateTodoRequest::get_Priority()": {
+          "Lines": {
+            "13": 0
+          },
+          "Branches": []
+        },
+        "System.Nullable`1<System.DateTime> TodoList.Application.Common.DTOs.UpdateTodoRequest::get_DueDate()": {
+          "Lines": {
+            "14": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Behaviors/LoggingBehavior.cs": {
+      "TodoList.Application.Common.Behaviors.LoggingBehavior`2": {
+        "System.Void TodoList.Application.Common.Behaviors.LoggingBehavior`2::.ctor(Microsoft.Extensions.Logging.ILogger`1<TodoList.Application.Common.Behaviors.LoggingBehavior`2<TRequest,TResponse>>)": {
+          "Lines": {
+            "11": 0,
+            "12": 0,
+            "13": 0,
+            "14": 0
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Common.Behaviors.LoggingBehavior`2/<Handle>d__2": {
+        "System.Void TodoList.Application.Common.Behaviors.LoggingBehavior`2/<Handle>d__2::MoveNext()": {
+          "Lines": {
+            "17": 0,
+            "18": 0,
+            "20": 0,
+            "22": 0,
+            "24": 0,
+            "25": 0
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Behaviors/PerformanceBehavior.cs": {
+      "TodoList.Application.Common.Behaviors.PerformanceBehavior`2": {
+        "System.Void TodoList.Application.Common.Behaviors.PerformanceBehavior`2::.ctor(Microsoft.Extensions.Logging.ILogger`1<TRequest>,TodoList.Application.Common.Interfaces.ICurrentUserService)": {
+          "Lines": {
+            "14": 0,
+            "15": 0,
+            "16": 0,
+            "17": 0,
+            "18": 0,
+            "19": 0,
+            "20": 0,
+            "21": 0
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Common.Behaviors.PerformanceBehavior`2/<Handle>d__4": {
+        "System.Void TodoList.Application.Common.Behaviors.PerformanceBehavior`2/<Handle>d__4::MoveNext()": {
+          "Lines": {
+            "24": 0,
+            "25": 0,
+            "27": 0,
+            "29": 0,
+            "31": 0,
+            "33": 0,
+            "34": 0,
+            "35": 0,
+            "36": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "42": 0,
+            "43": 0
+          },
+          "Branches": [
+            {
+              "Line": 33,
+              "Offset": 229,
+              "EndOffset": 234,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 36,
+              "Offset": 283,
+              "EndOffset": 285,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 36,
+              "Offset": 283,
+              "EndOffset": 292,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 229,
+              "EndOffset": 417,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/Users/yigit/Documents/Staj/src/TodoList.Application/Common/Behaviors/ValidationBehavior.cs": {
+      "TodoList.Application.Common.Behaviors.ValidationBehavior`2": {
+        "System.Void TodoList.Application.Common.Behaviors.ValidationBehavior`2::.ctor(System.Collections.Generic.IEnumerable`1<FluentValidation.IValidator`1<TRequest>>)": {
+          "Lines": {
+            "19": 0,
+            "20": 0,
+            "21": 0,
+            "22": 0
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Common.Behaviors.ValidationBehavior`2/<>c": {
+        "System.Boolean TodoList.Application.Common.Behaviors.ValidationBehavior`2/<>c::<Handle>b__2_0(FluentValidation.Results.ValidationResult)": {
+          "Lines": {
+            "34": 0
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IEnumerable`1<FluentValidation.Results.ValidationFailure> TodoList.Application.Common.Behaviors.ValidationBehavior`2/<>c::<Handle>b__2_1(FluentValidation.Results.ValidationResult)": {
+          "Lines": {
+            "35": 0
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Common.Behaviors.ValidationBehavior`2/<>c__DisplayClass2_1": {
+        "System.Threading.Tasks.Task`1<FluentValidation.Results.ValidationResult> TodoList.Application.Common.Behaviors.ValidationBehavior`2/<>c__DisplayClass2_1::<Handle>b__2(FluentValidation.IValidator`1<TRequest>)": {
+          "Lines": {
+            "31": 0
+          },
+          "Branches": []
+        }
+      },
+      "TodoList.Application.Common.Behaviors.ValidationBehavior`2/<Handle>d__2": {
+        "System.Void TodoList.Application.Common.Behaviors.ValidationBehavior`2/<Handle>d__2::MoveNext()": {
+          "Lines": {
+            "25": 0,
+            "26": 0,
+            "27": 0,
+            "28": 0,
+            "30": 0,
+            "33": 0,
+            "36": 0,
+            "38": 0,
+            "39": 0,
+            "40": 0,
+            "42": 0,
+            "44": 0,
+            "45": 0
+          },
+          "Branches": [
+            {
+              "Line": 26,
+              "Offset": 75,
+              "EndOffset": 80,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 297,
+              "EndOffset": 299,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 297,
+              "EndOffset": 322,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 333,
+              "EndOffset": 335,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 33,
+              "Offset": 333,
+              "EndOffset": 358,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 38,
+              "Offset": 388,
+              "EndOffset": 390,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 38,
+              "Offset": 388,
+              "EndOffset": 403,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 26,
+              "Offset": 75,
+              "EndOffset": 425,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}
