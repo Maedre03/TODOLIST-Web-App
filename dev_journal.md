@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+b97f314 feat: add FluentValidation and ValidationBehavior
+b8cac75 journal: Day 1 — DTOs completed
 8bb3769 feat: complete CreateTodoRequest, UpdateTodoRequest, and ApiResponse DTOs
 b43bc8d journal: Day 1 — Queries and Handlers implemented
 6c9a49e feat: add Queries, Handlers, and DTOs to Application layer
-0a94903 journal: Day 1 — Auth commands implemented
-2f9a1a8 feat: add RegisterUserCommand and LoginUserCommand with auth interfaces
 ```
 
 ### ✅ Tasks Completed
@@ -36,7 +36,7 @@ b43bc8d journal: Day 1 — Queries and Handlers implemented
 - Defined `IRepository<T>` and `ITodoRepository` interfaces
 - Defined custom Domain Exceptions (`TodoNotFoundException`, `UnauthorizedTodoAccessException`)
 
-**Phase 2 — Application Layer (started)**
+**Phase 2 — Application Layer (in progress)**
 - Installed `MediatR` NuGet package
 - Set up MediatR dependency injection registration in `DependencyInjection.cs`
 - Created `IUnitOfWork` and `ICurrentUserService` interfaces
@@ -51,8 +51,11 @@ b43bc8d journal: Day 1 — Queries and Handlers implemented
 - Implemented `GetTodoByIdQuery` and `GetTodoByIdQueryHandler`
 - Implemented `GetTodosPagedQuery` and `GetTodosPagedQueryHandler`
 - Added `TodoDto`, `CreateTodoRequest`, `UpdateTodoRequest`, and `ApiResponse<T>`, `PaginatedList<T>` models
-- Created `TodoNotFoundException`
 - Extended `ITodoRepository` with `GetPagedByUserIdAsync` for paginated queries
+- Installed `FluentValidation.DependencyInjectionExtensions`
+- Created `CreateTodoCommandValidator`, `UpdateTodoCommandValidator`, `RegisterUserCommandValidator`
+- Created `ValidationBehavior` to wire FluentValidation into the MediatR pipeline automatically
+- Added a custom `ValidationException` to encapsulate validation errors
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -70,13 +73,14 @@ b43bc8d journal: Day 1 — Queries and Handlers implemented
 - **Dedicated Response Wrappers**: Implemented `PaginatedList<T>` and `ApiResponse<T>` to encapsulate responses along with metadata (Success flag, TotalCount, TotalPages, Errors) to give the frontend all the data it needs for UI controls consistently across the API.
 - **Repository-level Pagination**: Decided to add `GetPagedByUserIdAsync` to `ITodoRepository`. Filtering, sorting, and pagination must be handled in the database query (via the repository) rather than loading all items into application memory.
 - **Separate Request DTOs**: Created `CreateTodoRequest` and `UpdateTodoRequest` instead of reusing MediatR commands as API payloads. This ensures the API payload contracts are decoupled from internal Application logic.
+- **Validation Pipeline Behavior**: Integrated FluentValidation directly into MediatR using a pipeline behavior (`ValidationBehavior`). This ensures that every command is validated before it ever reaches the handler. This keeps the handlers clean and focused purely on business logic rather than validation checks. We also created a custom `ValidationException` to format these errors properly.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] Continue with DTOs and validation pipeline (FluentValidation).
 - [ ] Add AutoMapper configurations.
+- [ ] Add Logging and Performance Behaviors.
 
 ---
 
