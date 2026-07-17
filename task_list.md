@@ -81,18 +81,18 @@ Industry standard — separates "reading data" from "changing data".
 Implements all the interfaces defined in Application. The only layer that knows about the database.
 
 ### Entity Framework Core / Database
-- [ ] Create `ApplicationDbContext` (registers all entities)
-- [ ] Configure entity mappings using **Fluent API** (table names, column types, indexes)
-  - [ ] `TodoConfiguration` (indexes on `UserId`, `IsDeleted`)
-  - [ ] `UserConfiguration`
-- [ ] Implement **soft delete** — override `SaveChangesAsync` to set `IsDeleted=true` instead of deleting
-- [ ] Implement **automatic auditing** — auto-set `CreatedAt`, `UpdatedAt` on save
-- [ ] Create first database migration: `InitialCreate`
-- [ ] Create database seeder for development data
+- [x] Create `ApplicationDbContext` (registers all entities)
+- [x] Configure entity mappings using **Fluent API** (table names, column types, indexes)
+  - [x] `TodoConfiguration` (indexes on `UserId`, `IsDeleted`)
+  - [x] `UserConfiguration`
+- [x] Implement **soft delete** — override `SaveChangesAsync` to set `IsDeleted=true` instead of deleting
+- [x] Implement **automatic auditing** — auto-set `CreatedAt`, `UpdatedAt` on save
+- [x] Create first database migration: `InitialCreate`
+- [x] Create database seeder for development data
 
 ### Repositories
-- [ ] `GenericRepository<T>` implementing `IRepository<T>` (base CRUD)
-- [ ] `TodoRepository` implementing `ITodoRepository` (todo-specific queries)
+- [x] `GenericRepository<T>` implementing `IRepository<T>` (base CRUD)
+- [x] `TodoRepository` implementing `ITodoRepository` (todo-specific queries)
 
 ### Authentication
 - [ ] Install `Microsoft.AspNetCore.Authentication.JwtBearer`
@@ -101,7 +101,7 @@ Implements all the interfaces defined in Application. The only layer that knows 
 - [ ] Implement `PasswordHasher` (using BCrypt)
 
 ### Dependency Injection
-- [ ] `InfrastructureServiceExtensions` — register all Infrastructure services in one place
+- [x] `InfrastructureServiceExtensions` — register all Infrastructure services in one place
 
 ---
 

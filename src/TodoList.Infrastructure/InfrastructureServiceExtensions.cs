@@ -1,0 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using TodoList.Domain.Repositories;
+using TodoList.Infrastructure.Persistence;
+using TodoList.Infrastructure.Persistence.Repositories;
+
+namespace TodoList.Infrastructure;
+
+public static class InfrastructureServiceExtensions
+{
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+        services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<TodoList.Domain.Repositories.IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        
+        services.AddTransient<TodoList.Application.Common.Interfaces.IDateTimeProvider, TodoList.Infrastructure.Services.DateTimeProvider>();
+        services.AddScoped<TodoList.Application.Common.Interfaces.ICurrentUserService, TodoList.Infrastructure.Services.CurrentUserService>();
+        services.AddScoped<TodoList.Application.Common.Interfaces.IPasswordHasher, TodoList.Infrastructure.Services.PasswordHasher>();
+        services.AddScoped<TodoList.Application.Common.Interfaces.IJwtTokenService, TodoList.Infrastructure.Services.JwtTokenService>();
+
+        return services;
+    }
+}
