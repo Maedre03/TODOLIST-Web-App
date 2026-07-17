@@ -61,18 +61,18 @@ Industry standard — separates "reading data" from "changing data".
 - [x] Wire FluentValidation into MediatR pipeline via `ValidationBehavior`
 
 ### AutoMapper Profiles
-- [ ] `TodoMappingProfile` (`Todo` entity → `TodoDto`)
-- [ ] `UserMappingProfile`
+- [x] `TodoMappingProfile` (`Todo` entity → `TodoDto`)
+- [x] `UserMappingProfile`
 
 ### Pipeline Behaviors (MediatR middleware)
-- [ ] `ValidationBehavior<TRequest, TResponse>` — auto-validate every command
-- [ ] `LoggingBehavior<TRequest, TResponse>` — log every command/query execution
-- [ ] `PerformanceBehavior<TRequest, TResponse>` — warn if a handler takes >500ms
+- [x] `ValidationBehavior<TRequest, TResponse>` — auto-validate every command
+- [x] `LoggingBehavior<TRequest, TResponse>` — log every command/query execution
+- [x] `PerformanceBehavior<TRequest, TResponse>` — warn if a handler takes >500ms
 
 ### Interfaces / Abstractions
-- [ ] `ICurrentUserService` — abstraction to get the currently logged-in user's ID
-- [ ] `IDateTimeProvider` — abstraction for getting current time (makes testing easy)
-- [ ] `IJwtTokenService` — abstraction for generating JWT tokens
+- [x] `ICurrentUserService` — abstraction to get the currently logged-in user's ID
+- [x] `IDateTimeProvider` — abstraction for getting current time (makes testing easy)
+- [x] `IJwtTokenService` — abstraction for generating JWT tokens
 
 ---
 
