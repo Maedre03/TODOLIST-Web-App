@@ -21,7 +21,6 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<TodoList.Domain.Repositories.IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
         services.AddTransient<TodoList.Application.Common.Interfaces.IDateTimeProvider, TodoList.Infrastructure.Services.DateTimeProvider>();
-        services.AddScoped<TodoList.Application.Common.Interfaces.ICurrentUserService, TodoList.Infrastructure.Services.CurrentUserService>();
         services.AddScoped<TodoList.Application.Common.Interfaces.IPasswordHasher, TodoList.Infrastructure.Services.PasswordHasher>();
         services.AddScoped<TodoList.Application.Common.Interfaces.IJwtTokenService, TodoList.Infrastructure.Services.JwtTokenService>();
 

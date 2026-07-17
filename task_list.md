@@ -122,20 +122,20 @@ The HTTP interface. Thin layer — just receives requests and delegates to Appli
 - [x] **CORS Middleware** — allow Angular frontend to call the API
 
 ### Cross-Cutting Configuration
-- [ ] Configure **JWT Authentication** in `Program.cs`
-- [ ] Configure **Swagger/OpenAPI** with JWT auth support (lock icon in Swagger UI)
-- [ ] Add **Health Check endpoint** (`/health`) — used by load balancers in production
-- [ ] Add **Rate Limiting** — prevent abuse (e.g., max 100 requests/minute per IP)
-- [ ] Implement `ICurrentUserService` using `IHttpContextAccessor`
-- [ ] Configure `appsettings.json` with proper sections:
+- [x] Configure **JWT Authentication** in `Program.cs`
+- [x] Configure **Swagger/OpenAPI** with JWT auth support (lock icon in Swagger UI)
+- [x] Add **Health Check endpoint** (`/health`) — used by load balancers in production
+- [x] Add **Rate Limiting** — prevent abuse (e.g., max 100 requests/minute per IP)
+- [x] Implement `ICurrentUserService` using `IHttpContextAccessor`
+- [x] Configure `appsettings.json` with proper sections:
   - `ConnectionStrings`
   - `JwtSettings` (secret, issuer, expiry)
   - `CorsSettings`
-- [ ] Create `appsettings.Development.json` for local overrides
+- [x] Create `appsettings.Development.json` for local overrides
 
 ### Logging
-- [ ] Install `Serilog` + `Serilog.AspNetCore` + `Serilog.Sinks.Console` + `Serilog.Sinks.File`
-- [ ] Configure structured logging (JSON format — readable by log aggregators like Datadog)
+- [x] Install `Serilog` + `Serilog.AspNetCore` + `Serilog.Sinks.Console` + `Serilog.Sinks.File`
+- [x] Configure structured logging (JSON format — readable by log aggregators like Datadog)
 
 ---
 
