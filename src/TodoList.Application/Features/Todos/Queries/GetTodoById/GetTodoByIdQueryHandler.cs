@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TodoList.Application.Common.DTOs;
-using TodoList.Application.Common.Exceptions;
+using TodoList.Domain.Exceptions;
 using TodoList.Application.Common.Interfaces;
 using TodoList.Domain.Repositories;
 

@@ -55,10 +55,10 @@ Industry standard — separates "reading data" from "changing data".
 - [x] `ApiResponse<T>` generic success/error response wrapper
 
 ### Validation (FluentValidation)
-- [ ] `CreateTodoCommandValidator` (title required, max length, dueDate not in past, etc.)
-- [ ] `UpdateTodoCommandValidator`
-- [ ] `RegisterUserCommandValidator` (email format, password strength, etc.)
-- [ ] Wire FluentValidation into MediatR pipeline via `ValidationBehavior`
+- [x] `CreateTodoCommandValidator` (title required, max length, dueDate not in past, etc.)
+- [x] `UpdateTodoCommandValidator`
+- [x] `RegisterUserCommandValidator` (email format, password strength, etc.)
+- [x] Wire FluentValidation into MediatR pipeline via `ValidationBehavior`
 
 ### AutoMapper Profiles
 - [ ] `TodoMappingProfile` (`Todo` entity → `TodoDto`)
