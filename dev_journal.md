@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+8bb3769 feat: complete CreateTodoRequest, UpdateTodoRequest, and ApiResponse DTOs
+b43bc8d journal: Day 1 — Queries and Handlers implemented
 6c9a49e feat: add Queries, Handlers, and DTOs to Application layer
 0a94903 journal: Day 1 — Auth commands implemented
 2f9a1a8 feat: add RegisterUserCommand and LoginUserCommand with auth interfaces
-e518f7e journal: Day 1 — Delete and Toggle commands implemented
-121701e feat: add DeleteTodoCommand and ToggleTodoCompleteCommand
 ```
 
 ### ✅ Tasks Completed
@@ -50,7 +50,7 @@ e518f7e journal: Day 1 — Delete and Toggle commands implemented
 - Implemented `GetAllTodosQuery` and `GetAllTodosQueryHandler`
 - Implemented `GetTodoByIdQuery` and `GetTodoByIdQueryHandler`
 - Implemented `GetTodosPagedQuery` and `GetTodosPagedQueryHandler`
-- Added `TodoDto` and `PaginatedList<T>` models
+- Added `TodoDto`, `CreateTodoRequest`, `UpdateTodoRequest`, and `ApiResponse<T>`, `PaginatedList<T>` models
 - Created `TodoNotFoundException`
 - Extended `ITodoRepository` with `GetPagedByUserIdAsync` for paginated queries
 
@@ -67,8 +67,9 @@ e518f7e journal: Day 1 — Delete and Toggle commands implemented
 - **Authentication Abstractions**: We defined `IPasswordHasher` and `IJwtTokenService` in the Application layer, but we DO NOT implement them here. The actual implementation (BCrypt, JWT Bearer) requires external libraries, which belongs in Infrastructure. This strictly enforces the Dependency Rule of Clean Architecture.
 - **Domain Exceptions for Auth**: Created `EmailAlreadyInUseException` and `InvalidCredentialsException`. By using typed exceptions instead of generic ones or returning nulls, the API layer (Phase 4) can easily map these to HTTP 409 Conflict and HTTP 401 Unauthorized via global middleware.
 - **Custom exceptions for missing data**: Created `TodoNotFoundException` instead of returning null or generic exceptions. This makes the code expressive and allows the API layer to map this to HTTP 404 globally.
-- **Dedicated PaginatedList response**: Implemented `PaginatedList<T>` to encapsulate paginated responses along with metadata (TotalCount, TotalPages) to give the frontend all the data it needs for UI controls.
+- **Dedicated Response Wrappers**: Implemented `PaginatedList<T>` and `ApiResponse<T>` to encapsulate responses along with metadata (Success flag, TotalCount, TotalPages, Errors) to give the frontend all the data it needs for UI controls consistently across the API.
 - **Repository-level Pagination**: Decided to add `GetPagedByUserIdAsync` to `ITodoRepository`. Filtering, sorting, and pagination must be handled in the database query (via the repository) rather than loading all items into application memory.
+- **Separate Request DTOs**: Created `CreateTodoRequest` and `UpdateTodoRequest` instead of reusing MediatR commands as API payloads. This ensures the API payload contracts are decoupled from internal Application logic.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
