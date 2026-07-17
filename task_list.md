@@ -110,11 +110,11 @@ Implements all the interfaces defined in Application. The only layer that knows 
 The HTTP interface. Thin layer — just receives requests and delegates to Application.
 
 ### Structure
-- [ ] Create `Controllers/` folder (or use Minimal API Endpoints)
-  - [ ] `TodosController` (CRUD endpoints)
-  - [ ] `AuthController` (register, login)
-- [ ] Implement **Route versioning** (e.g., `/api/v1/todos`) — industry standard
-- [ ] Add `[Authorize]` attribute to protect endpoints
+- [x] Create `Controllers/` folder (or use Minimal API Endpoints)
+  - [x] `TodosController` (CRUD endpoints)
+  - [x] `AuthController` (register, login)
+- [x] Implement **Route versioning** (e.g., `/api/v1/todos`) — industry standard
+- [x] Add `[Authorize]` attribute to protect endpoints
 
 ### Middleware
 - [ ] **Global Exception Handling Middleware** — catch all unhandled exceptions, return structured JSON error (never expose stack traces to clients)
