@@ -11,9 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
-4d597bc Phase 2 (Part 1): Install MediatR and setup DI registration
-ce76866 docs: Add root README.md and update gitignore
-976d561 Initial project setup
+4ca75b4 feat: add CreateTodoCommand and handler, IUnitOfWork, ICurrentUserService
+f0f6c5a chore: expand project rules — architecture, security, DB, testing, Angular, code style
+3e3d560 chore: update project rules — mandatory git commit+push after every task batch
+fb7065f chore: add project AI rules — auto-update dev journal after each task batch
+99e2e88 journal: Day 1 — project setup, Phase 1 complete, Phase 2 started
 ```
 
 ### ✅ Tasks Completed
@@ -37,6 +39,8 @@ ce76866 docs: Add root README.md and update gitignore
 **Phase 2 — Application Layer (started)**
 - Installed `MediatR` NuGet package
 - Set up MediatR dependency injection registration in `DependencyInjection.cs`
+- Created `IUnitOfWork` and `ICurrentUserService` interfaces
+- Implemented `CreateTodoCommand` and `CreateTodoCommandHandler`
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -44,12 +48,12 @@ ce76866 docs: Add root README.md and update gitignore
 - **Clean Architecture (4 layers)**: Domain → Application → Infrastructure → API. Each layer only knows about the layer below it. This makes the code testable and swappable (e.g., swap SQL Server for PostgreSQL without touching business logic).
 - **CQRS with MediatR**: Separates "reading" from "writing" operations. Each use case is its own class — easy to find, test, and modify independently.
 - **Repository pattern**: Application layer defines interfaces (`ITodoRepository`), Infrastructure implements them. Application never touches EF Core directly.
+- **IUnitOfWork abstraction**: Separated database commit logic (`SaveChangesAsync`) from repository query/add logic. Ensures commands can coordinate multiple changes in one transaction without bleeding EF Core into Application.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] `CreateTodoCommand` + `CreateTodoCommandHandler`
 - [ ] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
 - [ ] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
 - [ ] Start on DTOs and FluentValidation
