@@ -95,10 +95,10 @@ Implements all the interfaces defined in Application. The only layer that knows 
 - [x] `TodoRepository` implementing `ITodoRepository` (todo-specific queries)
 
 ### Authentication
-- [ ] Install `Microsoft.AspNetCore.Authentication.JwtBearer`
-- [ ] Install `BCrypt.Net-Next` (for hashing passwords — NEVER store plain text)
-- [ ] Implement `JwtTokenService` (generates signed JWT tokens)
-- [ ] Implement `PasswordHasher` (using BCrypt)
+- [x] Install `Microsoft.AspNetCore.Authentication.JwtBearer`
+- [x] Install `BCrypt.Net-Next` (for hashing passwords — NEVER store plain text)
+- [x] Implement `JwtTokenService` (generates signed JWT tokens)
+- [x] Implement `PasswordHasher` (using BCrypt)
 
 ### Dependency Injection
 - [x] `InfrastructureServiceExtensions` — register all Infrastructure services in one place

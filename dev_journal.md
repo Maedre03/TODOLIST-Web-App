@@ -97,11 +97,14 @@ ab36a5d journal: Day 1 - FluentValidation implemented
 - **Domain Event Dispatching in DbContext**: Before saving changes, `ApplicationDbContext` pulls events from entities and publishes them through MediatR. This allows decoupling cross-cutting actions (like sending an email when a Todo is created) from the core handler logic.
 - **Dummy Implementations for Auth Services**: Created `CurrentUserService` and `PasswordHasher` shells to satisfy MediatR dependency requirements for the handlers until we install BCrypt and integrate JWTs.
 
+- Installed `BCrypt.Net-Next` and implemented `PasswordHasher` for secure password storage.
+- Installed `Microsoft.AspNetCore.Authentication.JwtBearer` and implemented `JwtTokenService` using `Microsoft.IdentityModel.Tokens` to generate signed JWTs.
+
 ### ⚠️ Problems / Blockers
 - *(None today)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 3 — Authentication (Install BCrypt & JwtBearer, implement `JwtTokenService` and `PasswordHasher`)
+- [ ] Phase 4 — API Layer (Controllers, Middlewares, Configuration)
 
 ---
 
