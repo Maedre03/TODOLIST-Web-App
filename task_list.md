@@ -37,7 +37,7 @@ Industry standard — separates "reading data" from "changing data".
 
 ### Commands (actions that change data)
 - [x] `CreateTodoCommand` + `CreateTodoCommandHandler`
-- [ ] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
+- [x] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
 - [ ] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
 - [ ] `ToggleTodoCompleteCommand` + Handler
 - [ ] `RegisterUserCommand` + Handler
