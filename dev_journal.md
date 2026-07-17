@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+121701e feat: add DeleteTodoCommand and ToggleTodoCompleteCommand
+2eb6e69 journal: Day 1 — UpdateTodoCommand implemented
 81407fe feat: add UpdateTodoCommand and handler
 9f5d67f journal: Day 1 — CreateTodoCommand implemented
 4ca75b4 feat: add CreateTodoCommand and handler, IUnitOfWork, ICurrentUserService
-f0f6c5a chore: expand project rules — architecture, security, DB, testing, Angular, code style
-3e3d560 chore: update project rules — mandatory git commit+push after every task batch
 ```
 
 ### ✅ Tasks Completed
@@ -42,6 +42,8 @@ f0f6c5a chore: expand project rules — architecture, security, DB, testing, Ang
 - Created `IUnitOfWork` and `ICurrentUserService` interfaces
 - Implemented `CreateTodoCommand` and `CreateTodoCommandHandler`
 - Implemented `UpdateTodoCommand` and `UpdateTodoCommandHandler`
+- Implemented `DeleteTodoCommand` and `DeleteTodoCommandHandler`
+- Implemented `ToggleTodoCompleteCommand` and `ToggleTodoCompleteCommandHandler`
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -51,14 +53,16 @@ f0f6c5a chore: expand project rules — architecture, security, DB, testing, Ang
 - **Repository pattern**: Application layer defines interfaces (`ITodoRepository`), Infrastructure implements them. Application never touches EF Core directly.
 - **IUnitOfWork abstraction**: Separated database commit logic (`SaveChangesAsync`) from repository query/add logic. Ensures commands can coordinate multiple changes in one transaction without bleeding EF Core into Application.
 - **Authorization in Query**: In `UpdateTodoCommandHandler`, we fetch the Todo using `GetByIdAndUserAsync`. This enforces that users can only update their own items, addressing a key security requirement early in the Application layer.
+- **Targeted Updates vs Full Updates**: Created a specific `ToggleTodoCompleteCommand` instead of forcing the frontend to use `UpdateTodoCommand` just to check a box. This is better for performance and intent-driven APIs.
+- **Soft Delete in Repository**: `DeleteTodoCommandHandler` calls `_todoRepository.Delete()`. Following our project rules, this will be implemented as a soft delete (`IsDeleted = true`) inside the EF Core Infrastructure layer, keeping the Application layer completely agnostic of how deletion is stored.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
-- [ ] `ToggleTodoCompleteCommand` + Handler
-- [ ] Start on DTOs and FluentValidation
+- [ ] `RegisterUserCommand` + Handler
+- [ ] `LoginUserCommand` + Handler (returns JWT token)
+- [ ] Start on Queries (GetAllTodos, GetTodoById)
 
 ---
 
