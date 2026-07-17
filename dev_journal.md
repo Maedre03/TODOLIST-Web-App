@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging, CORS)
+efacde2 journal: Day 1 - phase 4 API Layer structure implemented
 775d644 feat: implement Phase 4 API Layer structure (Controllers, Route versioning, Authorize)
 bc79e98 feat: complete Phase 3 authentication with BCrypt and JwtBearer
 d433b5a journal: Day 1 - phase 3 database layer implemented
-93d9a27 feat: implement phase 3 database layer
-8f124c8 journal: Day 1 - completed Phase 2
 ```
 
 ### ✅ Tasks Completed
@@ -80,6 +80,9 @@ d433b5a journal: Day 1 - phase 3 database layer implemented
 - Implemented `AuthController` with register and login endpoints using MediatR.
 - Implemented Route Versioning using `[Route("api/v1/[controller]")]` on all controllers to ensure API backward compatibility.
 - Added `[Authorize]` attribute to `TodosController` to properly protect the endpoints.
+- Implemented `ExceptionHandlingMiddleware` to catch all unhandled exceptions and convert them to standard JSON `ApiResponse<T>` objects based on the exception type.
+- Implemented `RequestLoggingMiddleware` to manually track and log HTTP method, path, and execution time.
+- Configured `CORS Middleware` in `Program.cs` to lock down requests strictly from the `http://localhost:4200` Angular frontend.
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -107,12 +110,14 @@ d433b5a journal: Day 1 - phase 3 database layer implemented
 - **Dummy Implementations for Auth Services**: Created `CurrentUserService` and `PasswordHasher` shells to satisfy MediatR dependency requirements for the handlers until we install BCrypt and integrate JWTs.
 - **Thin Controllers**: The controllers (`TodosController`, `AuthController`) contain practically no logic. They simply construct MediatR commands/queries from HTTP requests and send them. This ensures the business logic remains strictly in the Application layer, making the controllers easy to test and maintain.
 - **Route Versioning (`/api/v1/`)**: Including versioning in the API routes from the start is an industry standard practice that prevents breaking clients when major API changes are required in the future.
+- **Global Exception Handling Middleware**: Instead of wrapping every controller action in a `try-catch` block, we catch exceptions globally. We map our custom domain exceptions to specific HTTP status codes (404 for NotFound, 400 for Validation, 403 for Forbidden) and never leak a 500 stack trace to the client.
+- **CORS locked down**: In a production environment, wildcard CORS `*` is a security risk. We explicitly bound CORS to only allow the Angular development server (`http://localhost:4200`).
 
 ### ⚠️ Problems / Blockers
 - *(None today)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 4 — API Layer Middlewares (Global Exception Handling, Request Logging, CORS)
+- [ ] Phase 4 — API Layer Configuration (JWT Setup, Swagger, Health Checks)
 
 ---
 
