@@ -74,7 +74,9 @@ public class ApplicationDbContext : DbContext, TodoList.Domain.Repositories.IUni
 
         foreach (var domainEvent in domainEvents)
         {
-            await _mediator.Publish(domainEvent);
+            var notificationType = typeof(TodoList.Application.Common.Models.DomainEventNotification<>).MakeGenericType(domainEvent.GetType());
+            var notification = (INotification)Activator.CreateInstance(notificationType, domainEvent)!;
+            await _mediator.Publish(notification);
         }
     }
 }
