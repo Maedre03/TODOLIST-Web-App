@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger, HealthCheck, RateLimiting, Serilog)
+5cd583b journal: Day 1 - phase 4 API Layer middlewares implemented
 ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging, CORS)
 efacde2 journal: Day 1 - phase 4 API Layer structure implemented
 775d644 feat: implement Phase 4 API Layer structure (Controllers, Route versioning, Authorize)
-bc79e98 feat: complete Phase 3 authentication with BCrypt and JwtBearer
-d433b5a journal: Day 1 - phase 3 database layer implemented
 ```
 
 ### ✅ Tasks Completed
@@ -74,7 +74,7 @@ d433b5a journal: Day 1 - phase 3 database layer implemented
 - Installed `BCrypt.Net-Next` and implemented `PasswordHasher` for secure password storage.
 - Installed `Microsoft.AspNetCore.Authentication.JwtBearer` and implemented `JwtTokenService` using `Microsoft.IdentityModel.Tokens` to generate signed JWTs.
 
-**Phase 4 — API Layer**
+**Phase 4 — API Layer (fully completed)**
 - Created `Controllers/` folder to manage HTTP endpoints.
 - Implemented `TodosController` with full CRUD endpoints using MediatR.
 - Implemented `AuthController` with register and login endpoints using MediatR.
@@ -83,6 +83,13 @@ d433b5a journal: Day 1 - phase 3 database layer implemented
 - Implemented `ExceptionHandlingMiddleware` to catch all unhandled exceptions and convert them to standard JSON `ApiResponse<T>` objects based on the exception type.
 - Implemented `RequestLoggingMiddleware` to manually track and log HTTP method, path, and execution time.
 - Configured `CORS Middleware` in `Program.cs` to lock down requests strictly from the `http://localhost:4200` Angular frontend.
+- Configured **JWT Authentication** in `Program.cs` to enforce bearer token validation using settings from `appsettings.json`.
+- Configured **Swagger/OpenAPI** to support JWT authorization by adding security definitions (lock icon) to test protected endpoints directly.
+- Added a **Health Check endpoint** (`/health`) to allow external monitoring systems to check API availability.
+- Set up **Rate Limiting** via `PartitionedRateLimiter.Create<HttpContext, string>` to prevent abuse, allowing max 100 requests per minute per IP.
+- Implemented a real `CurrentUserService` using `IHttpContextAccessor` inside the API layer, dropping the dummy implementation from Infrastructure.
+- Configured `appsettings.json` and `appsettings.Development.json` with dedicated sections (`ConnectionStrings`, `JwtSettings`, `CorsSettings`, `Serilog`).
+- Integrated **Serilog** for structured logging (writing to both Console and File with compact JSON formatting).
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -112,12 +119,15 @@ d433b5a journal: Day 1 - phase 3 database layer implemented
 - **Route Versioning (`/api/v1/`)**: Including versioning in the API routes from the start is an industry standard practice that prevents breaking clients when major API changes are required in the future.
 - **Global Exception Handling Middleware**: Instead of wrapping every controller action in a `try-catch` block, we catch exceptions globally. We map our custom domain exceptions to specific HTTP status codes (404 for NotFound, 400 for Validation, 403 for Forbidden) and never leak a 500 stack trace to the client.
 - **CORS locked down**: In a production environment, wildcard CORS `*` is a security risk. We explicitly bound CORS to only allow the Angular development server (`http://localhost:4200`).
+- **CurrentUserService moved to API Layer**: Retrieving the current user's ID requires reading the JWT token from the `HttpContext` via `IHttpContextAccessor`. Since the Infrastructure layer shouldn't know about HTTP, we deleted the dummy implementation in Infrastructure and placed the real implementation directly in the API project. This adheres strictly to Clean Architecture boundaries.
+- **Rate Limiting built-in**: Before .NET 7, third-party libraries were required for rate limiting. We utilized the native `Microsoft.AspNetCore.RateLimiting` to partition limits by client IP address, drastically reducing the risk of denial of service or brute force attacks against our login endpoint.
+- **Structured JSON Logging with Serilog**: Default .NET console logging is plain text, which is hard to search in DataDog or Kibana. By wiring up Serilog to output Compact JSON, every log message automatically includes parsed fields (like `RequestId` and `ExecutionTime`) making them fully searchable and observable.
 
 ### ⚠️ Problems / Blockers
-- *(None today)*
+- **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 4 — API Layer Configuration (JWT Setup, Swagger, Health Checks)
+- [ ] Phase 5 — Testing (Unit Tests & Integration Tests)
 
 ---
 
