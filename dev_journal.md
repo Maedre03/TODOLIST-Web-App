@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+81407fe feat: add UpdateTodoCommand and handler
+9f5d67f journal: Day 1 — CreateTodoCommand implemented
 4ca75b4 feat: add CreateTodoCommand and handler, IUnitOfWork, ICurrentUserService
 f0f6c5a chore: expand project rules — architecture, security, DB, testing, Angular, code style
 3e3d560 chore: update project rules — mandatory git commit+push after every task batch
-fb7065f chore: add project AI rules — auto-update dev journal after each task batch
-99e2e88 journal: Day 1 — project setup, Phase 1 complete, Phase 2 started
 ```
 
 ### ✅ Tasks Completed
@@ -41,6 +41,7 @@ fb7065f chore: add project AI rules — auto-update dev journal after each task 
 - Set up MediatR dependency injection registration in `DependencyInjection.cs`
 - Created `IUnitOfWork` and `ICurrentUserService` interfaces
 - Implemented `CreateTodoCommand` and `CreateTodoCommandHandler`
+- Implemented `UpdateTodoCommand` and `UpdateTodoCommandHandler`
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -49,13 +50,14 @@ fb7065f chore: add project AI rules — auto-update dev journal after each task 
 - **CQRS with MediatR**: Separates "reading" from "writing" operations. Each use case is its own class — easy to find, test, and modify independently.
 - **Repository pattern**: Application layer defines interfaces (`ITodoRepository`), Infrastructure implements them. Application never touches EF Core directly.
 - **IUnitOfWork abstraction**: Separated database commit logic (`SaveChangesAsync`) from repository query/add logic. Ensures commands can coordinate multiple changes in one transaction without bleeding EF Core into Application.
+- **Authorization in Query**: In `UpdateTodoCommandHandler`, we fetch the Todo using `GetByIdAndUserAsync`. This enforces that users can only update their own items, addressing a key security requirement early in the Application layer.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
 - [ ] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
+- [ ] `ToggleTodoCompleteCommand` + Handler
 - [ ] Start on DTOs and FluentValidation
 
 ---
