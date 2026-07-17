@@ -9,9 +9,28 @@ This project maintains a `dev_journal.md` in the project root. Every AI assistan
 2. Read `task_list.md` to understand which tasks are completed (`[x]`) and which are pending.
 
 ### After Completing Any Meaningful Batch of Work
-After finishing a task or group of tasks, you MUST:
+After finishing a task or group of tasks, you MUST do ALL of the following — no exceptions:
 
-1. **Update `dev_journal.md`**:
+#### Step 1 — Commit & push all code changes
+```bash
+git add .
+git commit -m "<type>: <short description of what was built>"
+git push origin main
+```
+Use conventional commit prefixes:
+- `feat:` — new feature or implementation (e.g. `feat: add CreateTodoCommandHandler`)
+- `fix:` — bug fix
+- `refactor:` — code restructure with no behaviour change
+- `chore:` — config, tooling, dependencies (e.g. `chore: install FluentValidation`)
+- `test:` — adding or updating tests
+- `docs:` — documentation only
+
+Never leave uncommitted code at the end of a task batch.
+
+#### Step 2 — Update `task_list.md`
+Mark every completed item with `[x]`. Stage and include in the next commit.
+
+#### Step 3 — Update `dev_journal.md`
    - If it is still the same calendar day as the last entry, add to that day's entry.
    - If it is a new calendar day, create a new `## 📅 Day N — YYYY-MM-DD` section by incrementing N.
    - Run `git log --oneline -5` and fill in the "Git Commits / Version" section with real hashes.
@@ -20,14 +39,12 @@ After finishing a task or group of tasks, you MUST:
    - Fill in "⚠️ Problems / Blockers" if anything was difficult or unexpected.
    - Update "📌 Tomorrow / Next Session" with the next pending tasks from `task_list.md`.
 
-2. **Commit and push the journal**:
-   ```bash
-   git add dev_journal.md
-   git commit -m "journal: Day N — brief description of what was done"
-   git push origin main
-   ```
-
-3. **Also update `task_list.md`** — mark completed items with `[x]` if not already done, then commit it alongside the journal update.
+#### Step 4 — Commit & push the journal
+```bash
+git add dev_journal.md task_list.md
+git commit -m "journal: Day N — brief description of what was done"
+git push origin main
+```
 
 ### Journal Entry Template (for new days)
 ```markdown
