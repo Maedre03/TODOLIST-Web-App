@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+2f9a1a8 feat: add RegisterUserCommand and LoginUserCommand with auth interfaces
+e518f7e journal: Day 1 — Delete and Toggle commands implemented
 121701e feat: add DeleteTodoCommand and ToggleTodoCompleteCommand
 2eb6e69 journal: Day 1 — UpdateTodoCommand implemented
 81407fe feat: add UpdateTodoCommand and handler
-9f5d67f journal: Day 1 — CreateTodoCommand implemented
-4ca75b4 feat: add CreateTodoCommand and handler, IUnitOfWork, ICurrentUserService
 ```
 
 ### ✅ Tasks Completed
@@ -44,6 +44,9 @@
 - Implemented `UpdateTodoCommand` and `UpdateTodoCommandHandler`
 - Implemented `DeleteTodoCommand` and `DeleteTodoCommandHandler`
 - Implemented `ToggleTodoCompleteCommand` and `ToggleTodoCompleteCommandHandler`
+- Created `IPasswordHasher` and `IJwtTokenService` interfaces
+- Implemented `RegisterUserCommand` and `RegisterUserCommandHandler`
+- Implemented `LoginUserCommand` and `LoginUserCommandHandler`
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -55,14 +58,15 @@
 - **Authorization in Query**: In `UpdateTodoCommandHandler`, we fetch the Todo using `GetByIdAndUserAsync`. This enforces that users can only update their own items, addressing a key security requirement early in the Application layer.
 - **Targeted Updates vs Full Updates**: Created a specific `ToggleTodoCompleteCommand` instead of forcing the frontend to use `UpdateTodoCommand` just to check a box. This is better for performance and intent-driven APIs.
 - **Soft Delete in Repository**: `DeleteTodoCommandHandler` calls `_todoRepository.Delete()`. Following our project rules, this will be implemented as a soft delete (`IsDeleted = true`) inside the EF Core Infrastructure layer, keeping the Application layer completely agnostic of how deletion is stored.
+- **Authentication Abstractions**: We defined `IPasswordHasher` and `IJwtTokenService` in the Application layer, but we DO NOT implement them here. The actual implementation (BCrypt, JWT Bearer) requires external libraries, which belongs in Infrastructure. This strictly enforces the Dependency Rule of Clean Architecture.
+- **Domain Exceptions for Auth**: Created `EmailAlreadyInUseException` and `InvalidCredentialsException`. By using typed exceptions instead of generic ones or returning nulls, the API layer (Phase 4) can easily map these to HTTP 409 Conflict and HTTP 401 Unauthorized via global middleware.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] `RegisterUserCommand` + Handler
-- [ ] `LoginUserCommand` + Handler (returns JWT token)
-- [ ] Start on Queries (GetAllTodos, GetTodoById)
+- [ ] Start on Queries (GetAllTodos, GetTodoById, GetTodosPaged)
+- [ ] Start on DTOs and FluentValidation
 
 ---
 
