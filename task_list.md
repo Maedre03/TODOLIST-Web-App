@@ -32,8 +32,8 @@ Orchestrates use cases. Contains no database or HTTP knowledge — only business
 ### Pattern: CQRS with MediatR
 Industry standard — separates "reading data" from "changing data".
 
-- [ ] Install `MediatR` NuGet package
-- [ ] Set up MediatR dependency injection registration
+- [x] Install `MediatR` NuGet package
+- [x] Set up MediatR dependency injection registration
 
 ### Commands (actions that change data)
 - [ ] `CreateTodoCommand` + `CreateTodoCommandHandler`
