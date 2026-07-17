@@ -32,6 +32,10 @@ dist/
 .idea/
 .vscode/
 
+# Local .NET Configuration
+appsettings.local.json
+appsettings.*.local.json
+
 # Other
 *.sqlite
 *.db
