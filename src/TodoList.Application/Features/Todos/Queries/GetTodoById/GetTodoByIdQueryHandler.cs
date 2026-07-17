@@ -1,0 +1,45 @@
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using TodoList.Application.Common.DTOs;
+using TodoList.Application.Common.Exceptions;
+using TodoList.Application.Common.Interfaces;
+using TodoList.Domain.Repositories;
+
+namespace TodoList.Application.Features.Todos.Queries.GetTodoById;
+
+/// <summary>
+/// Handler for getting a Todo item by ID.
+/// </summary>
+public class GetTodoByIdQueryHandler : IRequestHandler<GetTodoByIdQuery, TodoDto>
+{
+    private readonly ITodoRepository _todoRepository;
+    private readonly ICurrentUserService _currentUserService;
+
+    public GetTodoByIdQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService)
+    {
+        _todoRepository = todoRepository;
+        _currentUserService = currentUserService;
+    }
+
+    public async Task<TodoDto> Handle(GetTodoByIdQuery request, CancellationToken cancellationToken)
+    {
+        var todo = await _todoRepository.GetByIdAndUserAsync(request.Id, _currentUserService.UserId, cancellationToken);
+
+        if (todo == null)
+        {
+            throw new TodoNotFoundException(request.Id);
+        }
+
+        return new TodoDto
+        {
+            Id = todo.Id,
+            Title = todo.Title,
+            Description = todo.Description,
+            IsCompleted = todo.IsCompleted,
+            Priority = todo.Priority,
+            DueDate = todo.DueDate,
+            CreatedAt = todo.CreatedAt
+        };
+    }
+}
