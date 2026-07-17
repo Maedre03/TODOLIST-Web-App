@@ -36,7 +36,7 @@ Industry standard — separates "reading data" from "changing data".
 - [x] Set up MediatR dependency injection registration
 
 ### Commands (actions that change data)
-- [ ] `CreateTodoCommand` + `CreateTodoCommandHandler`
+- [x] `CreateTodoCommand` + `CreateTodoCommandHandler`
 - [ ] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
 - [ ] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
 - [ ] `ToggleTodoCompleteCommand` + Handler
