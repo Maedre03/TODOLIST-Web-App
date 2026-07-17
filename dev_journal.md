@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+9d7c487 fix: update docker-compose to use azure-sql-edge for ARM64 compatibility
+f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 68c77be fix: adapt pure domain events to MediatR INotification
 5b346ce journal: Day 1 - phase 4 API Layer fully completed
 f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger, HealthCheck, RateLimiting, Serilog)
-5cd583b journal: Day 1 - phase 4 API Layer middlewares implemented
-ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging, CORS)
 ```
 
 ### ✅ Tasks Completed
@@ -24,6 +24,7 @@ ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging
 - Initialized Git repository (`git init`)
 - Created `.gitignore` (tuned for .NET + Angular)
 - Set up Docker Compose for PostgreSQL database
+- Updated Docker Compose to use `azure-sql-edge` for Mac ARM64 compatibility
 - Created project folder structure (Backend: Clean Architecture 4-layer, Frontend: Angular)
 - Created `task_list.md` — full professional task breakdown across 8 phases
 
@@ -130,6 +131,7 @@ ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
 - **MediatR 500 Error on Create**: Swagger threw a 500 Internal Server Error when creating Todos because pure domain events (`IDomainEvent`) didn't implement MediatR's `INotification` interface. Fixed by adapting them into `DomainEventNotification<T>` dynamically during DbContext save.
+- **AMD64 Docker Crash on Apple Silicon**: The standard SQL Server container `mcr.microsoft.com/mssql/server:2022-latest` crashed silently on the M-series Mac due to architecture mismatch (ARM64 vs AMD64). Resolved by switching the Docker image to `mcr.microsoft.com/azure-sql-edge:latest`, wiping the corrupt volume, and re-applying migrations.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Phase 5 — Testing (Unit Tests & Integration Tests)
