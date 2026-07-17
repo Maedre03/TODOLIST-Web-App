@@ -39,3 +39,5 @@ appsettings.*.local.json
 # Other
 *.sqlite
 *.db
+.agents/
+dev_journal.md
