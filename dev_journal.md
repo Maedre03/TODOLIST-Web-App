@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+68c77be fix: adapt pure domain events to MediatR INotification
+5b346ce journal: Day 1 - phase 4 API Layer fully completed
 f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger, HealthCheck, RateLimiting, Serilog)
 5cd583b journal: Day 1 - phase 4 API Layer middlewares implemented
 ffc759d feat: implement API layer middlewares (ExceptionHandling, RequestLogging, CORS)
-efacde2 journal: Day 1 - phase 4 API Layer structure implemented
-775d644 feat: implement Phase 4 API Layer structure (Controllers, Route versioning, Authorize)
 ```
 
 ### ✅ Tasks Completed
@@ -91,6 +91,9 @@ efacde2 journal: Day 1 - phase 4 API Layer structure implemented
 - Configured `appsettings.json` and `appsettings.Development.json` with dedicated sections (`ConnectionStrings`, `JwtSettings`, `CorsSettings`, `Serilog`).
 - Integrated **Serilog** for structured logging (writing to both Console and File with compact JSON formatting).
 
+**Testing & Verification**
+- Successfully tested Phase 4 endpoints end-to-end manually using Swagger UI (Registration, JWT Authentication, and Todo CRUD operations).
+
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
 - **Soft delete (`IsDeleted` flag)**: Real apps never permanently delete data — regulatory requirements, audit trails, accidental deletion recovery.
@@ -114,6 +117,7 @@ efacde2 journal: Day 1 - phase 4 API Layer structure implemented
 - **EF Core Fluent API vs Data Annotations**: We chose to configure entities via `IEntityTypeConfiguration` rather than attributes on the Domain classes. This prevents the Domain layer from taking a dependency on Entity Framework, enforcing strict Clean Architecture.
 - **Centralized Saving / SaveChangesAsync Overrides**: Implemented automatic soft delete logic and auditing (`CreatedAt`, `UpdatedAt`) inside `ApplicationDbContext.SaveChangesAsync` rather than requiring each repository method to handle it. This ensures it's impossible for developers to forget to set audit fields.
 - **Domain Event Dispatching in DbContext**: Before saving changes, `ApplicationDbContext` pulls events from entities and publishes them through MediatR. This allows decoupling cross-cutting actions (like sending an email when a Todo is created) from the core handler logic.
+- **MediatR INotification Wrapper**: Rather than adding the MediatR NuGet package to our `TodoList.Domain` project (which would violate Clean Architecture's zero-dependency rule), we created a generic `DomainEventNotification<T>` wrapper in the Application Layer to securely publish `IDomainEvent`s as `INotification`s when `SaveChanges` is called.
 - **Dummy Implementations for Auth Services**: Created `CurrentUserService` and `PasswordHasher` shells to satisfy MediatR dependency requirements for the handlers until we install BCrypt and integrate JWTs.
 - **Thin Controllers**: The controllers (`TodosController`, `AuthController`) contain practically no logic. They simply construct MediatR commands/queries from HTTP requests and send them. This ensures the business logic remains strictly in the Application layer, making the controllers easy to test and maintain.
 - **Route Versioning (`/api/v1/`)**: Including versioning in the API routes from the start is an industry standard practice that prevents breaking clients when major API changes are required in the future.
@@ -125,6 +129,7 @@ efacde2 journal: Day 1 - phase 4 API Layer structure implemented
 
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
+- **MediatR 500 Error on Create**: Swagger threw a 500 Internal Server Error when creating Todos because pure domain events (`IDomainEvent`) didn't implement MediatR's `INotification` interface. Fixed by adapting them into `DomainEventNotification<T>` dynamically during DbContext save.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Phase 5 — Testing (Unit Tests & Integration Tests)
