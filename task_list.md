@@ -155,10 +155,10 @@ No professional project ships without tests. Tests are your safety net.
 - [x] Aim for **≥80% code coverage** on Application layer
 
 ### Integration Tests (`TodoList.IntegrationTests`)
-- [ ] Create new xUnit test project
-- [ ] Install `Microsoft.AspNetCore.Mvc.Testing` (spins up a real test server)
-- [ ] Install `Testcontainers.MsSql` (creates a real SQL Server in Docker for tests)
-- [ ] Test full HTTP flows (API → Application → DB → Response)
+- [x] Create new xUnit test project
+- [x] Install `Microsoft.AspNetCore.Mvc.Testing` (spins up a real test server)
+- [x] Install `Testcontainers.MsSql` (creates a real SQL Server in Docker for tests)
+- [x] Test full HTTP flows (API → Application → DB → Response)
   - `POST /api/v1/todos` creates a todo and returns 201
   - `GET /api/v1/todos` returns only the current user's todos
   - `DELETE /api/v1/todos/{id}` by non-owner returns 403 Forbidden

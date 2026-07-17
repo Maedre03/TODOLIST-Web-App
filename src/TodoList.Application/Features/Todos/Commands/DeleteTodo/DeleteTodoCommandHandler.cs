@@ -29,11 +29,16 @@ public class DeleteTodoCommandHandler : IRequestHandler<DeleteTodoCommand, Unit>
 
     public async Task<Unit> Handle(DeleteTodoCommand request, CancellationToken cancellationToken)
     {
-        var todo = await _todoRepository.GetByIdAndUserAsync(request.Id, _currentUserService.UserId, cancellationToken);
+        var todo = await _todoRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (todo == null)
         {
             throw new TodoNotFoundException(request.Id);
+        }
+
+        if (todo.CreatedByUserId != _currentUserService.UserId)
+        {
+            throw new UnauthorizedTodoAccessException(request.Id, _currentUserService.UserId);
         }
 
         _todoRepository.Delete(todo);

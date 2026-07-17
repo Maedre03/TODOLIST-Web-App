@@ -39,7 +39,7 @@ public class DeleteTodoCommandHandlerTests
         var todoId = Guid.NewGuid();
         var existingTodo = new Todo("Title", "Desc", Priority.Low, null, userId);
         
-        _todoRepositoryMock.GetByIdAndUserAsync(todoId, userId, Arg.Any<CancellationToken>())
+        _todoRepositoryMock.GetByIdAsync(todoId, Arg.Any<CancellationToken>())
             .Returns(existingTodo);
 
         var command = new DeleteTodoCommand(todoId);
@@ -62,7 +62,7 @@ public class DeleteTodoCommandHandlerTests
         _currentUserServiceMock.UserId.Returns(userId);
         var todoId = Guid.NewGuid();
 
-        _todoRepositoryMock.GetByIdAndUserAsync(todoId, userId, Arg.Any<CancellationToken>())
+        _todoRepositoryMock.GetByIdAsync(todoId, Arg.Any<CancellationToken>())
             .Returns((Todo?)null);
 
         var command = new DeleteTodoCommand(todoId);
@@ -72,6 +72,32 @@ public class DeleteTodoCommandHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<TodoNotFoundException>();
+
+        _todoRepositoryMock.DidNotReceive().Delete(Arg.Any<Todo>());
+        await _unitOfWorkMock.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowUnauthorizedTodoAccessException_WhenTodoBelongsToAnotherUser()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        _currentUserServiceMock.UserId.Returns(userId);
+        
+        var ownerId = Guid.NewGuid();
+        var todoId = Guid.NewGuid();
+        var existingTodo = new Todo("Title", "Desc", Priority.Low, null, ownerId); // Belongs to ownerId
+
+        _todoRepositoryMock.GetByIdAsync(todoId, Arg.Any<CancellationToken>())
+            .Returns(existingTodo);
+
+        var command = new DeleteTodoCommand(todoId);
+
+        // Act
+        Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<UnauthorizedTodoAccessException>();
 
         _todoRepositoryMock.DidNotReceive().Delete(Arg.Any<Todo>());
         await _unitOfWorkMock.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
