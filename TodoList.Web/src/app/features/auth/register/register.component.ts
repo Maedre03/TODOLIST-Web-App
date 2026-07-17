@@ -2,101 +2,267 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { InputText } from 'primeng/inputtext';
-import { Password } from 'primeng/password';
-import { Button } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../core/services/auth.service';
 
 /**
  * RegisterComponent — user registration page.
  *
- * Stub implementation — will be fully designed in Sub-Phase 6.3.
+ * Designed with a modern, split-screen SaaS aesthetic.
+ * - Left side: Branding and abstract visual (hidden on mobile).
+ * - Right side: Clean, focused registration form.
  */
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, InputText, Password, Button],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterLink, 
+    InputTextModule, 
+    PasswordModule, 
+    ButtonModule
+  ],
   template: `
-    <div class="register-page">
-      <div class="register-card">
-        <h1>Create Account</h1>
-        <p>Sign up to start managing your tasks</p>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <div class="field">
-            <label for="username">Username</label>
-            <input pInputText id="username" formControlName="username" placeholder="johndoe" />
+    <div class="auth-layout">
+      <!-- Left Side: Branding / Visual -->
+      <div class="auth-brand fade-in">
+        <div class="brand-content">
+          <div class="logo">
+            <i class="pi pi-check-square"></i>
+            <span>TaskFlow</span>
           </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input pInputText id="email" formControlName="email" placeholder="you@example.com" />
+          <h1>Join the next generation of task management.</h1>
+          <p>Organize your work, boost your productivity, and achieve your goals with ease.</p>
+        </div>
+        
+        <!-- Abstract decorative shapes -->
+        <div class="decorative-shape shape-1"></div>
+        <div class="decorative-shape shape-2"></div>
+      </div>
+
+      <!-- Right Side: Form -->
+      <div class="auth-form-container fade-in">
+        <div class="auth-card">
+          <div class="mobile-logo">
+            <i class="pi pi-check-square text-primary text-3xl"></i>
           </div>
-          <div class="field">
-            <label for="password">Password</label>
-            <p-password id="password" formControlName="password" [toggleMask]="true" placeholder="Min. 6 characters" />
-          </div>
-          <p-button type="submit" label="Create Account" [loading]="isLoading" [disabled]="form.invalid" styleClass="w-full" />
-          <p class="link-text">Already have an account? <a routerLink="/login">Sign In</a></p>
-        </form>
-        @if (errorMessage) {
-          <p class="error-text">{{ errorMessage }}</p>
-        }
+          <h2>Create an account</h2>
+          <p class="subtitle">Start managing your tasks for free today.</p>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-wrapper">
+            <div class="field">
+              <label for="username">Username</label>
+              <input 
+                pInputText 
+                id="username" 
+                formControlName="username" 
+                placeholder="johndoe" 
+                class="w-full p-inputtext-lg" />
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input 
+                pInputText 
+                id="email" 
+                formControlName="email" 
+                placeholder="name@company.com" 
+                class="w-full p-inputtext-lg" />
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <p-password 
+                id="password" 
+                formControlName="password" 
+                [toggleMask]="true" 
+                placeholder="Min. 6 characters"
+                styleClass="w-full"
+                inputStyleClass="w-full p-inputtext-lg" />
+            </div>
+
+            @if (errorMessage) {
+              <div class="error-message fade-in">
+                <i class="pi pi-exclamation-circle"></i>
+                <span>{{ errorMessage }}</span>
+              </div>
+            }
+
+            <p-button 
+              type="submit" 
+              label="Sign Up" 
+              [loading]="isLoading" 
+              [disabled]="form.invalid" 
+              styleClass="w-full p-button-lg mt-2" />
+          </form>
+
+          <p class="auth-footer">
+            Already have an account? <a routerLink="/login">Sign in here</a>
+          </p>
+        </div>
       </div>
     </div>
   `,
   styles: [`
-    .register-page {
+    .auth-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--surface-ground);
+    }
+
+    /* ── Left Side: Brand ── */
+    .auth-brand {
+      flex: 1;
+      background: linear-gradient(135deg, var(--surface-section) 0%, var(--surface-card) 100%);
+      border-right: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-content {
+      position: relative;
+      z-index: 2;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: var(--space-8);
+    }
+
+    .logo i {
+      color: var(--primary-color);
+      font-size: 2rem;
+    }
+
+    .auth-brand h1 {
+      font-size: 3rem;
+      line-height: 1.1;
+      margin-bottom: var(--space-4);
+      background: linear-gradient(to right, var(--text-color), var(--text-color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .auth-brand p {
+      font-size: var(--font-size-lg);
+      color: var(--text-color-secondary);
+    }
+
+    .decorative-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 1;
+      opacity: 0.15;
+    }
+
+    .shape-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary-color);
+      top: -100px;
+      right: -100px;
+    }
+
+    .shape-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--color-info);
+      bottom: -50px;
+      left: -50px;
+    }
+
+    /* ── Right Side: Form ── */
+    .auth-form-container {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background: var(--surface-ground);
       padding: var(--space-4);
     }
-    .register-card {
-      background: var(--surface-card);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-8);
+
+    .auth-card {
       width: 100%;
-      max-width: 420px;
-      animation: fadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-width: 400px;
     }
-    h1 {
-      margin-bottom: var(--space-1);
-    }
-    h1 + p {
+
+    .mobile-logo {
+      display: none;
       margin-bottom: var(--space-6);
+      text-align: center;
     }
-    .field {
-      margin-bottom: var(--space-4);
+
+    h2 {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-2);
     }
+
+    .subtitle {
+      color: var(--text-color-secondary);
+      margin-bottom: var(--space-8);
+    }
+
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
     .field label {
       display: block;
-      font-size: var(--font-size-sm);
       font-weight: 500;
-      color: var(--text-color-secondary);
-      margin-bottom: var(--space-1);
+      margin-bottom: var(--space-2);
+      color: var(--text-color);
     }
-    .field input {
-      width: 100%;
-    }
-    :host ::ng-deep .p-password {
-      width: 100%;
-    }
-    :host ::ng-deep .p-password input {
-      width: 100%;
-    }
-    .link-text {
-      text-align: center;
-      margin-top: var(--space-4);
-      font-size: var(--font-size-sm);
-    }
-    .error-text {
+
+    .error-message {
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.2);
       color: var(--color-danger);
-      text-align: center;
-      margin-top: var(--space-3);
+      padding: var(--space-3);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
       font-size: var(--font-size-sm);
+    }
+
+    .auth-footer {
+      margin-top: var(--space-8);
+      text-align: center;
+      color: var(--text-color-secondary);
+    }
+
+    .auth-footer a {
+      font-weight: 600;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 992px) {
+      .auth-brand {
+        display: none;
+      }
+      .mobile-logo {
+        display: block;
+      }
+      .auth-form-container {
+        padding: var(--space-8);
+      }
     }
   `]
 })
