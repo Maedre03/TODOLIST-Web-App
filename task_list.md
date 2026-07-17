@@ -50,9 +50,9 @@ Industry standard — separates "reading data" from "changing data".
 
 ### DTOs (Data Transfer Objects)
 - [x] `TodoDto` (what the API returns to the frontend)
-- [ ] `CreateTodoRequest`, `UpdateTodoRequest` (what the frontend sends)
+- [x] `CreateTodoRequest`, `UpdateTodoRequest` (what the frontend sends)
 - [x] `PagedResult<T>` generic response wrapper (for paginated lists)
-- [ ] `ApiResponse<T>` generic success/error response wrapper
+- [x] `ApiResponse<T>` generic success/error response wrapper
 
 ### Validation (FluentValidation)
 - [ ] `CreateTodoCommandValidator` (title required, max length, dueDate not in past, etc.)
