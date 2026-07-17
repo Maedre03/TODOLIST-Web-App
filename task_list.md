@@ -40,8 +40,8 @@ Industry standard — separates "reading data" from "changing data".
 - [x] `UpdateTodoCommand` + `UpdateTodoCommandHandler`
 - [x] `DeleteTodoCommand` + `DeleteTodoCommandHandler`
 - [x] `ToggleTodoCompleteCommand` + Handler
-- [ ] `RegisterUserCommand` + Handler
-- [ ] `LoginUserCommand` + Handler (returns JWT token)
+- [x] `RegisterUserCommand` + Handler
+- [x] `LoginUserCommand` + Handler (returns JWT token)
 
 ### Queries (actions that read data)
 - [ ] `GetAllTodosQuery` + `GetAllTodosQueryHandler`
