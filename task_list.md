@@ -144,15 +144,15 @@ The HTTP interface. Thin layer — just receives requests and delegates to Appli
 No professional project ships without tests. Tests are your safety net.
 
 ### Unit Tests (`TodoList.UnitTests`)
-- [ ] Create new xUnit test project, add to solution
-- [ ] Test every Command Handler
+- [x] Create new xUnit test project, add to solution
+- [x] Test every Command Handler
   - `CreateTodoCommandHandlerTests`
   - `DeleteTodoCommandHandlerTests`
   - etc.
-- [ ] Test all FluentValidation validators
-- [ ] Test domain entities (business rule logic)
-- [ ] Use `Moq` or `NSubstitute` to mock dependencies (repositories, services)
-- [ ] Aim for **≥80% code coverage** on Application layer
+- [x] Test all FluentValidation validators
+- [x] Test domain entities (business rule logic)
+- [x] Use `Moq` or `NSubstitute` to mock dependencies (repositories, services)
+- [x] Aim for **≥80% code coverage** on Application layer
 
 ### Integration Tests (`TodoList.IntegrationTests`)
 - [ ] Create new xUnit test project

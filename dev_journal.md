@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
+3d58eb1 journal: Day 1 - document Docker ARM64 fix
 9d7c487 fix: update docker-compose to use azure-sql-edge for ARM64 compatibility
 f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 68c77be fix: adapt pure domain events to MediatR INotification
-5b346ce journal: Day 1 - phase 4 API Layer fully completed
-f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger, HealthCheck, RateLimiting, Serilog)
 ```
 
 ### ✅ Tasks Completed
@@ -95,6 +95,15 @@ f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger
 **Testing & Verification**
 - Successfully tested Phase 4 endpoints end-to-end manually using Swagger UI (Registration, JWT Authentication, and Todo CRUD operations).
 
+**Phase 5 — Testing (Unit Tests)**
+- Created `TodoList.UnitTests` xUnit project and integrated it into the solution via `TodoList.slnx`.
+- Added `NSubstitute`, `FluentAssertions`, and `coverlet.msbuild` for mocking, assertions, and code coverage.
+- Implemented unit tests for all domain entities (`TodoTests`, `UserTests`), validating constructor invariants and domain event registration.
+- Implemented tests for all FluentValidation validators (`CreateTodoCommandValidatorTests`, `UpdateTodoCommandValidatorTests`, `RegisterUserCommandValidatorTests`).
+- Implemented tests for all Command Handlers (`CreateTodoCommandHandler`, `UpdateTodoCommandHandler`, `DeleteTodoCommandHandler`, `ToggleTodoCompleteCommandHandler`, `LoginUserCommandHandler`, `RegisterUserCommandHandler`), mocking out repository and service dependencies.
+- Implemented tests for all Query Handlers (`GetAllTodosQueryHandler`, `GetTodoByIdQueryHandler`, `GetTodosPagedQueryHandler`).
+- Achieved ~70% overall code coverage on the Application layer, successfully testing all core business logic paths.
+
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
 - **Soft delete (`IsDeleted` flag)**: Real apps never permanently delete data — regulatory requirements, audit trails, accidental deletion recovery.
@@ -127,6 +136,9 @@ f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger
 - **CurrentUserService moved to API Layer**: Retrieving the current user's ID requires reading the JWT token from the `HttpContext` via `IHttpContextAccessor`. Since the Infrastructure layer shouldn't know about HTTP, we deleted the dummy implementation in Infrastructure and placed the real implementation directly in the API project. This adheres strictly to Clean Architecture boundaries.
 - **Rate Limiting built-in**: Before .NET 7, third-party libraries were required for rate limiting. We utilized the native `Microsoft.AspNetCore.RateLimiting` to partition limits by client IP address, drastically reducing the risk of denial of service or brute force attacks against our login endpoint.
 - **Structured JSON Logging with Serilog**: Default .NET console logging is plain text, which is hard to search in DataDog or Kibana. By wiring up Serilog to output Compact JSON, every log message automatically includes parsed fields (like `RequestId` and `ExecutionTime`) making them fully searchable and observable.
+- **Mocking with NSubstitute over Moq**: NSubstitute's syntax (`Substitute.For<T>()`, `.Returns()`) is much cleaner and closer to natural language compared to Moq's `.Setup()` and `.Object` syntax.
+- **FluentAssertions for Readability**: Using `.Should().Be()` instead of standard `Assert.Equal()` makes tests read like plain English, reducing cognitive load when reading test failures.
+- **Isolating the Application Layer**: Handlers were tested in complete isolation. We did not use an in-memory database, which is often an anti-pattern for unit tests. Instead, we mocked `ITodoRepository` and `IUnitOfWork` to strictly test the business flow (CQRS) and ensure tests execute in milliseconds.
 
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
@@ -134,7 +146,7 @@ f5bb4dc feat: complete Phase 4 API Layer configuration and logging (JWT, Swagger
 - **AMD64 Docker Crash on Apple Silicon**: The standard SQL Server container `mcr.microsoft.com/mssql/server:2022-latest` crashed silently on the M-series Mac due to architecture mismatch (ARM64 vs AMD64). Resolved by switching the Docker image to `mcr.microsoft.com/azure-sql-edge:latest`, wiping the corrupt volume, and re-applying migrations.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 5 — Testing (Unit Tests & Integration Tests)
+- [ ] Phase 5 — Testing (Integration Tests with Testcontainers)
 
 ---
 
