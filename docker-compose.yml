@@ -2,14 +2,13 @@
 
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: TodoList_SqlExpress
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=TodoSecurePassword123!
     ports:
       - "1433:1433"
-    platform: linux/amd64
     volumes:
       - mssql_data:/var/opt/mssql
 
