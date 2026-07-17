@@ -44,14 +44,14 @@ Industry standard — separates "reading data" from "changing data".
 - [x] `LoginUserCommand` + Handler (returns JWT token)
 
 ### Queries (actions that read data)
-- [ ] `GetAllTodosQuery` + `GetAllTodosQueryHandler`
-- [ ] `GetTodoByIdQuery` + Handler
-- [ ] `GetTodosPagedQuery` + Handler (with pagination, filtering, sorting)
+- [x] `GetAllTodosQuery` + `GetAllTodosQueryHandler`
+- [x] `GetTodoByIdQuery` + Handler
+- [x] `GetTodosPagedQuery` + Handler (with pagination, filtering, sorting)
 
 ### DTOs (Data Transfer Objects)
-- [ ] `TodoDto` (what the API returns to the frontend)
+- [x] `TodoDto` (what the API returns to the frontend)
 - [ ] `CreateTodoRequest`, `UpdateTodoRequest` (what the frontend sends)
-- [ ] `PagedResult<T>` generic response wrapper (for paginated lists)
+- [x] `PagedResult<T>` generic response wrapper (for paginated lists)
 - [ ] `ApiResponse<T>` generic success/error response wrapper
 
 ### Validation (FluentValidation)

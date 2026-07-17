@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+6c9a49e feat: add Queries, Handlers, and DTOs to Application layer
+0a94903 journal: Day 1 — Auth commands implemented
 2f9a1a8 feat: add RegisterUserCommand and LoginUserCommand with auth interfaces
 e518f7e journal: Day 1 — Delete and Toggle commands implemented
 121701e feat: add DeleteTodoCommand and ToggleTodoCompleteCommand
-2eb6e69 journal: Day 1 — UpdateTodoCommand implemented
-81407fe feat: add UpdateTodoCommand and handler
 ```
 
 ### ✅ Tasks Completed
@@ -47,6 +47,12 @@ e518f7e journal: Day 1 — Delete and Toggle commands implemented
 - Created `IPasswordHasher` and `IJwtTokenService` interfaces
 - Implemented `RegisterUserCommand` and `RegisterUserCommandHandler`
 - Implemented `LoginUserCommand` and `LoginUserCommandHandler`
+- Implemented `GetAllTodosQuery` and `GetAllTodosQueryHandler`
+- Implemented `GetTodoByIdQuery` and `GetTodoByIdQueryHandler`
+- Implemented `GetTodosPagedQuery` and `GetTodosPagedQueryHandler`
+- Added `TodoDto` and `PaginatedList<T>` models
+- Created `TodoNotFoundException`
+- Extended `ITodoRepository` with `GetPagedByUserIdAsync` for paginated queries
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -60,13 +66,16 @@ e518f7e journal: Day 1 — Delete and Toggle commands implemented
 - **Soft Delete in Repository**: `DeleteTodoCommandHandler` calls `_todoRepository.Delete()`. Following our project rules, this will be implemented as a soft delete (`IsDeleted = true`) inside the EF Core Infrastructure layer, keeping the Application layer completely agnostic of how deletion is stored.
 - **Authentication Abstractions**: We defined `IPasswordHasher` and `IJwtTokenService` in the Application layer, but we DO NOT implement them here. The actual implementation (BCrypt, JWT Bearer) requires external libraries, which belongs in Infrastructure. This strictly enforces the Dependency Rule of Clean Architecture.
 - **Domain Exceptions for Auth**: Created `EmailAlreadyInUseException` and `InvalidCredentialsException`. By using typed exceptions instead of generic ones or returning nulls, the API layer (Phase 4) can easily map these to HTTP 409 Conflict and HTTP 401 Unauthorized via global middleware.
+- **Custom exceptions for missing data**: Created `TodoNotFoundException` instead of returning null or generic exceptions. This makes the code expressive and allows the API layer to map this to HTTP 404 globally.
+- **Dedicated PaginatedList response**: Implemented `PaginatedList<T>` to encapsulate paginated responses along with metadata (TotalCount, TotalPages) to give the frontend all the data it needs for UI controls.
+- **Repository-level Pagination**: Decided to add `GetPagedByUserIdAsync` to `ITodoRepository`. Filtering, sorting, and pagination must be handled in the database query (via the repository) rather than loading all items into application memory.
 
 ### ⚠️ Problems / Blockers
 - *(None today — fill in any issues you hit)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] Start on Queries (GetAllTodos, GetTodoById, GetTodosPaged)
-- [ ] Start on DTOs and FluentValidation
+- [ ] Continue with DTOs and validation pipeline (FluentValidation).
+- [ ] Add AutoMapper configurations.
 
 ---
 
