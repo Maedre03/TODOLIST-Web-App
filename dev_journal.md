@@ -11,13 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+8b98803 test: add unit tests for Application MediatR behaviors to reach 86% coverage
+9f37dea journal: Day 1 - phase 5 integration tests completed
 21aef4c test: implement Phase 5 Integration Tests with Testcontainers
 3633811 journal: Day 1 - phase 5 unit tests completed
 b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
-3d58eb1 journal: Day 1 - document Docker ARM64 fix
-9d7c487 fix: update docker-compose to use azure-sql-edge for ARM64 compatibility
-f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
-68c77be fix: adapt pure domain events to MediatR INotification
 ```
 
 ### ✅ Tasks Completed
@@ -101,7 +99,8 @@ f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 - Implemented tests for all FluentValidation validators (`CreateTodoCommandValidatorTests`, `UpdateTodoCommandValidatorTests`, `RegisterUserCommandValidatorTests`).
 - Implemented tests for all Command Handlers (`CreateTodoCommandHandler`, `UpdateTodoCommandHandler`, `DeleteTodoCommandHandler`, `ToggleTodoCompleteCommandHandler`, `LoginUserCommandHandler`, `RegisterUserCommandHandler`), mocking out repository and service dependencies.
 - Implemented tests for all Query Handlers (`GetAllTodosQueryHandler`, `GetTodoByIdQueryHandler`, `GetTodosPagedQueryHandler`).
-- Achieved ~70% overall code coverage on the Application layer, successfully testing all core business logic paths.
+- Achieved ~70% overall code coverage on the Application layer initially, successfully testing all core business logic paths.
+- Increased test coverage on the Application layer to 86.3% by testing all MediatR pipeline behaviors (`LoggingBehavior`, `ValidationBehavior`, `PerformanceBehavior`).
 
 **Phase 5 — Testing (Integration Tests)**
 - Created `TodoList.IntegrationTests` xUnit project.
@@ -146,6 +145,7 @@ f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 - **FluentAssertions for Readability**: Using `.Should().Be()` instead of standard `Assert.Equal()` makes tests read like plain English, reducing cognitive load when reading test failures.
 - **Isolating the Application Layer**: Handlers were tested in complete isolation. We did not use an in-memory database, which is often an anti-pattern for unit tests. Instead, we mocked `ITodoRepository` and `IUnitOfWork` to strictly test the business flow (CQRS) and ensure tests execute in milliseconds.
 - **Testcontainers over In-Memory DB**: For integration tests, we used Testcontainers to spin up a real SQL Server inside Docker. In-Memory databases behave differently than real relational databases (e.g., they don't enforce foreign keys or unique constraints). Testcontainers ensures our tests are incredibly accurate to production behavior.
+- **Behavior Testing**: Testing pipeline behaviors like `ValidationBehavior` ensures that no unvalidated request reaches the handler, and by testing them independently we achieve high coverage across all requests without duplicating validation tests inside individual handlers.
 
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
