@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
-8b98803 test: add unit tests for Application MediatR behaviors to reach 86% coverage
-9f37dea journal: Day 1 - phase 5 integration tests completed
-21aef4c test: implement Phase 5 Integration Tests with Testcontainers
-3633811 journal: Day 1 - phase 5 unit tests completed
-b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
+b1c4dc6 feat: implement Phase 6.4 Todos UI (TodoList, TodoItem, TodoForm with PrimeNG Select/Dialog/Paginator)
+a03477e feat: implement Phase 6.3 Auth UI with premium split-screen design
+81d18af feat: implement Phase 6.2 Angular shared components and layout (AppLayout, PriorityBadge, EmptyState, LoadingSkeleton)
+a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interceptors, guards, design system)
+508aa95 journal: Day 1 - update with application test coverage metrics
 ```
 
 ### ✅ Tasks Completed
@@ -109,6 +109,17 @@ b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
 - Implemented true end-to-end HTTP tests (`TodosControllerTests`) that hit the API, write to the real database, and assert on HTTP response codes (201 Created, 403 Forbidden).
 - Discovered and fixed a security bug in `DeleteTodoCommandHandler`: changed it to fetch via `GetByIdAsync` and explicitly throw `UnauthorizedTodoAccessException` (mapping to 403) instead of blindly returning 404 Not Found when a user tries to delete another user's todo.
 
+**Phase 6 — Frontend Setup (Angular & PrimeNG)**
+- Implemented `AuthService` and `TodoService` to manage HTTP calls using signals for state.
+- Configured functional HTTP interceptors (`auth.interceptor`, `error.interceptor`).
+- Configured functional guards (`auth.guard`, `guest.guard`).
+- Built the main application shell `AppLayoutComponent` with responsive sidebar and top bar.
+- Developed shared UI components (`PriorityBadgeComponent`, `EmptyStateComponent`, `LoadingSkeletonComponent`).
+- Designed a split-screen premium SaaS authentication flow for `LoginComponent` and `RegisterComponent` using Reactive Forms.
+- Built the complete `TodoListComponent` managing paginated state from the backend.
+- Developed `TodoItemComponent` with checkboxes, priority badges, and an action menu.
+- Developed `TodoFormComponent` in a PrimeNG Dialog using the new `p-select` for priority management.
+
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
 - **Soft delete (`IsDeleted` flag)**: Real apps never permanently delete data — regulatory requirements, audit trails, accidental deletion recovery.
@@ -146,6 +157,10 @@ b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
 - **Isolating the Application Layer**: Handlers were tested in complete isolation. We did not use an in-memory database, which is often an anti-pattern for unit tests. Instead, we mocked `ITodoRepository` and `IUnitOfWork` to strictly test the business flow (CQRS) and ensure tests execute in milliseconds.
 - **Testcontainers over In-Memory DB**: For integration tests, we used Testcontainers to spin up a real SQL Server inside Docker. In-Memory databases behave differently than real relational databases (e.g., they don't enforce foreign keys or unique constraints). Testcontainers ensures our tests are incredibly accurate to production behavior.
 - **Behavior Testing**: Testing pipeline behaviors like `ValidationBehavior` ensures that no unvalidated request reaches the handler, and by testing them independently we achieve high coverage across all requests without duplicating validation tests inside individual handlers.
+- **Smart/Dumb Component Pattern**: Separated the frontend into orchestrator components (`TodoListComponent`) and presentational components (`TodoItem`, `TodoForm`) to maximize reusability and maintainability.
+- **Angular Signals**: Used Angular's modern `signal<T>` approach instead of traditional properties or NgRx for lightweight, highly reactive local state management within the Todo list.
+- **Split-Screen Auth UI**: Implemented a modern SaaS design pattern for authentication pages where marketing/branding occupies half the screen, providing a premium user experience from first contact.
+- **Functional Interceptors and Guards**: Used the modern Angular approach (functions instead of classes) for router guards and HTTP interceptors to reduce boilerplate and align with Angular 15+ best practices.
 
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
@@ -154,7 +169,9 @@ b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
 - **Testcontainers ms-sql image incompatibility**: The standard `Testcontainers.MsSql` package expects the `sqlcmd` binary to be present to check readiness. This binary is missing in `azure-sql-edge`. We resolved this by switching our NuGet dependency to `Testcontainers.SqlEdge` which utilizes a tailored `SqlEdgeBuilder` that successfully manages the startup without relying on `sqlcmd`.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 6 — Frontend Setup (Angular & PrimeNG)
+- [ ] Manual verification of Phase 6 UI flows in Safari
+- [ ] Phase 6.5 — Routing & Wiring
+- [ ] Phase 7 — Advanced Features (optional polish)
 
 ---
 
