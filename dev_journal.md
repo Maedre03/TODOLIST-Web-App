@@ -11,6 +11,8 @@
 
 ### 🔀 Git Commits / Version
 ```
+21aef4c test: implement Phase 5 Integration Tests with Testcontainers
+3633811 journal: Day 1 - phase 5 unit tests completed
 b55fb9a test: implement Phase 5 Unit Tests for Domain and Application layers
 3d58eb1 journal: Day 1 - document Docker ARM64 fix
 9d7c487 fix: update docker-compose to use azure-sql-edge for ARM64 compatibility
@@ -92,9 +94,6 @@ f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 - Configured `appsettings.json` and `appsettings.Development.json` with dedicated sections (`ConnectionStrings`, `JwtSettings`, `CorsSettings`, `Serilog`).
 - Integrated **Serilog** for structured logging (writing to both Console and File with compact JSON formatting).
 
-**Testing & Verification**
-- Successfully tested Phase 4 endpoints end-to-end manually using Swagger UI (Registration, JWT Authentication, and Todo CRUD operations).
-
 **Phase 5 — Testing (Unit Tests)**
 - Created `TodoList.UnitTests` xUnit project and integrated it into the solution via `TodoList.slnx`.
 - Added `NSubstitute`, `FluentAssertions`, and `coverlet.msbuild` for mocking, assertions, and code coverage.
@@ -103,6 +102,13 @@ f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 - Implemented tests for all Command Handlers (`CreateTodoCommandHandler`, `UpdateTodoCommandHandler`, `DeleteTodoCommandHandler`, `ToggleTodoCompleteCommandHandler`, `LoginUserCommandHandler`, `RegisterUserCommandHandler`), mocking out repository and service dependencies.
 - Implemented tests for all Query Handlers (`GetAllTodosQueryHandler`, `GetTodoByIdQueryHandler`, `GetTodosPagedQueryHandler`).
 - Achieved ~70% overall code coverage on the Application layer, successfully testing all core business logic paths.
+
+**Phase 5 — Testing (Integration Tests)**
+- Created `TodoList.IntegrationTests` xUnit project.
+- Configured `Testcontainers.SqlEdge` to automatically spin up a real `azure-sql-edge` Docker container during test runs.
+- Overrode the application's `DbContext` in `CustomWebApplicationFactory` to seamlessly point to the Testcontainer instance.
+- Implemented true end-to-end HTTP tests (`TodosControllerTests`) that hit the API, write to the real database, and assert on HTTP response codes (201 Created, 403 Forbidden).
+- Discovered and fixed a security bug in `DeleteTodoCommandHandler`: changed it to fetch via `GetByIdAsync` and explicitly throw `UnauthorizedTodoAccessException` (mapping to 403) instead of blindly returning 404 Not Found when a user tries to delete another user's todo.
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -139,14 +145,16 @@ f63ba8c journal: Day 1 - test Phase 4 Swagger end-to-end
 - **Mocking with NSubstitute over Moq**: NSubstitute's syntax (`Substitute.For<T>()`, `.Returns()`) is much cleaner and closer to natural language compared to Moq's `.Setup()` and `.Object` syntax.
 - **FluentAssertions for Readability**: Using `.Should().Be()` instead of standard `Assert.Equal()` makes tests read like plain English, reducing cognitive load when reading test failures.
 - **Isolating the Application Layer**: Handlers were tested in complete isolation. We did not use an in-memory database, which is often an anti-pattern for unit tests. Instead, we mocked `ITodoRepository` and `IUnitOfWork` to strictly test the business flow (CQRS) and ensure tests execute in milliseconds.
+- **Testcontainers over In-Memory DB**: For integration tests, we used Testcontainers to spin up a real SQL Server inside Docker. In-Memory databases behave differently than real relational databases (e.g., they don't enforce foreign keys or unique constraints). Testcontainers ensures our tests are incredibly accurate to production behavior.
 
 ### ⚠️ Problems / Blockers
 - **Swashbuckle / .NET 10 OpenApi Conflict**: ASP.NET Core 9/10 includes built-in OpenAPI schema generation (`Microsoft.AspNetCore.OpenApi`), but this conflicts with `Swashbuckle.AspNetCore` because of shared namespaces. I downgraded Swashbuckle to `6.5.0` and removed `Microsoft.AspNetCore.OpenApi` to fix the build errors.
 - **MediatR 500 Error on Create**: Swagger threw a 500 Internal Server Error when creating Todos because pure domain events (`IDomainEvent`) didn't implement MediatR's `INotification` interface. Fixed by adapting them into `DomainEventNotification<T>` dynamically during DbContext save.
 - **AMD64 Docker Crash on Apple Silicon**: The standard SQL Server container `mcr.microsoft.com/mssql/server:2022-latest` crashed silently on the M-series Mac due to architecture mismatch (ARM64 vs AMD64). Resolved by switching the Docker image to `mcr.microsoft.com/azure-sql-edge:latest`, wiping the corrupt volume, and re-applying migrations.
+- **Testcontainers ms-sql image incompatibility**: The standard `Testcontainers.MsSql` package expects the `sqlcmd` binary to be present to check readiness. This binary is missing in `azure-sql-edge`. We resolved this by switching our NuGet dependency to `Testcontainers.SqlEdge` which utilizes a tailored `SqlEdgeBuilder` that successfully manages the startup without relying on `sqlcmd`.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 5 — Testing (Integration Tests with Testcontainers)
+- [ ] Phase 6 — Frontend Setup (Angular & PrimeNG)
 
 ---
 
