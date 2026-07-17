@@ -11,11 +11,11 @@
 
 ### 🔀 Git Commits / Version
 ```
+775d644 feat: implement Phase 4 API Layer structure (Controllers, Route versioning, Authorize)
+bc79e98 feat: complete Phase 3 authentication with BCrypt and JwtBearer
+d433b5a journal: Day 1 - phase 3 database layer implemented
 93d9a27 feat: implement phase 3 database layer
 8f124c8 journal: Day 1 - completed Phase 2
-de5487f feat: complete AutoMapper profiles, MediatR behaviors, and Interfaces for Phase 2
-c3cba1c chore: stop tracking .agents and dev_journal.md
-ab36a5d journal: Day 1 - FluentValidation implemented
 ```
 
 ### ✅ Tasks Completed
@@ -60,7 +60,7 @@ ab36a5d journal: Day 1 - FluentValidation implemented
 - Added `LoggingBehavior` and `PerformanceBehavior` to the MediatR pipeline
 - Created `IDateTimeProvider` interface for abstracting current time access
 
-**Phase 3 — Infrastructure Layer (Database & Repositories)**
+**Phase 3 — Infrastructure Layer (fully completed)**
 - Created `ApplicationDbContext` (registers `Todos` and `Users`)
 - Configured entity mappings using **Fluent API** (`TodoConfiguration`, `UserConfiguration`)
 - Implemented **soft delete** by overriding `SaveChangesAsync` to set `IsDeleted = true`
@@ -71,6 +71,15 @@ ab36a5d journal: Day 1 - FluentValidation implemented
 - Implemented `UserRepository` with specific email queries
 - Created `DatabaseSeeder` for development data
 - Successfully generated and applied the `InitialCreate` database migration to SQL Server on Docker
+- Installed `BCrypt.Net-Next` and implemented `PasswordHasher` for secure password storage.
+- Installed `Microsoft.AspNetCore.Authentication.JwtBearer` and implemented `JwtTokenService` using `Microsoft.IdentityModel.Tokens` to generate signed JWTs.
+
+**Phase 4 — API Layer**
+- Created `Controllers/` folder to manage HTTP endpoints.
+- Implemented `TodosController` with full CRUD endpoints using MediatR.
+- Implemented `AuthController` with register and login endpoints using MediatR.
+- Implemented Route Versioning using `[Route("api/v1/[controller]")]` on all controllers to ensure API backward compatibility.
+- Added `[Authorize]` attribute to `TodosController` to properly protect the endpoints.
 
 ### 🧠 Key Decisions & Why
 - **GUID over int for IDs**: UUIDs are harder to guess (security), and avoid ID collisions in distributed systems. Industry standard.
@@ -96,15 +105,14 @@ ab36a5d journal: Day 1 - FluentValidation implemented
 - **Centralized Saving / SaveChangesAsync Overrides**: Implemented automatic soft delete logic and auditing (`CreatedAt`, `UpdatedAt`) inside `ApplicationDbContext.SaveChangesAsync` rather than requiring each repository method to handle it. This ensures it's impossible for developers to forget to set audit fields.
 - **Domain Event Dispatching in DbContext**: Before saving changes, `ApplicationDbContext` pulls events from entities and publishes them through MediatR. This allows decoupling cross-cutting actions (like sending an email when a Todo is created) from the core handler logic.
 - **Dummy Implementations for Auth Services**: Created `CurrentUserService` and `PasswordHasher` shells to satisfy MediatR dependency requirements for the handlers until we install BCrypt and integrate JWTs.
-
-- Installed `BCrypt.Net-Next` and implemented `PasswordHasher` for secure password storage.
-- Installed `Microsoft.AspNetCore.Authentication.JwtBearer` and implemented `JwtTokenService` using `Microsoft.IdentityModel.Tokens` to generate signed JWTs.
+- **Thin Controllers**: The controllers (`TodosController`, `AuthController`) contain practically no logic. They simply construct MediatR commands/queries from HTTP requests and send them. This ensures the business logic remains strictly in the Application layer, making the controllers easy to test and maintain.
+- **Route Versioning (`/api/v1/`)**: Including versioning in the API routes from the start is an industry standard practice that prevents breaking clients when major API changes are required in the future.
 
 ### ⚠️ Problems / Blockers
 - *(None today)*
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 4 — API Layer (Controllers, Middlewares, Configuration)
+- [ ] Phase 4 — API Layer Middlewares (Global Exception Handling, Request Logging, CORS)
 
 ---
 
