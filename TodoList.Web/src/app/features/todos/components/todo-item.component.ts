@@ -4,7 +4,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
-import { Todo } from '../../../core/models/todo.model';
+import { Todo, Priority } from '../../../core/models/todo.model';
 import { PriorityBadgeComponent } from '../../../shared/components/priority-badge.component';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, MenuModule, PriorityBadgeComponent],
   template: `
-    <div class="todo-card" [class.completed]="todo.isCompleted">
+    <div class="todo-card" [class.completed]="todo.isCompleted" [ngClass]="priorityClass">
       <!-- Checkbox & Title Area -->
       <div class="todo-header">
         <p-checkbox 
@@ -21,8 +21,13 @@ import { FormsModule } from '@angular/forms';
           (ngModelChange)="onToggleComplete()"
           [binary]="true" />
         
-        <div class="todo-title" [class.line-through]="todo.isCompleted">
-          {{ todo.title }}
+        <div class="todo-title-wrapper">
+          <div class="todo-title" [class.line-through]="todo.isCompleted">
+            {{ todo.title }}
+          </div>
+          <span *ngIf="todo.priority === 2" class="title-badge badge-high">High</span>
+          <span *ngIf="todo.priority === 1" class="title-badge badge-medium">Medium</span>
+          <span *ngIf="todo.priority === 0" class="title-badge badge-low">Low</span>
         </div>
 
         <!-- Action Menu (Three dots) -->
@@ -44,7 +49,6 @@ import { FormsModule } from '@angular/forms';
 
       <!-- Footer: Priority & Dates -->
       <div class="todo-footer">
-        <app-priority-badge [priority]="todo.priority" />
         <div class="dates">
           <span *ngIf="todo.dueDate" class="due-date" [class.overdue]="isOverdue()">
             <span *ngIf="isOverdue()" class="pulse-dot"></span>
@@ -88,14 +92,57 @@ import { FormsModule } from '@angular/forms';
       gap: var(--space-3);
     }
 
-    .todo-title {
+    .todo-title-wrapper {
       flex: 1;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .todo-title {
       font-weight: 600;
       color: var(--text-color);
       font-size: var(--font-size-md);
       margin-top: 2px; /* Align with checkbox */
       word-break: break-word;
       transition: color var(--transition-fast);
+    }
+
+    .title-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .badge-high {
+      background: rgba(248, 113, 113, 0.15);
+      color: #FCA5A5;
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+    .badge-medium {
+      background: rgba(251, 191, 36, 0.15);
+      color: #FCD34D;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+    .badge-low {
+      background: rgba(96, 165, 250, 0.15);
+      color: #93C5FD;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    /* Priority Borders & Backgrounds */
+    .todo-card.priority-high {
+      border-left: 4px solid var(--color-danger);
+      background: linear-gradient(90deg, rgba(248, 113, 113, 0.05) 0%, var(--surface-card) 30%);
+    }
+    .todo-card.priority-medium {
+      border-left: 4px solid var(--color-warning);
+    }
+    .todo-card.priority-low {
+      border-left: 4px solid var(--color-info);
     }
 
     .todo-description {
@@ -153,6 +200,15 @@ export class TodoItemComponent {
   @Output() toggle = new EventEmitter<Todo>();
   @Output() edit = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<Todo>();
+
+  get priorityClass(): string {
+    switch (this.todo.priority) {
+      case Priority.High: return 'priority-high';
+      case Priority.Medium: return 'priority-medium';
+      case Priority.Low: return 'priority-low';
+      default: return '';
+    }
+  }
 
   get menuItems(): MenuItem[] {
     return [
