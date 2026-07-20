@@ -386,7 +386,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 
     .kanban-column {
       flex: 1;
-      min-width: 300px;
+      min-width: 0;
       background: var(--surface-section);
       border-radius: var(--radius-lg);
       border: 1px solid var(--surface-border);

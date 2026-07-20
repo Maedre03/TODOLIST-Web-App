@@ -1,56 +1,47 @@
-# TodoList Web Application
+# TodoList Web App
 
-A full-stack, production-grade Todo List application built with an ASP.NET Core backend and an Angular frontend.
+A professional-grade To-Do list application built with .NET 10 Clean Architecture and Angular 18+.
 
-This project is built focusing on clean architecture, security, testability, observability, and maintainability. It's not just "working code"; it's a structural reference for a real-world enterprise project.
-
-## Architecture
-
-The solution uses Clean Architecture and separates concerns into layers:
-- **Domain Layer (`TodoList.Domain`)**: Core business logic and entities, entirely independent of other layers.
-- **Application Layer (`TodoList.Application`)**: Orchestrates use cases using the CQRS pattern with MediatR.
-- **Infrastructure Layer (`TodoList.Infrastructure`)**: Integrates external concerns (e.g., Entity Framework Core for Database, Auth, External APIs).
-- **Presentation Layer (`TodoList.Api`)**: The REST API surface area using ASP.NET Core.
-
-## Technologies Used
-
-### Backend
-- **Framework**: .NET 8 (or latest) / ASP.NET Core Web API
-- **Architecture**: Clean Architecture & CQRS Pattern
-- **Libraries**:
-  - MediatR (CQRS)
-  - Entity Framework Core (ORM)
-  - FluentValidation
-  - Mapster or AutoMapper (Object mapping)
-
-### Frontend
-- **Framework**: Angular
-- **Styling**: Tailwind CSS (or Vanilla CSS based on choices)
+## Features
+- **Clean Architecture**: Domain, Application, Infrastructure, API layers.
+- **CQRS**: Command Query Responsibility Segregation with MediatR.
+- **Security**: JWT Authentication, BCrypt Password Hashing, HTTPs, CORS.
+- **Frontend**: Angular 18 with Signals, PrimeNG UI, Drag-and-Drop Kanban.
+- **Database**: SQL Server via Entity Framework Core with automatic migrations.
 
 ## Getting Started
 
 ### Prerequisites
-- [.NET SDK](https://dotnet.microsoft.com/download)
-- [Node.js](https://nodejs.org/)
-- [Angular CLI](https://angular.io/cli)
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+- [Node.js](https://nodejs.org/) & npm
+- [Docker](https://www.docker.com/)
 
-### Setup Instructions
+### Running with Docker Compose (Backend only)
+```bash
+docker-compose up -d
+```
+This will start both the SQL Server and the .NET API. The API will automatically apply migrations on startup.
+Swagger API Docs will be available at: `http://localhost:5000/swagger`
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Maedre03/TODOLIST-Web-App.git
-   ```
+### Running Locally (Without Docker API)
+1. Start the database: `docker-compose up sqlserver -d`
+2. Run the API:
+```bash
+cd src/TodoList.Api
+dotnet run
+```
+3. Run the Frontend:
+```bash
+cd src/TodoList.Web
+npm install
+npm start
+```
+The frontend will be available at `http://localhost:4200`
 
-2. **Backend**:
-   - Navigate to the `src/TodoList.Api` folder.
-   - Run `dotnet restore` to restore packages.
-   - Run `dotnet run` to start the API (defaults to `https://localhost:7122` or similar).
+## Architecture
 
-3. **Frontend**:
-   - Navigate to the `TodoList.Web` folder.
-   - Run `npm install` to install dependencies.
-   - Run `ng serve` to start the Angular dev server (defaults to `http://localhost:4200`).
-
-## Project Status
-
-Currently in active development. (Phase 1 Domain layer completed)
+- **TodoList.Domain**: Core business logic and entities.
+- **TodoList.Application**: Use cases, MediatR handlers, DTOs, Validation.
+- **TodoList.Infrastructure**: EF Core, JWT Services, Repositories.
+- **TodoList.Api**: Controllers, Middleware, API endpoints.
+- **TodoList.Web**: Angular frontend.

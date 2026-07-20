@@ -265,7 +265,14 @@ ca49d8d journal: Day 2 - record search icon fix
 - None today.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Phase 8 — DevOps & Project Hygiene
+- [x] Phase 8 — DevOps & Project Hygiene
+
+### 🎉 Phase 8 — DevOps & Project Hygiene Complete
+- **Dockerization:** Added a `Dockerfile` for the `.NET API` and integrated it into `docker-compose.yml`, enabling the entire backend (API + SQL Server) to run with a single command.
+- **Documentation:** Created a comprehensive `README.md` containing features, prerequisites, setup instructions, and an architectural overview.
+- **Project Structure:** Added `Directory.Build.props` to centralize and enforce consistent build settings (`net10.0`, `ImplicitUsings`, `Nullable`) across all `.csproj` files.
+- **Developer Experience:** Added automatic Entity Framework Core migration logic to `Program.cs` that safely applies pending migrations on startup when running in the `Development` environment.
+- **Git Hygiene:** Verified that the `.gitignore` was correctly configured for .NET and Angular environments.
 
 ### 🎉 Frontend Redesign Complete
 The entire 7-phase UI/UX redesign has been successfully implemented.

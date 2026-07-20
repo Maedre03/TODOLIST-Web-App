@@ -1,6 +1,19 @@
 
 
 services:
+  api:
+    build:
+      context: .
+      dockerfile: src/TodoList.Api/Dockerfile
+    container_name: TodoList_Api
+    ports:
+      - "5185:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TodoListDb;User Id=sa;Password=TodoSecurePassword123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
   sqlserver:
     image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: TodoList_SqlExpress

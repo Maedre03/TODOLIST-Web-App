@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +10,7 @@ using TodoList.Api.Services;
 using TodoList.Application;
 using TodoList.Application.Common.Interfaces;
 using TodoList.Infrastructure;
+using TodoList.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +118,12 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+    }
+
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TodoList API v1"));
 }

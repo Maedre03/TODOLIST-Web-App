@@ -225,15 +225,15 @@ Security is non-negotiable in a real company project.
 
 ## 📦 PHASE 8 — DevOps & Project Hygiene
 
-- [ ] Add `.NET API` to `docker-compose.yml` so the whole backend runs with one command
-- [ ] Create a proper `README.md`:
+- [x] Add `.NET API` to `docker-compose.yml` so the whole backend runs with one command
+- [x] Create a proper `README.md`:
   - What the project does
   - How to run it locally (prerequisites, commands)
   - Architecture diagram
   - API documentation link
-- [ ] Add a `.gitignore` tuned for .NET + Angular (already partly there)
-- [ ] Set up a **migration script** that runs on app startup in Development
-- [ ] Add `Directory.Build.props` to enforce consistent .NET settings across all projects
+- [x] Add a `.gitignore` tuned for .NET + Angular (already partly there)
+- [x] Set up a **migration script** that runs on app startup in Development
+- [x] Add `Directory.Build.props` to enforce consistent .NET settings across all projects
 
 ---
 
