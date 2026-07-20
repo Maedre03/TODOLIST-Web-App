@@ -57,7 +57,9 @@ public class TodosController : ControllerBase
         [FromQuery] string? searchTerm = null, 
         [FromQuery] string? sortBy = null, 
         [FromQuery] bool sortDescending = false,
-        [FromQuery] bool? isCompleted = null)
+        [FromQuery] bool? isCompleted = null,
+        [FromQuery] DateTime? startDate = null,
+        [FromQuery] DateTime? endDate = null)
     {
         var query = new GetTodosPagedQuery
         {
@@ -66,7 +68,9 @@ public class TodosController : ControllerBase
             SearchTerm = searchTerm,
             SortBy = sortBy,
             SortDescending = sortDescending,
-            IsCompleted = isCompleted
+            IsCompleted = isCompleted,
+            StartDate = startDate,
+            EndDate = endDate
         };
         var result = await _mediator.Send(query);
         return Ok(result);

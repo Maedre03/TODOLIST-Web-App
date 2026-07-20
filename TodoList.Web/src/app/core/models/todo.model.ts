@@ -80,4 +80,6 @@ export interface TodoPagedParams {
   sortBy?: string;
   sortDescending?: boolean;
   isCompleted?: boolean;
+  startDate?: string;
+  endDate?: string;
 }

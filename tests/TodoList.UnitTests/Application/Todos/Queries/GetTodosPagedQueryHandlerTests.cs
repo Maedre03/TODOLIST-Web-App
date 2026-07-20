@@ -46,7 +46,7 @@ public class GetTodosPagedQueryHandlerTests
         var totalCount = 12;
 
         _todoRepositoryMock.GetPagedByUserIdAsync(
-                userId, query.PageNumber, query.PageSize, query.SearchTerm, query.SortBy, query.SortDescending, query.IsCompleted, Arg.Any<CancellationToken>())
+                userId, query.PageNumber, query.PageSize, query.SearchTerm, query.SortBy, query.SortDescending, query.IsCompleted, query.StartDate, query.EndDate, Arg.Any<CancellationToken>())
             .Returns((todos, totalCount));
 
         // Act

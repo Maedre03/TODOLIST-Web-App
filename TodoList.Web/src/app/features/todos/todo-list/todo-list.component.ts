@@ -10,6 +10,7 @@ import { SelectModule } from 'primeng/select';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { DatePickerModule } from 'primeng/datepicker';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
@@ -32,6 +33,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     PaginatorModule,
     IconFieldModule,
     InputIconModule,
+    DatePickerModule,
     TodoItemComponent,
     TodoFormComponent,
     LoadingSkeletonComponent,
@@ -73,6 +75,14 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           optionLabel="label" 
           optionValue="value"
           placeholder="Sort By" />
+
+        <p-datepicker 
+          [(ngModel)]="dateRange" 
+          selectionMode="range" 
+          [readonlyInput]="true" 
+          placeholder="Filter by Due Date" 
+          (ngModelChange)="onDateRangeChange()" 
+          [showButtonBar]="true" />
 
         <!-- View Switcher -->
         <div class="view-switcher ml-auto md:ml-0">
@@ -546,6 +556,7 @@ export class TodoListComponent implements OnInit {
   pageSize = 10;
   searchTerm = '';
   isCompletedFilter?: boolean;
+  dateRange = signal<Date[] | null>(null);
   private searchTimeout: any;
 
   // Sorting
@@ -610,13 +621,23 @@ export class TodoListComponent implements OnInit {
   loadTodos(): void {
     this.isLoading.set(true);
 
+    let startIso: string | undefined;
+    let endIso: string | undefined;
+    const range = this.dateRange();
+    if (range && range.length > 0) {
+      if (range[0]) startIso = range[0].toISOString();
+      if (range[1]) endIso = range[1].toISOString();
+    }
+
     const params: TodoPagedParams = {
       pageNumber: this.currentPage,
       pageSize: this.pageSize,
       searchTerm: this.searchTerm,
       sortBy: this.selectedSort.sortBy,
       sortDescending: this.selectedSort.desc,
-      isCompleted: this.isCompletedFilter
+      isCompleted: this.isCompletedFilter,
+      startDate: startIso,
+      endDate: endIso
     };
 
     this.todoService.getPaged(params).subscribe({
@@ -642,6 +663,11 @@ export class TodoListComponent implements OnInit {
   }
 
   onSortChange(): void {
+    this.currentPage = 1;
+    this.loadTodos();
+  }
+
+  onDateRangeChange(): void {
     this.currentPage = 1;
     this.loadTodos();
   }

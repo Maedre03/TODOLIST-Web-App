@@ -33,6 +33,8 @@ public class GetTodosPagedQueryHandler : IRequestHandler<GetTodosPagedQuery, Pag
             request.SortBy,
             request.SortDescending,
             request.IsCompleted,
+            request.StartDate,
+            request.EndDate,
             cancellationToken);
 
         var dtoItems = items.Select(t => new TodoDto

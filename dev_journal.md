@@ -179,14 +179,15 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+d052152 feat: add date range filtering for due dates
+5c8fa91 journal: Day 2 - record kanban board layout fix
 1016d29 fix: adjust kanban column min-width to fit screen without scrolling
 85d0ae6 journal: Day 2 - verify and complete phase 7 security hardening
 df48839 journal: Day 2 - record phase 6 frontend test completion
-b1110c4 test: add vitest unit tests for angular services and components
-b1caf54 journal: Day 2 - record sidebar collapsible features
 ```
 
 ### ✅ Tasks Completed
+- **Phase 9.5 — Date Range Filtering:** Added a full-stack feature allowing users to filter the Todo list by a `DueDate` range using PrimeNG's `p-datepicker` range selection.
 - **Phase 9.4 — Kanban Board Layout Fix:** Adjusted `.kanban-column` `min-width` to `0`, ensuring the columns shrink proportionally and eliminating the horizontal scrollbar on smaller screens.
 - **Phase 7 — Security Hardening:** Verified that all 7 security requirements (BCrypt hashing, JWT expiration, User ownership enforcement, SQL Injection prevention via EF Core, HTTPS redirection, Generic error responses for 500s, CORS lock down) were already implemented correctly during earlier phases. Marked them as complete in `task_list.md`.
 - **Bug Fix**: Aligned Priority enum values between the frontend and backend to fix 'Low' priority creation issues, and introduced 'Critical' priority to the frontend UI including the Kanban board.
@@ -242,6 +243,7 @@ b1caf54 journal: Day 2 - record sidebar collapsible features
   - Mocked global `localStorage` explicitly to ensure Vitest environment runs correctly in Node without jsdom friction.
 
 ### 🧠 Key Decisions & Why
+- **Date Range Architecture**: By pushing the date filtering logic all the way down to the EF Core `IQueryable` in `TodoRepository`, we ensure that only the requested slice of data is ever retrieved from SQL Server, maintaining the performance benefits of our existing server-side pagination.
 - **Responsive Kanban Layout**: Adjusted Kanban column scaling by removing explicit `min-width: 300px` in favor of `min-width: 0` inside the flex container. This ensures flex items can shrink properly when screen real-estate is limited, avoiding horizontal scrolling while maintaining proportional column widths.
 - **Security by Default**: Due to the adherence to Clean Architecture and modern .NET practices in the earlier phases, the security hardening tasks (Phase 7) were naturally fulfilled without requiring retrofits. Using MediatR handlers with `_currentUserService.UserId` and `EF Core` parameterization ensures security is baked into the foundation.
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.

@@ -24,13 +24,23 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
             .FirstOrDefaultAsync(t => t.Id == id && t.CreatedByUserId == userId, cancellationToken);
     }
 
-    public async Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, CancellationToken cancellationToken = default)
+    public async Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
     {
         var query = DbContext.Todos.Where(t => t.CreatedByUserId == userId);
 
         if (isCompleted.HasValue)
         {
             query = query.Where(t => t.IsCompleted == isCompleted.Value);
+        }
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(t => t.DueDate >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(t => t.DueDate <= endDate.Value);
         }
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
