@@ -179,14 +179,19 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
-d052152 feat: add date range filtering for due dates
+ade96e3 feat: complete Tags feature implementation (API, DB, UI)
+8f6a7ab fix: adjust date range filtering to encompass full days
+b27843d fix: resolve datepicker signal binding issue preventing filtering
+629c413 feat: add date range filtering for due dates
 5c8fa91 journal: Day 2 - record kanban board layout fix
-1016d29 fix: adjust kanban column min-width to fit screen without scrolling
-85d0ae6 journal: Day 2 - verify and complete phase 7 security hardening
-df48839 journal: Day 2 - record phase 6 frontend test completion
 ```
 
 ### ✅ Tasks Completed
+- **Tags Feature:** Implemented a full-stack Tag system allowing users to organize tasks.
+  - Backend: Created `Tag` entity, many-to-many relationship with `Todo` via `TodoTags` join table.
+  - API: Developed `TagsController` for CRUD operations and updated `TodosController` to filter by `tagId` and accept `tagIds` on creation/update.
+  - DB: Generated and applied `AddTags` EF Core migration.
+  - Frontend UI: Built an inline "Create Tag" dialog within the sidebar, added PrimeNG `<p-multiselect>` for tagging during task creation, and rendered visual tag badges on the `TodoItemComponent` cards.
 - **Phase 9.5 — Date Range Filtering:** Added a full-stack feature allowing users to filter the Todo list by a `DueDate` range using PrimeNG's `p-datepicker` range selection.
 - **Phase 9.4 — Kanban Board Layout Fix:** Adjusted `.kanban-column` `min-width` to `0`, ensuring the columns shrink proportionally and eliminating the horizontal scrollbar on smaller screens.
 - **Phase 7 — Security Hardening:** Verified that all 7 security requirements (BCrypt hashing, JWT expiration, User ownership enforcement, SQL Injection prevention via EF Core, HTTPS redirection, Generic error responses for 500s, CORS lock down) were already implemented correctly during earlier phases. Marked them as complete in `task_list.md`.
