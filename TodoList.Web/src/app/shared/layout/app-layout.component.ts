@@ -2,12 +2,13 @@ import { Component, inject, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 /**
  * AppLayoutComponent — the main application shell.
  *
  * This wraps all authenticated pages with:
- * - Sidebar navigation (left)
+ * - Sidebar navigation (left) with stats, upcoming, tags, pinned
  * - Top bar (top)
  * - Content area (center) via <router-outlet>
  */
@@ -39,34 +40,112 @@ import { AuthService } from '../../core/services/auth.service';
         </div>
 
         <nav class="sidebar-nav">
-          <ul class="nav-list">
+          <ul class="nav-list mb-4">
             <li>
-              <a routerLink="/todos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" (click)="onNavClick()">
-                <i class="pi pi-list"></i>
+              <a routerLink="/todos" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
+                <i class="pi pi-inbox"></i>
                 <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">All Tasks</span>
               </a>
             </li>
-            <!-- Placeholder for future filters -->
-            <li>
-              <a routerLink="/todos" [queryParams]="{ filter: 'active' }" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
-                <i class="pi pi-clock"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Active</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/todos" [queryParams]="{ filter: 'completed' }" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
-                <i class="pi pi-check-circle"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Completed</span>
-              </a>
-            </li>
           </ul>
+
+          <ng-container *ngIf="!isSidebarCollapsed() || isMobile()">
+            <!-- Progress Section -->
+            <div class="sidebar-section">
+              <h3 class="section-title">Today's Progress</h3>
+              <div class="progress-panel">
+                <div class="progress-ring-container">
+                  <div class="progress-circle" style="--progress: 65%">
+                    <span>65%</span>
+                  </div>
+                </div>
+                <div class="progress-details">
+                  <span class="stat-value">5 / 8</span>
+                  <span class="stat-label">completed</span>
+                  <div class="streak mt-1 text-xs font-medium">
+                    <i class="pi pi-fire text-orange-500 mr-1"></i> 3 day streak
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Upcoming Section -->
+            <div class="sidebar-section">
+              <h3 class="section-title">Upcoming</h3>
+              <ul class="nav-list small-list">
+                <li>
+                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
+                    <span class="pulse-dot mr-2"></span>
+                    <span class="nav-text text-truncate" title="Submit quarterly report">Submit quarterly report</span>
+                    <span class="date-badge overdue">Today</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
+                    <i class="pi pi-calendar mr-2 text-color-secondary"></i>
+                    <span class="nav-text text-truncate" title="Doctor appointment">Doctor appointment</span>
+                    <span class="date-badge">Tom</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Tags Section -->
+            <div class="sidebar-section">
+              <div class="section-header">
+                <h3 class="section-title mb-0">Tags</h3>
+                <button class="icon-btn" title="Add Tag"><i class="pi pi-plus"></i></button>
+              </div>
+              <ul class="nav-list small-list">
+                <li>
+                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
+                    <span class="color-dot bg-blue-500 mr-2"></span>
+                    <span class="nav-text">Work</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
+                    <span class="color-dot bg-green-500 mr-2"></span>
+                    <span class="nav-text">Personal</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Pinned Section -->
+            <div class="sidebar-section">
+              <h3 class="section-title">Pinned</h3>
+              <ul class="nav-list small-list">
+                <li>
+                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
+                    <i class="pi pi-thumbtack mr-2 text-yellow-500"></i>
+                    <span class="nav-text text-truncate">Buy groceries</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
         </nav>
 
         <div class="sidebar-footer">
-          <button class="nav-link logout-btn" (click)="logout()">
-            <i class="pi pi-sign-out"></i>
-            <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Logout</span>
-          </button>
+          <div class="settings-menu" *ngIf="!isSidebarCollapsed() || isMobile()">
+            <button class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="toggleTheme()">
+              <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
+              <span>{{ themeService.isDarkMode() ? 'Dark Mode' : 'Light Mode' }}</span>
+            </button>
+            <button class="nav-link w-full flex align-items-center gap-3 logout-btn" (click)="logout()">
+              <i class="pi pi-sign-out"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+          <div class="settings-menu-collapsed" *ngIf="isSidebarCollapsed() && !isMobile()">
+            <button class="icon-btn mb-2 w-full" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode'">
+               <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
+            </button>
+            <button class="icon-btn text-danger w-full logout-icon" (click)="logout()" title="Logout">
+               <i class="pi pi-sign-out"></i>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -209,6 +288,13 @@ import { AuthService } from '../../core/services/auth.service';
       overflow: hidden;
       white-space: nowrap;
       text-decoration: none;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
     }
 
     .nav-link:hover {
@@ -219,6 +305,8 @@ import { AuthService } from '../../core/services/auth.service';
     .nav-link.active {
       background: var(--surface-hover);
       color: var(--primary-color);
+      border-left: 3px solid var(--primary-color);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .nav-link i {
@@ -226,23 +314,151 @@ import { AuthService } from '../../core/services/auth.service';
       min-width: 1.1rem;
     }
 
+    /* ── New Sidebar Sections ── */
+    .sidebar-section {
+      padding: var(--space-2) var(--space-4);
+      margin-bottom: var(--space-3);
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-2);
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-color-secondary);
+      font-weight: 600;
+      margin: 0 0 var(--space-2) 0;
+    }
+
+    .progress-panel {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      background: var(--surface-card);
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+    }
+
+    .progress-ring-container {
+      position: relative;
+      width: 40px;
+      height: 40px;
+    }
+
+    .progress-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary-color) var(--progress), var(--surface-hover) 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: bold;
+    }
+    .progress-circle::before {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--surface-card);
+      z-index: 1;
+    }
+    .progress-circle span {
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-color-secondary);
+    }
+
+    .small-list .nav-link {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-sm);
+    }
+    
+    .text-truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .date-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: var(--surface-hover);
+      color: var(--text-color-secondary);
+      margin-left: auto;
+    }
+    .date-badge.overdue {
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--color-danger);
+    }
+
+    .color-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .bg-blue-500 { background-color: #3b82f6; }
+    .bg-green-500 { background-color: #22c55e; }
+
+    .pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-danger);
+      animation: pulse 2s infinite;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-color-secondary);
+      cursor: pointer;
+      border-radius: 4px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .icon-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text-color);
+    }
+
     .sidebar-footer {
       padding: var(--space-4) var(--space-2);
       border-top: 1px solid var(--surface-border);
     }
 
-    .logout-btn {
-      width: 100%;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: inherit;
-      text-align: left;
-    }
-
-    .logout-btn:hover {
-      color: var(--color-danger);
+    .logout-btn:hover, .logout-icon:hover {
+      color: var(--color-danger) !important;
     }
 
     /* ── Main Container ── */
@@ -351,6 +567,7 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class AppLayoutComponent implements OnInit {
   authService = inject(AuthService);
+  themeService = inject(ThemeService);
   
   isSidebarCollapsed = signal(false);
   isMobileMenuOpen = signal(false);
@@ -388,6 +605,10 @@ export class AppLayoutComponent implements OnInit {
     if (this.isMobile()) {
       this.closeMobileMenu();
     }
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   logout() {
