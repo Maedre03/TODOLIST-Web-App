@@ -93,7 +93,9 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
             formControlName="dueDate" 
             [minDate]="minDate"
             dateFormat="M d, yy"
-            placeholder="Select a due date"
+            [showTime]="true"
+            hourFormat="24"
+            placeholder="Select a due date and time"
             [showClear]="true"
             appendTo="body"
             styleClass="w-full">

@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
           <div class="todo-title" [class.line-through]="todo.isCompleted">
             {{ todo.title }}
           </div>
+          <i *ngIf="needsAttention" class="pi pi-exclamation-circle text-danger attention-icon" title="Requires attention"></i>
           <span *ngIf="todo.priority === 4" class="title-badge badge-critical">Critical</span>
           <span *ngIf="todo.priority === 3" class="title-badge badge-high">High</span>
           <span *ngIf="todo.priority === 2" class="title-badge badge-medium">Medium</span>
@@ -53,7 +54,7 @@ import { FormsModule } from '@angular/forms';
         <div class="dates">
           <span *ngIf="todo.dueDate" class="due-date" [class.overdue]="isOverdue()">
             <span *ngIf="isOverdue()" class="pulse-dot"></span>
-            Due: {{ todo.dueDate | date:'MMM d, y' }}
+            Due: {{ todo.dueDate | date:'MMM d, y, HH:mm' }}
           </span>
           <span *ngIf="!todo.dueDate">Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
         </div>
@@ -202,6 +203,11 @@ import { FormsModule } from '@angular/forms';
       text-decoration: line-through;
       color: var(--text-color-disabled);
     }
+
+    .attention-icon {
+      font-size: 1.1rem;
+      animation: pulse 2s infinite;
+    }
   `]
 })
 export class TodoItemComponent {
@@ -248,5 +254,17 @@ export class TodoItemComponent {
     due.setHours(0,0,0,0);
     today.setHours(0,0,0,0);
     return due < today;
+  }
+
+  isDueSoon(): boolean {
+    if (!this.todo.dueDate || this.todo.isCompleted) return false;
+    const due = new Date(this.todo.dueDate).getTime();
+    const now = new Date().getTime();
+    const hours24 = 24 * 60 * 60 * 1000;
+    return (due - now) > 0 && (due - now) <= hours24;
+  }
+
+  get needsAttention(): boolean {
+    return !this.todo.isCompleted && (this.todo.priority === Priority.Critical || this.isDueSoon());
   }
 }

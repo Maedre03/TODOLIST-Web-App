@@ -24,7 +24,7 @@ public class UpdateTodoCommandValidator : AbstractValidator<UpdateTodoCommand>
             .IsInEnum().WithMessage("Invalid priority value.");
 
         RuleFor(v => v.DueDate)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Due date cannot be in the past.")
+            .Must(dueDate => dueDate!.Value.Date >= DateTime.UtcNow.Date).WithMessage("Due date cannot be in the past.")
             .When(v => v.DueDate.HasValue);
     }
 }
