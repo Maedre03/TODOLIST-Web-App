@@ -77,11 +77,11 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           placeholder="Sort By" />
 
         <p-datepicker 
-          [(ngModel)]="dateRange" 
+          [ngModel]="dateRange()" 
           selectionMode="range" 
           [readonlyInput]="true" 
           placeholder="Filter by Due Date" 
-          (ngModelChange)="onDateRangeChange()" 
+          (ngModelChange)="dateRange.set($event); onDateRangeChange()" 
           [showButtonBar]="true" />
 
         <!-- View Switcher -->
