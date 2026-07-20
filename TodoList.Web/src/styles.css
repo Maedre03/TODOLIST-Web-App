@@ -241,6 +241,22 @@ p {
 }
 
 
+/* ── Pulse Animation (for overdue dots) ─────────────────────── */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(248, 113, 113, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+  }
+}
+
 /* ── Fade In Animation (for page content) ───────────────────── */
 @keyframes fadeIn {
   from {

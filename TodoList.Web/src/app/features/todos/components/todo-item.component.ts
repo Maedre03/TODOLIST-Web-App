@@ -46,7 +46,11 @@ import { FormsModule } from '@angular/forms';
       <div class="todo-footer">
         <app-priority-badge [priority]="todo.priority" />
         <div class="dates">
-          <span>Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
+          <span *ngIf="todo.dueDate" class="due-date" [class.overdue]="isOverdue()">
+            <span *ngIf="isOverdue()" class="pulse-dot"></span>
+            Due: {{ todo.dueDate | date:'MMM d, y' }}
+          </span>
+          <span *ngIf="!todo.dueDate">Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
         </div>
       </div>
     </div>
@@ -112,6 +116,29 @@ import { FormsModule } from '@angular/forms';
     .dates {
       font-size: var(--font-size-xs);
       color: var(--text-color-disabled);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .due-date {
+      display: flex;
+      align-items: center;
+    }
+
+    .due-date.overdue {
+      color: var(--color-danger);
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-danger);
+      animation: pulse 2s infinite;
+      margin-right: 4px;
     }
 
     .line-through {
@@ -145,5 +172,14 @@ export class TodoItemComponent {
 
   onToggleComplete(): void {
     this.toggle.emit(this.todo);
+  }
+
+  isOverdue(): boolean {
+    if (!this.todo.dueDate || this.todo.isCompleted) return false;
+    const due = new Date(this.todo.dueDate);
+    const today = new Date();
+    due.setHours(0,0,0,0);
+    today.setHours(0,0,0,0);
+    return due < today;
   }
 }
