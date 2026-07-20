@@ -67,29 +67,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           </ul>
 
           <ng-container *ngIf="!isSidebarCollapsed() || isMobile()">
-            <!-- Progress Section -->
-            <div class="sidebar-section">
-              <div class="section-header interactive" (click)="toggleSection('progress')" routerLink="/todos" [queryParams]="{ section: 'progress' }">
-                <div class="flex align-items-center gap-2">
-                  <i class="pi" [class.pi-chevron-down]="isProgressExpanded()" [class.pi-chevron-right]="!isProgressExpanded()"></i>
-                  <h3 class="section-title mb-0">Today's Progress</h3>
-                </div>
-              </div>
-              <div class="progress-panel" *ngIf="isProgressExpanded()">
-                <div class="progress-ring-container">
-                  <div class="progress-circle" style="--progress: 65%">
-                    <span>65%</span>
-                  </div>
-                </div>
-                <div class="progress-details">
-                  <span class="stat-value">5 / 8</span>
-                  <span class="stat-label">completed</span>
-                  <div class="streak mt-1 text-xs font-medium">
-                    <i class="pi pi-fire text-orange-500 mr-1"></i> 3 day streak
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <!-- Upcoming Section -->
             <div class="sidebar-section">
@@ -446,62 +423,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       transition: transform 0.2s;
     }
 
-    .progress-panel {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      background: var(--surface-card);
-      padding: var(--space-3);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--surface-border);
-    }
-
-    .progress-ring-container {
-      position: relative;
-      width: 40px;
-      height: 40px;
-    }
-
-    .progress-circle {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: conic-gradient(var(--primary-color) var(--progress), var(--surface-hover) 0deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      font-weight: bold;
-    }
-    .progress-circle::before {
-      content: "";
-      position: absolute;
-      inset: 4px;
-      border-radius: 50%;
-      background: var(--surface-card);
-      z-index: 1;
-    }
-    .progress-circle span {
-      position: relative;
-      z-index: 2;
-    }
-
-    .progress-details {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .stat-value {
-      font-weight: 700;
-      font-size: 0.9rem;
-      line-height: 1;
-    }
-    
-    .stat-label {
-      font-size: 0.7rem;
-      color: var(--text-color-secondary);
-    }
-
     .small-list .nav-link {
       padding: var(--space-2) var(--space-3);
       border-radius: var(--radius-sm);
@@ -717,7 +638,7 @@ export class AppLayoutComponent implements OnInit {
   isMobileMenuOpen = signal(false);
   isMobile = signal(false);
 
-  isProgressExpanded = signal(true);
+
   isUpcomingExpanded = signal(true);
   isTagsExpanded = signal(true);
   isPinnedExpanded = signal(true);
@@ -845,9 +766,8 @@ export class AppLayoutComponent implements OnInit {
     return email.split('@')[0];
   }
 
-  toggleSection(section: 'progress' | 'upcoming' | 'tags' | 'pinned') {
-    if (section === 'progress') this.isProgressExpanded.update(v => !v);
-    else if (section === 'upcoming') this.isUpcomingExpanded.update(v => !v);
+  toggleSection(section: 'upcoming' | 'tags' | 'pinned') {
+    if (section === 'upcoming') this.isUpcomingExpanded.update(v => !v);
     else if (section === 'tags') this.isTagsExpanded.update(v => !v);
     else if (section === 'pinned') this.isPinnedExpanded.update(v => !v);
   }
