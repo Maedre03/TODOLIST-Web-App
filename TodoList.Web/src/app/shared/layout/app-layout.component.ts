@@ -58,6 +58,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">All Tasks</span>
               </a>
             </li>
+            <li>
+              <a routerLink="/stats" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
+                <i class="pi pi-chart-bar"></i>
+                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Stats & Progress</span>
+              </a>
+            </li>
           </ul>
 
           <ng-container *ngIf="!isSidebarCollapsed() || isMobile()">

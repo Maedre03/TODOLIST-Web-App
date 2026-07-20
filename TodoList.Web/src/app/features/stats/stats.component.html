@@ -1,0 +1,87 @@
+<div class="stats-container animate-fade-in" *ngIf="!isLoading()">
+  <header class="stats-header mb-5">
+    <div>
+      <h1 class="text-3xl font-bold mb-2">Stats & Progress</h1>
+      <p class="text-color-secondary">Overview of your task completion and priorities.</p>
+    </div>
+  </header>
+
+  <!-- Metric Cards -->
+  <div class="grid mb-5">
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="metric-card">
+        <div class="metric-icon bg-blue-100 text-blue-600">
+          <i class="pi pi-list text-xl"></i>
+        </div>
+        <div class="metric-details">
+          <span class="metric-label">Total Tasks</span>
+          <span class="metric-value">{{ totalTasks() }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="metric-card">
+        <div class="metric-icon bg-emerald-100 text-emerald-600">
+          <i class="pi pi-check-circle text-xl"></i>
+        </div>
+        <div class="metric-details">
+          <span class="metric-label">Completed Tasks</span>
+          <span class="metric-value">{{ completedTasks() }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="metric-card">
+        <div class="metric-icon bg-indigo-100 text-indigo-600">
+          <i class="pi pi-clock text-xl"></i>
+        </div>
+        <div class="metric-details">
+          <span class="metric-label">Pending Tasks</span>
+          <span class="metric-value">{{ pendingTasks() }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6 lg:col-3">
+      <div class="metric-card">
+        <div class="metric-icon bg-purple-100 text-purple-600">
+          <i class="pi pi-chart-line text-xl"></i>
+        </div>
+        <div class="metric-details">
+          <span class="metric-label">Completion Rate</span>
+          <span class="metric-value">{{ completionRate() }}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid">
+    <div class="col-12 md:col-6">
+      <div class="chart-card">
+        <h3 class="chart-title">Tasks by Priority</h3>
+        <div class="chart-container">
+          <p-chart type="doughnut" [data]="priorityChartData" [options]="priorityChartOptions"></p-chart>
+        </div>
+        <div class="chart-empty" *ngIf="totalTasks() === 0">
+          <p class="text-color-secondary">No tasks available to show priority stats.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-6">
+      <div class="chart-card">
+        <h3 class="chart-title">Completion Status</h3>
+        <div class="chart-container">
+          <p-chart type="doughnut" [data]="statusChartData" [options]="statusChartOptions"></p-chart>
+        </div>
+        <div class="chart-empty" *ngIf="totalTasks() === 0">
+          <p class="text-color-secondary">No tasks available to show status stats.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="flex justify-content-center align-items-center h-full min-h-screen" *ngIf="isLoading()">
+  <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+</div>

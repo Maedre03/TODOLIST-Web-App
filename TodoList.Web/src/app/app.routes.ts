@@ -47,6 +47,11 @@ export const routes: Routes = [
         path: 'todos',
         loadComponent: () =>
           import('./features/todos/todo-list/todo-list.component').then(m => m.TodoListComponent)
+      },
+      {
+        path: 'stats',
+        loadComponent: () =>
+          import('./features/stats/stats.component').then(m => m.StatsComponent)
       }
     ]
   },
