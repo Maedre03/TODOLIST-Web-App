@@ -179,26 +179,33 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
-e8aa39b fix: hide PrimeUI license watermark by removing invalid ng-deep from global styles
-4be9d9d journal: Day 1 - phase 6 frontend ui implementation completed
-b1c4dc6 feat: implement Phase 6.4 Todos UI (TodoList, TodoItem, TodoForm with PrimeNG Select/Dialog/Paginator)
-a03477e feat: implement Phase 6.3 Auth UI with premium split-screen design
-81d18af feat: implement Phase 6.2 Angular shared components and layout (AppLayout, PriorityBadge, EmptyState, LoadingSkeleton)
+ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, search input)
+a7e72d6 chore: sync task_list.md with completed Phase 6 items from dev journal
+fa7cf23 chore: commit pending changes from previous sessions
+1617e53 feat: configure official PrimeUI community license key
+c3dc297 journal: Day 2 - fixed primeUI watermark
 ```
 
 ### ✅ Tasks Completed
 - Removed CSS hack and activated the official PrimeUI Community License.
+- **Phase 9.1 — Critical UI Bug Fixes:**
+  - Deleted unused `app.component.html` placeholder to reduce noise.
+  - Fixed mobile sidebar logic by adding `isMobileMenuOpen` signal and responsive backdrop overlay.
+  - Made `isMobile()` reactive to window resizing.
+  - Replaced deprecated `p-input-icon-left` with modern `p-iconField` from PrimeNG v18.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
+- **Reactive Mobile View:** We replaced the static `window.innerWidth` check with an `@HostListener('window:resize')` and proper signal usage in `AppLayoutComponent`. This ensures layout accurately reflects desktop/mobile state without requiring page reloads.
+- **PrimeNG IconField API:** Shifted to `<p-iconField>` and `<p-inputIcon>` wrapper to remain compliant with PrimeNG 18, ensuring we don't carry technical debt from v17 patterns.
 
 ### ⚠️ Problems / Blockers
 - None today.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Manual verification of Phase 6 UI flows in Safari
-- [ ] Phase 6.5 — Routing & Wiring
-- [ ] Phase 7 — Advanced Features (optional polish)
+- [ ] Phase 9.2 — Due Date Feature (form picker, card badge, overdue pulse)
+- [ ] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
+- [ ] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
 
 ---
 
