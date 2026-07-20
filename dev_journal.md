@@ -207,6 +207,8 @@ ade96e3 feat: complete Tags feature implementation (API, DB, UI)
   - Fixed an issue where newly created tags did not appear in the sidebar or the task creation form. Updated `TagService` to use a `BehaviorSubject` (`tags$`) so `AppLayoutComponent` and `TodoListComponent` can passively subscribe and automatically sync tag state globally.
   - Fixed `CreateTagCommandHandler` on the backend, which was missing a call to `_unitOfWork.SaveChangesAsync()`. Tags were previously discarded at the end of the request and never actually inserted into the SQL database.
   - Fixed a backend bug preventing users from assigning tags to existing tasks. Rewrote the `UpdateTodoCommandHandler` logic for many-to-many tag relationships. Replaced the simplistic `.Clear()` and `.Add()` logic with proper collection diffing (adding only new tags, removing only deleted tags) to prevent EF Core `InvalidOperationException` tracking conflicts.
+  - Fixed a frontend bug where clicking the delete tag button in the sidebar navigated the router instead of opening the confirmation dialog. Added `event.preventDefault()` to the click handler.
+  - Fixed a backend bug where soft-deleted tags still appeared in the tasks on the board. Added an EF Core Global Query Filter (`builder.HasQueryFilter(t => !t.IsDeleted)`) to `TagConfiguration` to automatically filter them out.
 - **Phase 9.2 — Due Date Feature:**
   - Added PrimeNG `p-datepicker` to `TodoFormComponent` for setting due dates.
   - Updated `TodoItemComponent` to display the due date.

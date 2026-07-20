@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
@@ -10,6 +10,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../core/models/todo.model';
 import { Tag } from '../../../core/models/tag.model';
+import { TagService } from '../../../core/services/tag.service';
+import { MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-todo-form',
@@ -17,14 +20,17 @@ import { Tag } from '../../../core/models/tag.model';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     InputTextModule,
     TextareaModule,
     SelectModule,
     ButtonModule,
     DialogModule,
     DatePickerModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TooltipModule
   ],
+  providers: [MessageService],
   template: `
     <p-dialog 
       [header]="isEditMode ? 'Edit Task' : 'Create New Task'" 
@@ -107,23 +113,34 @@ import { Tag } from '../../../core/models/tag.model';
 
         <div class="field">
           <label for="tagIds">Tags</label>
-          <p-multiselect 
-            id="tagIds" 
-            formControlName="tagIds" 
-            [options]="userTags" 
-            optionLabel="name" 
-            optionValue="id" 
-            placeholder="Select Tags"
-            [maxSelectedLabels]="3"
-            styleClass="w-full"
-            appendTo="body">
-            <ng-template let-tag pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <span class="tag-color-dot" [style.backgroundColor]="tag.color"></span>
-                <span>{{ tag.name }}</span>
-              </div>
-            </ng-template>
-          </p-multiselect>
+          <div class="flex gap-2 mb-2">
+            <p-multiselect 
+              id="tagIds" 
+              formControlName="tagIds" 
+              [options]="userTags" 
+              optionLabel="name" 
+              optionValue="id" 
+              placeholder="Select Tags"
+              [maxSelectedLabels]="3"
+              styleClass="w-full"
+              class="flex-1"
+              appendTo="body">
+              <ng-template let-tag pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <span class="tag-color-dot" [style.backgroundColor]="tag.color"></span>
+                  <span>{{ tag.name }}</span>
+                </div>
+              </ng-template>
+            </p-multiselect>
+            <p-button icon="pi pi-plus" (onClick)="showInlineTagForm = true" [text]="true" [rounded]="true" severity="secondary" pTooltip="Create new tag"></p-button>
+          </div>
+
+          <div *ngIf="showInlineTagForm" class="flex gap-2 align-items-center mt-2 p-2 border-round surface-ground border-1 surface-border">
+            <input pInputText [(ngModel)]="newTagName" [ngModelOptions]="{standalone: true}" placeholder="Tag name" class="flex-1 p-inputtext-sm" autofocus />
+            <input type="color" [(ngModel)]="newTagColor" [ngModelOptions]="{standalone: true}" class="w-2rem h-2rem border-none p-0 cursor-pointer border-round" />
+            <p-button icon="pi pi-check" (onClick)="createInlineTag()" [text]="true" size="small" [loading]="isSavingInlineTag"></p-button>
+            <p-button icon="pi pi-times" (onClick)="showInlineTagForm = false" [text]="true" severity="secondary" size="small"></p-button>
+          </div>
         </div>
 
         <div class="dialog-footer">
@@ -197,6 +214,8 @@ import { Tag } from '../../../core/models/tag.model';
 })
 export class TodoFormComponent implements OnInit, OnChanges {
   private readonly fb = inject(FormBuilder);
+  private readonly tagService = inject(TagService);
+  private readonly messageService = inject(MessageService);
 
   @Input() visible = false;
   @Input() todoToEdit: Todo | null = null;
@@ -214,6 +233,12 @@ export class TodoFormComponent implements OnInit, OnChanges {
     { label: 'High', value: Priority.High },
     { label: 'Critical', value: Priority.Critical }
   ];
+
+  // Inline Tag Creation State
+  showInlineTagForm = false;
+  newTagName = '';
+  newTagColor = '#8B5CF6'; // Default primary brand color
+  isSavingInlineTag = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -311,5 +336,30 @@ export class TodoFormComponent implements OnInit, OnChanges {
       case Priority.Low: return 'Low';
       default: return 'Unknown';
     }
+  }
+
+  createInlineTag() {
+    if (!this.newTagName.trim()) return;
+    
+    this.isSavingInlineTag = true;
+    this.tagService.createTag({ name: this.newTagName.trim(), color: this.newTagColor }).subscribe({
+      next: (newTagId: string) => {
+        this.isSavingInlineTag = false;
+        this.showInlineTagForm = false;
+        this.newTagName = '';
+        
+        // Refresh tags globally
+        this.tagService.getTags().subscribe(() => {
+            // Auto-select the newly created tag!
+            const currentTagIds = this.form.get('tagIds')?.value || [];
+            this.form.patchValue({ tagIds: [...currentTagIds, newTagId] });
+            this.messageService.add({ severity: 'success', summary: 'Tag Created', detail: 'New tag added.' });
+        });
+      },
+      error: () => {
+        this.isSavingInlineTag = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create tag.' });
+      }
+    });
   }
 }
