@@ -48,17 +48,22 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, Unit>
 
         if (request.TagIds != null)
         {
-            todo.Tags.Clear();
-            if (request.TagIds.Any())
+            var userTags = await _tagRepository.GetTagsByUserIdAsync(_currentUserService.UserId, cancellationToken);
+            var validTagIds = userTags.Select(t => t.Id).Intersect(request.TagIds).ToList();
+            
+            // Remove tags that are no longer in the request
+            var tagsToRemove = todo.Tags.Where(t => !validTagIds.Contains(t.Id)).ToList();
+            foreach (var tag in tagsToRemove)
             {
-                var userTags = await _tagRepository.GetTagsByUserIdAsync(_currentUserService.UserId, cancellationToken);
-                var validTagIds = userTags.Select(t => t.Id).Intersect(request.TagIds).ToList();
-                var tagsToAdd = userTags.Where(t => validTagIds.Contains(t.Id)).ToList();
-                
-                foreach (var tag in tagsToAdd)
-                {
-                    todo.Tags.Add(tag);
-                }
+                todo.Tags.Remove(tag);
+            }
+            
+            // Add tags that are new in the request
+            var existingTagIds = todo.Tags.Select(t => t.Id).ToList();
+            var tagsToAdd = userTags.Where(t => validTagIds.Contains(t.Id) && !existingTagIds.Contains(t.Id)).ToList();
+            foreach (var tag in tagsToAdd)
+            {
+                todo.Tags.Add(tag);
             }
         }
 

@@ -11,11 +11,13 @@ public class CreateTagCommandHandler : IRequestHandler<CreateTagCommand, Guid>
 {
     private readonly ITagRepository _tagRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateTagCommandHandler(ITagRepository tagRepository, ICurrentUserService currentUserService)
+    public CreateTagCommandHandler(ITagRepository tagRepository, ICurrentUserService currentUserService, IUnitOfWork unitOfWork)
     {
         _tagRepository = tagRepository;
         _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(CreateTagCommand request, CancellationToken cancellationToken)
@@ -23,6 +25,7 @@ public class CreateTagCommandHandler : IRequestHandler<CreateTagCommand, Guid>
         var tag = new Tag(request.Name, request.Color, _currentUserService.UserId);
 
         await _tagRepository.AddAsync(tag, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return tag.Id;
     }
