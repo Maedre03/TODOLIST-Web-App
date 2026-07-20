@@ -213,13 +213,13 @@ No professional project ships without tests. Tests are your safety net.
 
 Security is non-negotiable in a real company project.
 
-- [ ] Verify passwords are **BCrypt hashed** — never stored as plain text
-- [ ] JWT tokens expire (short-lived: e.g. 1 hour)
-- [ ] Users can **only see/edit their own todos** (enforced in backend — never trust the frontend)
-- [ ] SQL Injection impossible (EF Core parameterizes queries by default — verify)
-- [ ] HTTPS enforced (already in `Program.cs`)
-- [ ] No sensitive info in error responses (stack traces hidden in production)
-- [ ] CORS locked to only the Angular app's domain
+- [x] Verify passwords are **BCrypt hashed** — never stored as plain text
+- [x] JWT tokens expire (short-lived: e.g. 1 hour)
+- [x] Users can **only see/edit their own todos** (enforced in backend — never trust the frontend)
+- [x] SQL Injection impossible (EF Core parameterizes queries by default — verify)
+- [x] HTTPS enforced (already in `Program.cs`)
+- [x] No sensitive info in error responses (stack traces hidden in production)
+- [x] CORS locked to only the Angular app's domain
 
 ---
 
