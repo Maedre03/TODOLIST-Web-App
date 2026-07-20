@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+f84a2d2 fix: render search icon explicitly inside inputicon to fix missing glyph
 2578487 fix: update kanban view switcher icon to valid primeicon
-889652a journal: Day 2 - record exact time overdue fix
 5832570 fix: compare exact time for overdue task logic
-6c5c046 journal: Day 2 - record frontend robust timezone patch
 fcdb54a fix: robust frontend timezone parsing and display both due/created dates
+ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
 ```
 
 ### ✅ Tasks Completed
@@ -230,6 +230,7 @@ fcdb54a fix: robust frontend timezone parsing and display both due/created dates
 - **UI Tweaks**: 
   - Modified `TodoItemComponent` to always display the "Created" date, rather than hiding it when a "Due" date is present, providing full temporal context to the user.
   - Replaced the invalid `pi-table-columns` PrimeIcon on the Kanban view switcher with the widely supported `pi-th-large` grid icon to fix the empty-box rendering bug.
+  - Fixed a missing search icon within the `TodoListComponent` by explicitly nesting an `<i>` tag inside `<p-inputicon>`, resolving a PrimeNG v18 component projection bug where the `styleClass` attribute failed to render the glyph.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
