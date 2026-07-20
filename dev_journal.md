@@ -179,14 +179,20 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
-a5e220b fix: resolve tagging system bugs (sidebar refresh, form dropdown sync, and many-to-many entity updates)
-25262e8 fix: resolve double v1 in tags API URL
-fb02d54 journal: Day 2 - record Tags feature completion
-ade96e3 feat: complete Tags feature implementation (API, DB, UI)
-8f6a7ab fix: adjust date range filtering to encompass full days
+7b16b66 feat: implement Stats and Progress page with charts
+d1f0398 fix: resolve TS compilation error in inline tag creation
+f34c96a feat: add inline tag creation inside TodoFormComponent
+6f93aa9 fix: add preventDefault to tag delete button and HasQueryFilter to TagConfiguration
+694be41 fix: resolve backend issues preventing tag saving and updating
 ```
 
 ### ✅ Tasks Completed
+- **Stats and Progress Page:** Added a dedicated page with graphical numerical stats accessible from the sidebar.
+  - Installed `chart.js` to power PrimeNG `ChartModule`.
+  - Created a new `/stats` route and a lazy-loaded `StatsComponent`.
+  - Implemented dynamic calculation of task stats (Total, Completed, Pending, Completion Rate) entirely on the frontend using `TodoService.getAll()`.
+  - Built a dynamic UI with animated metric cards, and two doughnut charts (Tasks by Priority, Completion Status) using `p-chart`.
+  - Updated `AppLayoutComponent` sidebar with a direct navigation link.
 - **Tags Feature:** Implemented a full-stack Tag system allowing users to organize tasks.
   - Backend: Created `Tag` entity, many-to-many relationship with `Todo` via `TodoTags` join table.
   - API: Developed `TagsController` for CRUD operations and updated `TodosController` to filter by `tagId` and accept `tagIds` on creation/update.
@@ -259,6 +265,7 @@ ade96e3 feat: complete Tags feature implementation (API, DB, UI)
   - Mocked global `localStorage` explicitly to ensure Vitest environment runs correctly in Node without jsdom friction.
 
 ### 🧠 Key Decisions & Why
+- **Frontend Stats Aggregation:** Calculated task statistics entirely on the frontend by reusing the existing `TodoService.getAll()` instead of creating a bespoke backend endpoint. For personal task management apps where the payload is small (hundreds/thousands of tasks), this approach saves backend architectural overhead (new CQRS queries, controllers) while allowing for instantaneous, zero-latency reactive UI updates.
 - **Date Range Architecture**: By pushing the date filtering logic all the way down to the EF Core `IQueryable` in `TodoRepository`, we ensure that only the requested slice of data is ever retrieved from SQL Server, maintaining the performance benefits of our existing server-side pagination.
 - **Responsive Kanban Layout**: Adjusted Kanban column scaling by removing explicit `min-width: 300px` in favor of `min-width: 0` inside the flex container. This ensures flex items can shrink properly when screen real-estate is limited, avoiding horizontal scrolling while maintaining proportional column widths.
 - **Security by Default**: Due to the adherence to Clean Architecture and modern .NET practices in the earlier phases, the security hardening tasks (Phase 7) were naturally fulfilled without requiring retrofits. Using MediatR handlers with `_currentUserService.UserId` and `EF Core` parameterization ensures security is baked into the foundation.
