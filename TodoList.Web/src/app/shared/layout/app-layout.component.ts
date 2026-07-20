@@ -848,5 +848,6 @@ export class AppLayoutComponent implements OnInit {
 
   preventProp(event: Event) {
     event.stopPropagation();
+    event.preventDefault();
   }
 }

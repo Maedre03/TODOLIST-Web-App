@@ -25,6 +25,9 @@ public class TagConfiguration : IEntityTypeConfiguration<Tag>
             .HasForeignKey(t => t.CreatedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Global query filter to automatically hide soft-deleted tags
+        builder.HasQueryFilter(t => !t.IsDeleted);
+
         // Many-to-many relationship configuration (can be done here or in TodoConfiguration)
         builder.HasMany(t => t.Todos)
             .WithMany(t => t.Tags)
