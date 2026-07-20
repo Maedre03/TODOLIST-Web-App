@@ -53,8 +53,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 
       <!-- Controls (Search & Sort) & View Switcher -->
       <div class="controls-bar">
-        <p-iconField iconPosition="left" class="search-input">
-          <p-inputIcon styleClass="pi pi-search" />
+        <p-iconfield iconPosition="left" class="search-input">
+          <p-inputicon styleClass="pi pi-search" />
           <input 
             pInputText 
             type="text" 
@@ -62,7 +62,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
             (ngModelChange)="onSearchChange()"
             placeholder="Search tasks..." 
             class="w-full" />
-        </p-iconField>
+        </p-iconfield>
 
         <p-select 
           [options]="sortOptions" 
@@ -131,6 +131,30 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
         <!-- Kanban View -->
         @else if (viewMode() === 'kanban') {
           <div class="kanban-board">
+            <!-- Critical Priority Column -->
+            <div class="kanban-column">
+              <div class="column-header">
+                <h3>Critical</h3>
+                <span class="count">{{ kanbanCritical().length }}</span>
+              </div>
+              <div class="kanban-drop-list"
+                   cdkDropList
+                   #criticalList="cdkDropList"
+                   [cdkDropListData]="kanbanCritical()"
+                   [cdkDropListConnectedTo]="[highList, mediumList, lowList]"
+                   (cdkDropListDropped)="onKanbanDrop($event, 4)">
+                @for (todo of kanbanCritical(); track todo.id) {
+                  <div class="kanban-card" cdkDrag>
+                    <app-todo-item 
+                      [todo]="todo"
+                      (toggle)="onToggleComplete($event)"
+                      (edit)="openEditForm($event)"
+                      (delete)="confirmDelete($event)" />
+                  </div>
+                }
+              </div>
+            </div>
+
             <!-- High Priority Column -->
             <div class="kanban-column">
               <div class="column-header">
@@ -141,8 +165,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                    cdkDropList
                    #highList="cdkDropList"
                    [cdkDropListData]="kanbanHigh()"
-                   [cdkDropListConnectedTo]="[mediumList, lowList]"
-                   (cdkDropListDropped)="onKanbanDrop($event, 2)">
+                   [cdkDropListConnectedTo]="[criticalList, mediumList, lowList]"
+                   (cdkDropListDropped)="onKanbanDrop($event, 3)">
                 @for (todo of kanbanHigh(); track todo.id) {
                   <div class="kanban-card" cdkDrag>
                     <app-todo-item 
@@ -165,8 +189,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                    cdkDropList
                    #mediumList="cdkDropList"
                    [cdkDropListData]="kanbanMedium()"
-                   [cdkDropListConnectedTo]="[highList, lowList]"
-                   (cdkDropListDropped)="onKanbanDrop($event, 1)">
+                   [cdkDropListConnectedTo]="[criticalList, highList, lowList]"
+                   (cdkDropListDropped)="onKanbanDrop($event, 2)">
                 @for (todo of kanbanMedium(); track todo.id) {
                   <div class="kanban-card" cdkDrag>
                     <app-todo-item 
@@ -189,8 +213,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                    cdkDropList
                    #lowList="cdkDropList"
                    [cdkDropListData]="kanbanLow()"
-                   [cdkDropListConnectedTo]="[highList, mediumList]"
-                   (cdkDropListDropped)="onKanbanDrop($event, 0)">
+                   [cdkDropListConnectedTo]="[criticalList, highList, mediumList]"
+                   (cdkDropListDropped)="onKanbanDrop($event, 1)">
                 @for (todo of kanbanLow(); track todo.id) {
                   <div class="kanban-card" cdkDrag>
                     <app-todo-item 
@@ -514,6 +538,7 @@ export class TodoListComponent implements OnInit {
   });
 
   // Kanban lists
+  kanbanCritical = computed(() => this.filteredTodos().filter(t => t.priority === Priority.Critical));
   kanbanHigh = computed(() => this.filteredTodos().filter(t => t.priority === Priority.High));
   kanbanMedium = computed(() => this.filteredTodos().filter(t => t.priority === Priority.Medium));
   kanbanLow = computed(() => this.filteredTodos().filter(t => t.priority === Priority.Low));
@@ -676,7 +701,7 @@ export class TodoListComponent implements OnInit {
     this.todoService.toggleComplete(todo.id).subscribe({
       next: () => {
         const status = !previousState ? 'completed' : 'uncompleted';
-        this.messageService.add({ severity: 'success', summary: 'Task Updated', detail: \`Task marked as \${status}.\`, life: 2000 });
+        this.messageService.add({ severity: 'success', summary: 'Task Updated', detail: `Task marked as ${status}.`, life: 2000 });
       },
       error: () => {
         this.todos.update(current => 
@@ -688,7 +713,7 @@ export class TodoListComponent implements OnInit {
 
   confirmDelete(todo: Todo): void {
     this.confirmationService.confirm({
-      message: \`Are you sure you want to delete "\${todo.title}"?\`,
+      message: `Are you sure you want to delete "${todo.title}"?`,
       header: 'Confirm Deletion',
       icon: 'pi pi-exclamation-triangle',
       acceptButtonStyleClass: 'p-button-danger',

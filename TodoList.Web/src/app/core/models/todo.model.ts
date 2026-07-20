@@ -1,12 +1,13 @@
 /**
  * Priority levels for Todo items.
  * Must match the backend enum: TodoList.Domain.Enums.Priority
- * Values: Low = 0, Medium = 1, High = 2
+ * Values: Low = 1, Medium = 2, High = 3, Critical = 4
  */
 export enum Priority {
-  Low = 0,
-  Medium = 1,
-  High = 2
+  Low = 1,
+  Medium = 2,
+  High = 3,
+  Critical = 4
 }
 
 /**

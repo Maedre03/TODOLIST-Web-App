@@ -25,9 +25,10 @@ import { FormsModule } from '@angular/forms';
           <div class="todo-title" [class.line-through]="todo.isCompleted">
             {{ todo.title }}
           </div>
-          <span *ngIf="todo.priority === 2" class="title-badge badge-high">High</span>
-          <span *ngIf="todo.priority === 1" class="title-badge badge-medium">Medium</span>
-          <span *ngIf="todo.priority === 0" class="title-badge badge-low">Low</span>
+          <span *ngIf="todo.priority === 4" class="title-badge badge-critical">Critical</span>
+          <span *ngIf="todo.priority === 3" class="title-badge badge-high">High</span>
+          <span *ngIf="todo.priority === 2" class="title-badge badge-medium">Medium</span>
+          <span *ngIf="todo.priority === 1" class="title-badge badge-low">Low</span>
         </div>
 
         <!-- Action Menu (Three dots) -->
@@ -117,6 +118,11 @@ import { FormsModule } from '@angular/forms';
       border-radius: 4px;
       letter-spacing: 0.05em;
     }
+    .badge-critical {
+      background: rgba(220, 38, 38, 0.15);
+      color: #EF4444;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
     .badge-high {
       background: rgba(248, 113, 113, 0.15);
       color: #FCA5A5;
@@ -134,6 +140,10 @@ import { FormsModule } from '@angular/forms';
     }
 
     /* Priority Borders & Backgrounds */
+    .todo-card.priority-critical {
+      border-left: 4px solid #DC2626;
+      background: linear-gradient(90deg, rgba(220, 38, 38, 0.05) 0%, var(--surface-card) 30%);
+    }
     .todo-card.priority-high {
       border-left: 4px solid var(--color-danger);
       background: linear-gradient(90deg, rgba(248, 113, 113, 0.05) 0%, var(--surface-card) 30%);
@@ -203,6 +213,7 @@ export class TodoItemComponent {
 
   get priorityClass(): string {
     switch (this.todo.priority) {
+      case Priority.Critical: return 'priority-critical';
       case Priority.High: return 'priority-high';
       case Priority.Medium: return 'priority-medium';
       case Priority.Low: return 'priority-low';

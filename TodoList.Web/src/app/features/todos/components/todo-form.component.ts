@@ -157,6 +157,7 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
       border-radius: 50%;
       display: inline-block;
     }
+    .priority-dot.critical { background: #DC2626; }
     .priority-dot.high { background: var(--color-danger); }
     .priority-dot.medium { background: var(--color-warning); }
     .priority-dot.low { background: var(--color-info); }
@@ -177,7 +178,8 @@ export class TodoFormComponent implements OnInit, OnChanges {
   priorityOptions = [
     { label: 'Low', value: Priority.Low },
     { label: 'Medium', value: Priority.Medium },
-    { label: 'High', value: Priority.High }
+    { label: 'High', value: Priority.High },
+    { label: 'Critical', value: Priority.Critical }
   ];
 
   ngOnInit(): void {
@@ -255,6 +257,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
 
   getPriorityClass(priority: Priority): string {
     switch (priority) {
+      case Priority.Critical: return 'critical';
       case Priority.High: return 'high';
       case Priority.Medium: return 'medium';
       case Priority.Low: return 'low';
@@ -264,6 +267,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
 
   getPriorityLabel(priority: Priority): string {
     switch (priority) {
+      case Priority.Critical: return 'Critical';
       case Priority.High: return 'High';
       case Priority.Medium: return 'Medium';
       case Priority.Low: return 'Low';
