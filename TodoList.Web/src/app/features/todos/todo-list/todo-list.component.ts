@@ -54,7 +54,9 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
       <!-- Controls (Search & Sort) & View Switcher -->
       <div class="controls-bar">
         <p-iconfield iconPosition="left" class="search-input">
-          <p-inputicon styleClass="pi pi-search" />
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
           <input 
             pInputText 
             type="text" 
