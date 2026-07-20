@@ -56,7 +56,7 @@ import { FormsModule } from '@angular/forms';
             <span *ngIf="isOverdue()" class="pulse-dot"></span>
             Due: {{ todo.dueDate | date:'MMM d, y, HH:mm' }}
           </span>
-          <span *ngIf="!todo.dueDate">Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
+          <span class="created-date">Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
   Todo,
@@ -33,7 +34,9 @@ export class TodoService {
    * Note: The backend returns a List<TodoDto> directly (not wrapped in ApiResponse).
    */
   getAll(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.baseUrl);
+    return this.http.get<Todo[]>(this.baseUrl).pipe(
+      map(todos => todos.map(t => this.fixDateStrings(t)))
+    );
   }
 
   /**
@@ -41,7 +44,9 @@ export class TodoService {
    * Backend endpoint: GET /api/v1/todos/{id}
    */
   getById(id: string): Observable<Todo> {
-    return this.http.get<Todo>(`${this.baseUrl}/${id}`);
+    return this.http.get<Todo>(`${this.baseUrl}/${id}`).pipe(
+      map(t => this.fixDateStrings(t))
+    );
   }
 
   /**
@@ -71,7 +76,24 @@ export class TodoService {
 
     return this.http.get<PaginatedResult<Todo>>(`${this.baseUrl}/paged`, {
       params: httpParams
-    });
+    }).pipe(
+      map(result => {
+        result.items = result.items.map(t => this.fixDateStrings(t));
+        return result;
+      })
+    );
+  }
+
+  private fixDateStrings(todo: Todo): Todo {
+    const fix = (dateStr: string | null) => {
+      if (!dateStr) return dateStr;
+      return dateStr.endsWith('Z') ? dateStr : dateStr + 'Z';
+    };
+    return {
+      ...todo,
+      dueDate: fix(todo.dueDate),
+      createdAt: fix(todo.createdAt)
+    } as Todo;
   }
 
   /**
