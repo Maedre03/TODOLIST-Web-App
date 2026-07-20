@@ -307,6 +307,37 @@ f34c96a feat: add inline tag creation inside TodoFormComponent
 ### 🎉 Frontend Redesign Complete
 The entire 7-phase UI/UX redesign has been successfully implemented.
 
+### System Audit & Codebase Polish
+Performed a full codebase audit and addressed the following technical debt and feature requests:
+
+**🔀 Git Commits / Version**
+```
+6051a5a fix: resolve bugs and implement features from system audit
+876fd09 journal: Day 2 - record progress sidebar cleanup
+ef3ce1a refactor: remove redundant Today's Progress from sidebar
+d2cef09 journal: Day 2 - record Stats and Progress feature completion
+7b16b66 feat: implement Stats and Progress page with charts
+```
+
+**✅ Tasks Completed**
+- **Bug 1 (High)**: Fixed HTTP Status Codes for Tag Exceptions (`TagNotFoundException` → 404, `UnauthorizedTagAccessException` → 403) in `ExceptionHandlingMiddleware`.
+- **Bug 2 & 3**: Cleaned up unused imports in `TagService` and removed a local `MessageService` provider in `TodoFormComponent` that was swallowing global toast notifications.
+- **Bug 5**: Fixed login button loading state not resetting on successful login.
+- **Bug 7**: Fixed `searchTimeout` memory leak in `TodoListComponent` by implementing `OnDestroy`.
+- **Feature 1**: Implemented auto-login after a user successfully registers an account.
+- **Feature 2**: Added a "Confirm Password" field to the registration form with custom validation logic.
+- **Feature 3**: Made the active tab in `TodoListComponent` persist via `localStorage` so users don't lose their selected view (All/Active/Completed).
+- **Feature 4 & Bug 6**: Replaced the hardcoded mock "Upcoming" sidebar section with a real query fetching tasks due in the next 7 days, and removed the hardcoded "Pinned" section.
+- **Feature 5**: Added keyboard shortcuts: `N` for new task, `Escape` to close modals/blur inputs, and `/` to focus the search bar.
+
+**🧠 Key Decisions & Why**
+- **Global Error Handling**: Fixing the tag exception mappings ensures our API conforms to REST standards (403 for ownership issues, 404 for not found), making frontend integration more reliable.
+- **Keyboard Shortcuts**: Added via `@HostListener('window:keydown')` on the main `TodoListComponent` to drastically improve power-user experience and navigability without needing complex state management.
+- **Local Storage UX**: Saving the active tab to `localStorage` aligns with modern SaaS app design where UI state is preserved across reloads.
+
+**📌 Tomorrow / Next Session**
+- [ ] End of planned tasks. Open to further user-requested features.
+
 ---
 
 <!-- ============================================================ -->
