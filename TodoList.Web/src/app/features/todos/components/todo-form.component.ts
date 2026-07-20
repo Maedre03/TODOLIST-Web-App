@@ -343,7 +343,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
     
     this.isSavingInlineTag = true;
     this.tagService.createTag({ name: this.newTagName.trim(), color: this.newTagColor }).subscribe({
-      next: (newTagId: string) => {
+      next: (response: { id: string }) => {
         this.isSavingInlineTag = false;
         this.showInlineTagForm = false;
         this.newTagName = '';
@@ -352,7 +352,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
         this.tagService.getTags().subscribe(() => {
             // Auto-select the newly created tag!
             const currentTagIds = this.form.get('tagIds')?.value || [];
-            this.form.patchValue({ tagIds: [...currentTagIds, newTagId] });
+            this.form.patchValue({ tagIds: [...currentTagIds, response.id] });
             this.messageService.add({ severity: 'success', summary: 'Tag Created', detail: 'New tag added.' });
         });
       },

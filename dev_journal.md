@@ -209,6 +209,10 @@ ade96e3 feat: complete Tags feature implementation (API, DB, UI)
   - Fixed a backend bug preventing users from assigning tags to existing tasks. Rewrote the `UpdateTodoCommandHandler` logic for many-to-many tag relationships. Replaced the simplistic `.Clear()` and `.Add()` logic with proper collection diffing (adding only new tags, removing only deleted tags) to prevent EF Core `InvalidOperationException` tracking conflicts.
   - Fixed a frontend bug where clicking the delete tag button in the sidebar navigated the router instead of opening the confirmation dialog. Added `event.preventDefault()` to the click handler.
   - Fixed a backend bug where soft-deleted tags still appeared in the tasks on the board. Added an EF Core Global Query Filter (`builder.HasQueryFilter(t => !t.IsDeleted)`) to `TagConfiguration` to automatically filter them out.
+- **Phase 9.3 — Inline Tag Creation:**
+  - Added inline tag creation capability directly inside `TodoFormComponent`.
+  - Users can now click a "+" button next to the Tags multiselect to open an inline form to create a tag without leaving the task creation flow.
+  - The newly created tag is automatically saved to the backend, the global `TagService` observable is refreshed, and the new tag is immediately auto-selected in the multiselect form control.
 - **Phase 9.2 — Due Date Feature:**
   - Added PrimeNG `p-datepicker` to `TodoFormComponent` for setting due dates.
   - Updated `TodoItemComponent` to display the due date.
