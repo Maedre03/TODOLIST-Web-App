@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+2578487 fix: update kanban view switcher icon to valid primeicon
+889652a journal: Day 2 - record exact time overdue fix
 5832570 fix: compare exact time for overdue task logic
+6c5c046 journal: Day 2 - record frontend robust timezone patch
 fcdb54a fix: robust frontend timezone parsing and display both due/created dates
-f129609 journal: Day 2 - record UTC datetime fix
-ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
-2bebca3 journal: Day 2 - record same-day bug fix and time picker features
 ```
 
 ### ✅ Tasks Completed
@@ -227,7 +227,9 @@ ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
   - Updated the date pipe in `TodoItemComponent` to show the full time (`HH:mm`) alongside the date so users can visualize exact deadlines.
 - **Bug Fix (Timezone Shift)**: Configured a global EF Core Value Converter in `ApplicationDbContext` to explicitly set `DateTimeKind.Utc` on all DateTime properties retrieved from the database. Added a robust frontend fallback in `TodoService` via RxJS `map` to intercept incoming dates and forcefully append the 'Z' (UTC indicator) if it's missing, ensuring the UI converts them to local time flawlessly even without backend restarts.
 - **Bug Fix (Overdue Evaluation)**: Removed `.setHours(0,0,0,0)` constraints from the `isOverdue` logic across `TodoItemComponent` and `TodoListComponent`, ensuring that overdue checks evaluate down to the exact minute rather than waiting until the next calendar day.
-- **UI Tweaks**: Modified `TodoItemComponent` to always display the "Created" date, rather than hiding it when a "Due" date is present, providing full temporal context to the user.
+- **UI Tweaks**: 
+  - Modified `TodoItemComponent` to always display the "Created" date, rather than hiding it when a "Due" date is present, providing full temporal context to the user.
+  - Replaced the invalid `pi-table-columns` PrimeIcon on the Kanban view switcher with the widely supported `pi-th-large` grid icon to fix the empty-box rendering bug.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
