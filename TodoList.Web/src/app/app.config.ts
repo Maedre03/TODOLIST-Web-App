@@ -91,7 +91,8 @@ export const appConfig: ApplicationConfig = {
         options: {
           darkModeSelector: '.dark-mode'
         }
-      }
+      },
+      license: 'eyJpZCI6IjFhZDExNmI1LTc1ODYtNDdiZC1hODYxLWRjMzYzYjc3YWJhMCIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODQ1Mjk2MDgsImV4cCI6MTgxNjA2NTYwOH0.K2q3cnpmhkA0JfZY0K-1HzZP01EWFW7nmFTVYk_4xg_u2555J_H-tau0bU0Je1e8zgz3NGQUkJUUHxsmULNbBA'
     }),
 
     // PrimeNG global services (injected by Toast and ConfirmDialog components)

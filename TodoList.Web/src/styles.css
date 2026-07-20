@@ -420,16 +420,6 @@ p {
   color: var(--text-color) !important;
 }
 
-/* Hide PrimeUI License Watermark */
-.p-license {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
-a[href*="primeng.org/license"] {
-  display: none !important;
-}
 
 
 /* ── Utility Classes ────────────────────────────────────────── */

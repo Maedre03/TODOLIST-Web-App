@@ -187,10 +187,10 @@ a03477e feat: implement Phase 6.3 Auth UI with premium split-screen design
 ```
 
 ### ✅ Tasks Completed
-- Fixed the "Invalid PrimeUI License" watermark issue that was obscuring the UI.
+- Removed CSS hack and activated the official PrimeUI Community License.
 
 ### 🧠 Key Decisions & Why
-- **Global CSS Selectors for Watermarks**: Removed `::ng-deep` from `.p-license` overrides in `styles.css`. Since `styles.css` is a global stylesheet, Angular-specific view encapsulation pseudo-classes like `::ng-deep` are invalid syntax and were preventing the browser from applying the rule to hide the newly introduced PrimeNG v18+ commercial watermark.
+- **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
 
 ### ⚠️ Problems / Blockers
 - None today.
