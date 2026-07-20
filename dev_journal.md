@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+5873fab feat: implement phase 9.4 todo list redesign with kanban view and filter tabs
+7ded2da journal: Day 2 - record phase 9.3 sidebar redesign
 f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and theme service
 2832450 journal: Day 2 - record phase 9.2 due date feature
 2806208 feat: implement phase 9.2 due date form picker and card overdue pulse
-7494066 journal: Day 2 - record phase 9.1 critical bug fixes
-ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, search input)
 ```
 
 ### ✅ Tasks Completed
@@ -201,6 +201,12 @@ ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, searc
   - Built out entirely new UI sections for the sidebar: Today's Progress ring, Upcoming dates, Tags, and Pinned Tasks.
   - Created a new `ThemeService` using Angular `signal` and `effect` to handle Light/Dark mode toggles and local storage persistence.
   - Added theme toggle buttons to the sidebar footer.
+- **Phase 9.4 — Todo List Page Redesign:**
+  - Installed `@angular/cdk` to utilize `DragDropModule`.
+  - Replaced the previous dropdown/sidebar filters with a horizontal `Tab Bar` inside the list view (All, Active, Completed, Overdue).
+  - Implemented a Kanban Board view, grouping tasks by Priority columns (High, Medium, Low).
+  - Added drag-and-drop support to re-prioritize tasks across Kanban columns seamlessly (with optimistic UI updates via API calls).
+  - Constrained the Floating Action Button (FAB) to be visible only on mobile screens (`md:hidden`).
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -208,6 +214,7 @@ ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, searc
 - **PrimeNG IconField API:** Shifted to `<p-iconField>` and `<p-inputIcon>` wrapper to remain compliant with PrimeNG 18, ensuring we don't carry technical debt from v17 patterns.
 - **Due Date UX:** Used a simple CSS keyframe pulse animation for overdue indicators. This provides immediate visual urgency without relying on heavy JS animations. We reset hours on the date comparison in `isOverdue` to ensure tasks due today don't prematurely trigger the overdue state.
 - **Mocked Feature Skeletons:** We scaffolded the UI for Tags, Pinned tasks, and Progress using static HTML. This allows us to finalize the visual redesign first, enabling rapid frontend iterations before investing in the required backend domain and CQRS changes.
+- **Kanban Drag-and-Drop:** Implemented optimistic UI updates for moving items between Kanban columns. If the underlying `todoService.update` HTTP call fails, the UI is immediately reverted back to its original state, ensuring UI consistency without stalling the user experience on loading spinners.
 
 ### ⚠️ Problems / Blockers
 - None today.
@@ -215,8 +222,9 @@ ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, searc
 ### 📌 Tomorrow / Next Session
 - [x] Phase 9.2 — Due Date Feature (form picker, card badge, overdue pulse)
 - [x] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
-- [ ] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
+- [x] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
 - [ ] Phase 9.5 — Task Card Redesign (priority indicators)
+- [ ] Phase 9.6 — Auth Pages (features list, stats counter)
 
 ---
 
