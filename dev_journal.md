@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+1aeaf57 fix: allow same-day tasks and add time picker with due soon emphasis
+e5769e4 journal: Day 2 - record priority bug fix
 7eaf3cd fix: align Priority enum between frontend and backend to fix low priority creation
 de2a4c3 journal: Day 2 - record phase 9.7 global polish and frontend redesign completion
 e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
-5118d7a journal: Day 2 - record phase 9.6 auth pages enhancements
-6c88efe feat: implement phase 9.6 auth pages enhancements with feature bullets and stats
 ```
 
 ### ✅ Tasks Completed
@@ -219,6 +219,12 @@ e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
 - **Phase 9.7 — Polish:**
   - Defined explicit `:root.light-mode` overrides in `styles.css` ensuring full contrast and theme toggle support.
   - Enhanced the `EmptyStateComponent` with a subtle gradient background and a glowing box-shadow for a more premium default state.
+- **Bug Fix**: Fixed validation rules in `CreateTodoCommandValidator` and `UpdateTodoCommandValidator` to only check the `.Date` portion instead of comparing exact UTC timestamps, which previously blocked creating tasks for the same day.
+- **Unit Test Fix**: Addressed a signature mismatch in `GetTodosPagedQueryHandlerTests` by supplying the `IsCompleted` query flag to the mocked repository method to resolve a compile error.
+- **Frontend UI Enhancements**:
+  - Upgraded the `p-datepicker` in `TodoFormComponent` with `[showTime]="true" hourFormat="24"` so users can optionally select a specific time for their tasks.
+  - Implemented an `isDueSoon` logic in `TodoItemComponent` to add an animated "Requires attention" red exclamation icon next to the task title when the task is critical or due within the next 24 hours.
+  - Updated the date pipe in `TodoItemComponent` to show the full time (`HH:mm`) alongside the date so users can visualize exact deadlines.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -231,6 +237,8 @@ e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
 - **SaaS Conversion Elements:** Auth pages in modern web apps aren't just forms; they are landing pages. Adding feature lists and social proof (stats) directly to the login/register screens decreases bounce rates and sets a premium tone before the user even enters the app.
 - **Design System Resilience:** By adding `.light-mode` overrides directly to `styles.css` instead of relying entirely on PrimeNG presets, we ensure our custom utility classes and layout backgrounds respect the theme toggle consistently.
 - **Frontend-Backend Enum Alignment:** The frontend Priority enum was zero-indexed (`Low = 0`), while the backend domain enum started at 1 (`Low = 1`). This caused the backend's `IsInEnum` validator to reject frontend requests for Low priority. We aligned the frontend `todo.model.ts` to exactly match `TodoList.Domain.Enums.Priority` and exposed the missing `Critical` priority level throughout the UI to ensure 1:1 parity.
+- **Date-only Validation for Due Dates**: Rather than forcing `DueDate > DateTime.UtcNow` and accidentally failing same-day task creation if the exact second is in the past, validating `.Date >= DateTime.UtcNow.Date` is much more practical for task management apps. It honors that users often plan tasks retrospectively for the current day.
+- **Attention Micro-animations**: Adding an animated pulse to an icon (`pi-exclamation-circle text-danger`) instead of a generic red border draws the user's eye precisely to items requiring immediate action (due within 24 hours or marked critical), fulfilling the "wow factor" and dynamic design requirements without cluttering the card real estate.
 
 ### ⚠️ Problems / Blockers
 - None today.
