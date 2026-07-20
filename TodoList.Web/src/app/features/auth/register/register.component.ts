@@ -37,6 +37,36 @@ import { AuthService } from '../../../core/services/auth.service';
           </div>
           <h1>Join the next generation of task management.</h1>
           <p>Organize your work, boost your productivity, and achieve your goals with ease.</p>
+
+          <ul class="feature-list">
+            <li>
+              <i class="pi pi-check-circle text-primary"></i>
+              <span>Smart Kanban boards for visual workflow</span>
+            </li>
+            <li>
+              <i class="pi pi-check-circle text-primary"></i>
+              <span>Optimistic UI updates for blazing speed</span>
+            </li>
+            <li>
+              <i class="pi pi-check-circle text-primary"></i>
+              <span>Robust filtering and progress tracking</span>
+            </li>
+          </ul>
+
+          <div class="stats-container">
+            <div class="stat-box">
+              <div class="stat-number">10k+</div>
+              <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">2M+</div>
+              <div class="stat-label">Tasks Done</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">99.9%</div>
+              <div class="stat-label">Uptime</div>
+            </div>
+          </div>
         </div>
         
         <!-- Abstract decorative shapes -->
@@ -161,6 +191,58 @@ import { AuthService } from '../../../core/services/auth.service';
     .auth-brand p {
       font-size: var(--font-size-lg);
       color: var(--text-color-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 var(--space-8) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 1.05rem;
+      color: var(--text-color);
+    }
+
+    .feature-list i {
+      font-size: 1.25rem;
+    }
+
+    .stats-container {
+      display: flex;
+      gap: var(--space-6);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .decorative-shape {
