@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Tag, CreateTagRequest } from '../models/tag.model';
-import { ApiResponse } from '../models/todo.model';
 
 @Injectable({
   providedIn: 'root'

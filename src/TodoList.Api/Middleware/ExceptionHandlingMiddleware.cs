@@ -41,7 +41,9 @@ public class ExceptionHandlingMiddleware
         {
             ValidationException => HttpStatusCode.BadRequest,
             TodoNotFoundException => HttpStatusCode.NotFound,
+            TagNotFoundException => HttpStatusCode.NotFound,
             UnauthorizedTodoAccessException => HttpStatusCode.Forbidden,
+            UnauthorizedTagAccessException => HttpStatusCode.Forbidden,
             EmailAlreadyInUseException => HttpStatusCode.Conflict,
             InvalidCredentialsException => HttpStatusCode.Unauthorized,
             DomainException => HttpStatusCode.BadRequest,

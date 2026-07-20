@@ -30,7 +30,6 @@ import { TooltipModule } from 'primeng/tooltip';
     MultiSelectModule,
     TooltipModule
   ],
-  providers: [MessageService],
   template: `
     <p-dialog 
       [header]="isEditMode ? 'Edit Task' : 'Create New Task'" 

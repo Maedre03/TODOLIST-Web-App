@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -113,6 +113,20 @@ import { AuthService } from '../../../core/services/auth.service';
                 placeholder="Min. 6 characters"
                 styleClass="w-full"
                 inputStyleClass="w-full p-inputtext-lg" />
+            </div>
+
+            <div class="field">
+              <label for="confirmPassword">Confirm Password</label>
+              <p-password 
+                id="confirmPassword" 
+                formControlName="confirmPassword" 
+                [toggleMask]="true" 
+                placeholder="Confirm your password"
+                styleClass="w-full"
+                inputStyleClass="w-full p-inputtext-lg" />
+              @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
+                <small class="error-text">Passwords do not match.</small>
+              }
             </div>
 
             @if (errorMessage) {
@@ -360,8 +374,15 @@ export class RegisterComponent {
   form: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]]
+  }, { validators: this.passwordMatchValidator });
+
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return;
@@ -371,13 +392,23 @@ export class RegisterComponent {
 
     this.authService.register(this.form.value).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Account Created',
-          detail: 'Registration successful! Please sign in.',
-          life: 4000
+        // Auto-login after successful registration
+        this.authService.login({ email: this.form.value.email, password: this.form.value.password }).subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.router.navigate(['/todos']);
+          },
+          error: () => {
+            this.isLoading = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Account Created',
+              detail: 'Registration successful! Please sign in.',
+              life: 4000
+            });
+            this.router.navigate(['/login']);
+          }
         });
-        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.isLoading = false;

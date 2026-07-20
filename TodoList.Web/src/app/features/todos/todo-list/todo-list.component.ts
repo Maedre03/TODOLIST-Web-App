@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -62,11 +62,12 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
             <i class="pi pi-search"></i>
           </p-inputicon>
           <input 
+            #searchInput
             pInputText 
             type="text" 
             [(ngModel)]="searchTerm" 
             (ngModelChange)="onSearchChange()"
-            placeholder="Search tasks..." 
+            placeholder="Search tasks... (/)" 
             class="w-full" />
         </p-iconfield>
 
@@ -516,7 +517,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     }
   `]
 })
-export class TodoListComponent implements OnInit {
+export class TodoListComponent implements OnInit, OnDestroy {
   private readonly todoService = inject(TodoService);
   private readonly tagService = inject(TagService);
   private readonly messageService = inject(MessageService);
@@ -591,12 +592,53 @@ export class TodoListComponent implements OnInit {
   isFormVisible = false;
   todoToEdit: Todo | null = null;
 
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // If user is typing in an input/textarea, don't trigger shortcuts unless it's Escape
+    const target = event.target as HTMLElement;
+    const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+
+    if (event.key === 'Escape') {
+      if (this.isFormVisible) {
+        this.isFormVisible = false;
+      } else if (isInput && target.tagName === 'INPUT') {
+        (target as HTMLInputElement).blur();
+      }
+      return;
+    }
+
+    if (isInput) return;
+
+    if (event.key.toLowerCase() === 'n') {
+      event.preventDefault();
+      this.openCreateForm();
+    }
+
+    if (event.key === '/') {
+      event.preventDefault();
+      this.searchInput?.nativeElement?.focus();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+  }
+
   ngOnInit(): void {
     const savedMode = localStorage.getItem('todo_view_mode') as 'list' | 'kanban';
     if (savedMode) {
       this.viewMode.set(savedMode);
-      if (savedMode === 'kanban') this.pageSize = 50;
     }
+    
+    const savedTab = localStorage.getItem('todo_active_tab') as 'all' | 'active' | 'completed' | 'overdue';
+    if (savedTab) {
+      this.activeTab.set(savedTab);
+    }
+    if (this.viewMode() === 'kanban') this.pageSize = 50;
 
     this.tagService.tags$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
       this.userTags.set(tags);
@@ -623,6 +665,7 @@ export class TodoListComponent implements OnInit {
 
   setTab(tab: 'all' | 'active' | 'completed' | 'overdue'): void {
     this.activeTab.set(tab);
+    localStorage.setItem('todo_active_tab', tab);
     if (tab === 'all') {
       this.isCompletedFilter = undefined;
     } else if (tab === 'active') {

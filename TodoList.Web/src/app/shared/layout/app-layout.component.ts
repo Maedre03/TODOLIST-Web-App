@@ -11,6 +11,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { TagService } from '../../core/services/tag.service';
 import { Tag } from '../../core/models/tag.model';
+import { TodoService } from '../../core/services/todo.service';
+import { Todo } from '../../core/models/todo.model';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -77,19 +79,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 </div>
               </div>
               <ul class="nav-list small-list" *ngIf="isUpcomingExpanded()">
-                <li>
-                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
-                    <span class="pulse-dot mr-2"></span>
-                    <span class="nav-text text-truncate" title="Submit quarterly report">Submit quarterly report</span>
-                    <span class="date-badge overdue">Today</span>
+                <li *ngFor="let todo of upcomingTodos()">
+                  <a [routerLink]="['/todos']" [queryParams]="{ searchTerm: todo.title }" class="nav-link text-sm" (click)="onNavClick()">
+                    <span class="pulse-dot mr-2" *ngIf="isOverdue(todo.dueDate!)"></span>
+                    <i class="pi pi-calendar mr-2 text-color-secondary" *ngIf="!isOverdue(todo.dueDate!)"></i>
+                    <span class="nav-text text-truncate" [title]="todo.title">{{ todo.title }}</span>
+                    <span class="date-badge" [class.overdue]="isOverdue(todo.dueDate!)">{{ getDueDateDisplay(todo.dueDate!) }}</span>
                   </a>
                 </li>
-                <li>
-                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
-                    <i class="pi pi-calendar mr-2 text-color-secondary"></i>
-                    <span class="nav-text text-truncate" title="Doctor appointment">Doctor appointment</span>
-                    <span class="date-badge">Tom</span>
-                  </a>
+                <li *ngIf="upcomingTodos().length === 0" class="text-xs text-color-secondary p-2 ml-4">
+                  No upcoming tasks
                 </li>
               </ul>
             </div>
@@ -119,23 +118,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
               </ul>
             </div>
 
-            <!-- Pinned Section -->
-            <div class="sidebar-section">
-              <div class="section-header interactive" (click)="toggleSection('pinned')" routerLink="/todos" [queryParams]="{ section: 'pinned' }">
-                <div class="flex align-items-center gap-2">
-                  <i class="pi" [class.pi-chevron-down]="isPinnedExpanded()" [class.pi-chevron-right]="!isPinnedExpanded()"></i>
-                  <h3 class="section-title mb-0">Pinned</h3>
-                </div>
-              </div>
-              <ul class="nav-list small-list" *ngIf="isPinnedExpanded()">
-                <li>
-                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
-                    <i class="pi pi-thumbtack mr-2 text-yellow-500"></i>
-                    <span class="nav-text text-truncate">Buy groceries</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
           </ng-container>
         </nav>
 
@@ -648,7 +630,10 @@ export class AppLayoutComponent implements OnInit {
   // Tag creation state
   isCreateTagVisible = false;
   newTagName = '';
-  newTagColor = '#3b82f6';
+  newTagColor = '#8B5CF6';
+
+  upcomingTodos = signal<Todo[]>([]);
+  private readonly todoService = inject(TodoService);
   isSavingTag = signal(false);
 
   predefinedColors = [
@@ -660,12 +645,47 @@ export class AppLayoutComponent implements OnInit {
   ngOnInit() {
     this.checkMobile();
     
-    // Subscribe to tags$ to automatically get tag updates
-    this.tagService.tags$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
-      this.userTags.set(tags);
+    if (this.authService.isAuthenticated()) {
+      this.tagService.getTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
+        this.userTags.set(tags);
+      });
+      this.loadUpcomingTodos();
+    }
+  }
+
+  private loadUpcomingTodos() {
+    this.todoService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(todos => {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      const in7Days = new Date(now);
+      in7Days.setDate(in7Days.getDate() + 7);
+      
+      const upcoming = todos.filter(t => {
+        if (t.isCompleted || !t.dueDate) return false;
+        const due = new Date(t.dueDate);
+        return due >= now && due <= in7Days;
+      }).sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime());
+      
+      this.upcomingTodos.set(upcoming);
     });
+  }
+
+  isOverdue(dueDate: string): boolean {
+    const due = new Date(dueDate);
+    const now = new Date();
+    return due < now;
+  }
+  
+  getDueDateDisplay(dueDate: string): string {
+    const due = new Date(dueDate);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
     
-    this.loadTags();
+    if (due.toDateString() === today.toDateString()) return 'Today';
+    if (due.toDateString() === tomorrow.toDateString()) return 'Tom';
+    
+    return due.toLocaleDateString('en-US', { weekday: 'short' });
   }
 
   loadTags(): void {
