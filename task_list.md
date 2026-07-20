@@ -275,7 +275,7 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 
 ## 🔄 PHASE 9 — UI/UX Redesign
 - [x] Phase 1: Bug Fixes (app.component.html, mobile sidebar, search input)
-- [ ] Phase 2: Due Date Feature (form picker, card badge, overdue pulse)
+- [x] Phase 2: Due Date Feature (form picker, card badge, overdue pulse)
 - [ ] Phase 3: Sidebar Redesign (stats, timeline, tags, pinned, settings)
 - [ ] Phase 4: Todo List Page (tab bar, kanban view switcher)
 - [ ] Phase 5: Task Card Redesign (priority indicators)
