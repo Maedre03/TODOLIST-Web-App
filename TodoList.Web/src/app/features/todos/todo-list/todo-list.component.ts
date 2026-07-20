@@ -514,26 +514,22 @@ export class TodoListComponent implements OnInit {
   filteredTodos = computed(() => {
     let list = this.todos();
     if (this.activeTab() === 'overdue') {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const now = new Date();
       return list.filter(t => {
         if (!t.dueDate || t.isCompleted) return false;
         const due = new Date(t.dueDate);
-        due.setHours(0, 0, 0, 0);
-        return due < today;
+        return due < now;
       });
     }
     return list;
   });
 
   overdueCount = computed(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
     return this.todos().filter(t => {
       if (!t.dueDate || t.isCompleted) return false;
       const due = new Date(t.dueDate);
-      due.setHours(0, 0, 0, 0);
-      return due < today;
+      return due < now;
     }).length;
   });
 

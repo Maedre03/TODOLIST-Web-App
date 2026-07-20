@@ -250,10 +250,8 @@ export class TodoItemComponent {
   isOverdue(): boolean {
     if (!this.todo.dueDate || this.todo.isCompleted) return false;
     const due = new Date(this.todo.dueDate);
-    const today = new Date();
-    due.setHours(0,0,0,0);
-    today.setHours(0,0,0,0);
-    return due < today;
+    const now = new Date();
+    return due < now;
   }
 
   isDueSoon(): boolean {
