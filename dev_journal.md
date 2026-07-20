@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+5832570 fix: compare exact time for overdue task logic
 fcdb54a fix: robust frontend timezone parsing and display both due/created dates
 f129609 journal: Day 2 - record UTC datetime fix
 ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
 2bebca3 journal: Day 2 - record same-day bug fix and time picker features
-1aeaf57 fix: allow same-day tasks and add time picker with due soon emphasis
 ```
 
 ### ✅ Tasks Completed
@@ -226,6 +226,7 @@ ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
   - Implemented an `isDueSoon` logic in `TodoItemComponent` to add an animated "Requires attention" red exclamation icon next to the task title when the task is critical or due within the next 24 hours.
   - Updated the date pipe in `TodoItemComponent` to show the full time (`HH:mm`) alongside the date so users can visualize exact deadlines.
 - **Bug Fix (Timezone Shift)**: Configured a global EF Core Value Converter in `ApplicationDbContext` to explicitly set `DateTimeKind.Utc` on all DateTime properties retrieved from the database. Added a robust frontend fallback in `TodoService` via RxJS `map` to intercept incoming dates and forcefully append the 'Z' (UTC indicator) if it's missing, ensuring the UI converts them to local time flawlessly even without backend restarts.
+- **Bug Fix (Overdue Evaluation)**: Removed `.setHours(0,0,0,0)` constraints from the `isOverdue` logic across `TodoItemComponent` and `TodoListComponent`, ensuring that overdue checks evaluate down to the exact minute rather than waiting until the next calendar day.
 - **UI Tweaks**: Modified `TodoItemComponent` to always display the "Created" date, rather than hiding it when a "Due" date is present, providing full temporal context to the user.
 
 ### 🧠 Key Decisions & Why
