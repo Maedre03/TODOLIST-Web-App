@@ -78,7 +78,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
             <i class="pi pi-list"></i>
           </button>
           <button class="icon-btn" [class.active]="viewMode() === 'kanban'" (click)="setViewMode('kanban')" title="Kanban View">
-            <i class="pi pi-table-columns"></i>
+            <i class="pi pi-th-large"></i>
           </button>
         </div>
       </div>
