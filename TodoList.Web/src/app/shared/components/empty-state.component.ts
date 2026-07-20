@@ -38,10 +38,11 @@ import { ButtonModule } from 'primeng/button';
     }
 
     .icon-wrapper {
-      width: 64px;
-      height: 64px;
+      width: 80px;
+      height: 80px;
       border-radius: var(--radius-full);
-      background: var(--surface-overlay);
+      background: linear-gradient(135deg, var(--surface-overlay) 0%, var(--surface-card) 100%);
+      box-shadow: var(--shadow-glow);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -50,7 +51,8 @@ import { ButtonModule } from 'primeng/button';
     }
 
     .icon-wrapper i {
-      font-size: 2rem;
+      font-size: 2.5rem;
+      color: var(--primary-color);
     }
 
     h3 {

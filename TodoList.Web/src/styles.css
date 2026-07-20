@@ -121,6 +121,23 @@
   --topbar-height: 60px;
 }
 
+/* ── Light Mode Overrides ──────────────────────────────────── */
+:root.light-mode {
+  --surface-ground: #F8FAFC;
+  --surface-section: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-overlay: #F1F5F9;
+  --surface-border: #E2E8F0;
+  --surface-hover: #F1F5F9;
+
+  --text-color: #0F172A;
+  --text-color-secondary: #64748B;
+  --text-color-disabled: #94A3B8;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
 
 /* ── Global Reset & Base ────────────────────────────────────── */
 *,
