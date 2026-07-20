@@ -9,7 +9,7 @@ import { ApiResponse } from '../models/todo.model';
   providedIn: 'root'
 })
 export class TagService {
-  private apiUrl = `${environment.apiUrl}/v1/tags`;
+  private apiUrl = `${environment.apiUrl}/tags`;
 
   constructor(private http: HttpClient) { }
 
