@@ -52,8 +52,13 @@ import { ThemeService } from '../../core/services/theme.service';
           <ng-container *ngIf="!isSidebarCollapsed() || isMobile()">
             <!-- Progress Section -->
             <div class="sidebar-section">
-              <h3 class="section-title">Today's Progress</h3>
-              <div class="progress-panel">
+              <div class="section-header interactive" (click)="toggleSection('progress')" routerLink="/todos" [queryParams]="{ section: 'progress' }">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi" [class.pi-chevron-down]="isProgressExpanded()" [class.pi-chevron-right]="!isProgressExpanded()"></i>
+                  <h3 class="section-title mb-0">Today's Progress</h3>
+                </div>
+              </div>
+              <div class="progress-panel" *ngIf="isProgressExpanded()">
                 <div class="progress-ring-container">
                   <div class="progress-circle" style="--progress: 65%">
                     <span>65%</span>
@@ -71,8 +76,13 @@ import { ThemeService } from '../../core/services/theme.service';
 
             <!-- Upcoming Section -->
             <div class="sidebar-section">
-              <h3 class="section-title">Upcoming</h3>
-              <ul class="nav-list small-list">
+              <div class="section-header interactive" (click)="toggleSection('upcoming')" routerLink="/todos" [queryParams]="{ section: 'upcoming' }">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi" [class.pi-chevron-down]="isUpcomingExpanded()" [class.pi-chevron-right]="!isUpcomingExpanded()"></i>
+                  <h3 class="section-title mb-0">Upcoming</h3>
+                </div>
+              </div>
+              <ul class="nav-list small-list" *ngIf="isUpcomingExpanded()">
                 <li>
                   <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
                     <span class="pulse-dot mr-2"></span>
@@ -92,11 +102,14 @@ import { ThemeService } from '../../core/services/theme.service';
 
             <!-- Tags Section -->
             <div class="sidebar-section">
-              <div class="section-header">
-                <h3 class="section-title mb-0">Tags</h3>
-                <button class="icon-btn" title="Add Tag"><i class="pi pi-plus"></i></button>
+              <div class="section-header interactive" (click)="toggleSection('tags')" routerLink="/todos" [queryParams]="{ section: 'tags' }">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi" [class.pi-chevron-down]="isTagsExpanded()" [class.pi-chevron-right]="!isTagsExpanded()"></i>
+                  <h3 class="section-title mb-0">Tags</h3>
+                </div>
+                <button class="icon-btn" title="Add Tag" (click)="preventProp($event)"><i class="pi pi-plus"></i></button>
               </div>
-              <ul class="nav-list small-list">
+              <ul class="nav-list small-list" *ngIf="isTagsExpanded()">
                 <li>
                   <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
                     <span class="color-dot bg-blue-500 mr-2"></span>
@@ -114,8 +127,13 @@ import { ThemeService } from '../../core/services/theme.service';
 
             <!-- Pinned Section -->
             <div class="sidebar-section">
-              <h3 class="section-title">Pinned</h3>
-              <ul class="nav-list small-list">
+              <div class="section-header interactive" (click)="toggleSection('pinned')" routerLink="/todos" [queryParams]="{ section: 'pinned' }">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi" [class.pi-chevron-down]="isPinnedExpanded()" [class.pi-chevron-right]="!isPinnedExpanded()"></i>
+                  <h3 class="section-title mb-0">Pinned</h3>
+                </div>
+              </div>
+              <ul class="nav-list small-list" *ngIf="isPinnedExpanded()">
                 <li>
                   <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
                     <i class="pi pi-thumbtack mr-2 text-yellow-500"></i>
@@ -334,6 +352,28 @@ import { ThemeService } from '../../core/services/theme.service';
       color: var(--text-color-secondary);
       font-weight: 600;
       margin: 0 0 var(--space-2) 0;
+    }
+
+    .section-header.interactive {
+      cursor: pointer;
+      padding: var(--space-2);
+      border-radius: var(--radius-sm);
+      transition: background-color var(--transition-fast);
+      margin-left: calc(-1 * var(--space-2));
+      margin-right: calc(-1 * var(--space-2));
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .section-header.interactive:hover {
+      background: var(--surface-hover);
+    }
+
+    .section-header.interactive i.pi-chevron-down,
+    .section-header.interactive i.pi-chevron-right {
+      color: var(--text-color-secondary);
+      font-size: 0.7rem;
+      transition: transform 0.2s;
     }
 
     .progress-panel {
@@ -573,6 +613,11 @@ export class AppLayoutComponent implements OnInit {
   isMobileMenuOpen = signal(false);
   isMobile = signal(false);
 
+  isProgressExpanded = signal(true);
+  isUpcomingExpanded = signal(true);
+  isTagsExpanded = signal(true);
+  isPinnedExpanded = signal(true);
+
   ngOnInit() {
     this.checkMobile();
   }
@@ -623,5 +668,16 @@ export class AppLayoutComponent implements OnInit {
   getDisplayName(email: string): string {
     if (!email) return 'User';
     return email.split('@')[0];
+  }
+
+  toggleSection(section: 'progress' | 'upcoming' | 'tags' | 'pinned') {
+    if (section === 'progress') this.isProgressExpanded.update(v => !v);
+    else if (section === 'upcoming') this.isUpcomingExpanded.update(v => !v);
+    else if (section === 'tags') this.isTagsExpanded.update(v => !v);
+    else if (section === 'pinned') this.isPinnedExpanded.update(v => !v);
+  }
+
+  preventProp(event: Event) {
+    event.stopPropagation();
   }
 }
