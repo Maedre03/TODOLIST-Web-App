@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+ba178e8 fix: enforce UTC DateTimeKind globally to fix timezone shift bug
+2bebca3 journal: Day 2 - record same-day bug fix and time picker features
 1aeaf57 fix: allow same-day tasks and add time picker with due soon emphasis
 e5769e4 journal: Day 2 - record priority bug fix
 7eaf3cd fix: align Priority enum between frontend and backend to fix low priority creation
-de2a4c3 journal: Day 2 - record phase 9.7 global polish and frontend redesign completion
-e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
 ```
 
 ### ✅ Tasks Completed
@@ -225,6 +225,7 @@ e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
   - Upgraded the `p-datepicker` in `TodoFormComponent` with `[showTime]="true" hourFormat="24"` so users can optionally select a specific time for their tasks.
   - Implemented an `isDueSoon` logic in `TodoItemComponent` to add an animated "Requires attention" red exclamation icon next to the task title when the task is critical or due within the next 24 hours.
   - Updated the date pipe in `TodoItemComponent` to show the full time (`HH:mm`) alongside the date so users can visualize exact deadlines.
+- **Bug Fix (Timezone Shift)**: Configured a global EF Core Value Converter in `ApplicationDbContext` to explicitly set `DateTimeKind.Utc` on all DateTime properties retrieved from the database. This prevents dates from being serialized without a 'Z' offset, which was causing the Angular frontend to incorrectly interpret UTC times as local time.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -239,6 +240,7 @@ e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
 - **Frontend-Backend Enum Alignment:** The frontend Priority enum was zero-indexed (`Low = 0`), while the backend domain enum started at 1 (`Low = 1`). This caused the backend's `IsInEnum` validator to reject frontend requests for Low priority. We aligned the frontend `todo.model.ts` to exactly match `TodoList.Domain.Enums.Priority` and exposed the missing `Critical` priority level throughout the UI to ensure 1:1 parity.
 - **Date-only Validation for Due Dates**: Rather than forcing `DueDate > DateTime.UtcNow` and accidentally failing same-day task creation if the exact second is in the past, validating `.Date >= DateTime.UtcNow.Date` is much more practical for task management apps. It honors that users often plan tasks retrospectively for the current day.
 - **Attention Micro-animations**: Adding an animated pulse to an icon (`pi-exclamation-circle text-danger`) instead of a generic red border draws the user's eye precisely to items requiring immediate action (due within 24 hours or marked critical), fulfilling the "wow factor" and dynamic design requirements without cluttering the card real estate.
+- **Global DateTime Conversion for EF Core**: SQL Server does not store timezone information (`datetime2` drops the `DateTimeKind`). As a result, when data comes out, ASP.NET returns `"2026-07-20T08:08:00"` instead of `"2026-07-20T08:08:00Z"`. By forcing EF Core to map all `DateTime` properties to `DateTimeKind.Utc` within `ApplicationDbContext.OnModelCreating()`, we ensure standard ISO8601 formatting during JSON serialization, completely fixing timezone displacement bugs in the frontend.
 
 ### ⚠️ Problems / Blockers
 - None today.
