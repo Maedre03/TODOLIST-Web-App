@@ -625,8 +625,16 @@ export class TodoListComponent implements OnInit {
     let endIso: string | undefined;
     const range = this.dateRange();
     if (range && range.length > 0) {
-      if (range[0]) startIso = range[0].toISOString();
-      if (range[1]) endIso = range[1].toISOString();
+      if (range[0]) {
+        const start = new Date(range[0]);
+        start.setHours(0, 0, 0, 0);
+        startIso = start.toISOString();
+        
+        // If no end date is selected yet, use the start date to filter for that single day
+        const end = range[1] ? new Date(range[1]) : new Date(range[0]);
+        end.setHours(23, 59, 59, 999);
+        endIso = end.toISOString();
+      }
     }
 
     const params: TodoPagedParams = {
