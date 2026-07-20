@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+fa43298 feat: implement phase 9.5 task card redesign with priority indicators
+b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
 5873fab feat: implement phase 9.4 todo list redesign with kanban view and filter tabs
 7ded2da journal: Day 2 - record phase 9.3 sidebar redesign
 f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and theme service
-2832450 journal: Day 2 - record phase 9.2 due date feature
-2806208 feat: implement phase 9.2 due date form picker and card overdue pulse
 ```
 
 ### ✅ Tasks Completed
@@ -207,6 +207,10 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
   - Implemented a Kanban Board view, grouping tasks by Priority columns (High, Medium, Low).
   - Added drag-and-drop support to re-prioritize tasks across Kanban columns seamlessly (with optimistic UI updates via API calls).
   - Constrained the Floating Action Button (FAB) to be visible only on mobile screens (`md:hidden`).
+- **Phase 9.5 — Task Card Redesign:**
+  - Replaced the standalone badge component in the footer with a small inline priority badge next to the task title.
+  - Added a thick colored left border (Red/Yellow/Blue) to instantly identify task priority.
+  - Added a subtle background tint gradient for High Priority tasks to make them stand out further.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -215,6 +219,7 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
 - **Due Date UX:** Used a simple CSS keyframe pulse animation for overdue indicators. This provides immediate visual urgency without relying on heavy JS animations. We reset hours on the date comparison in `isOverdue` to ensure tasks due today don't prematurely trigger the overdue state.
 - **Mocked Feature Skeletons:** We scaffolded the UI for Tags, Pinned tasks, and Progress using static HTML. This allows us to finalize the visual redesign first, enabling rapid frontend iterations before investing in the required backend domain and CQRS changes.
 - **Kanban Drag-and-Drop:** Implemented optimistic UI updates for moving items between Kanban columns. If the underlying `todoService.update` HTTP call fails, the UI is immediately reverted back to its original state, ensuring UI consistency without stalling the user experience on loading spinners.
+- **Micro-Visuals for Priority:** Moved priority indicators from a bulky bottom badge to the left border and title line. This aligns with modern SaaS design, reducing vertical card height and allowing users to scan priority instantly by looking down the left edge of the list.
 
 ### ⚠️ Problems / Blockers
 - None today.
@@ -223,8 +228,9 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
 - [x] Phase 9.2 — Due Date Feature (form picker, card badge, overdue pulse)
 - [x] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
 - [x] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
-- [ ] Phase 9.5 — Task Card Redesign (priority indicators)
+- [x] Phase 9.5 — Task Card Redesign (priority indicators)
 - [ ] Phase 9.6 — Auth Pages (features list, stats counter)
+- [ ] Phase 9.7 — Polish (PrimeNG theme, empty states)
 
 ---
 
