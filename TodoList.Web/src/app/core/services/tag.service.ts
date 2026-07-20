@@ -19,11 +19,11 @@ export class TagService {
   /**
    * Retrieves all tags for the current user.
    */
-  getTags(): Observable<ApiResponse<Tag[]>> {
-    return this.http.get<ApiResponse<Tag[]>>(this.apiUrl).pipe(
-      tap(res => {
-        if (res.success && res.data) {
-          this.tagsSubject.next(res.data);
+  getTags(): Observable<Tag[]> {
+    return this.http.get<Tag[]>(this.apiUrl).pipe(
+      tap(tags => {
+        if (tags) {
+          this.tagsSubject.next(tags);
         }
       })
     );
@@ -32,14 +32,14 @@ export class TagService {
   /**
    * Creates a new tag.
    */
-  createTag(request: CreateTagRequest): Observable<ApiResponse<{ id: string }>> {
-    return this.http.post<ApiResponse<{ id: string }>>(this.apiUrl, request);
+  createTag(request: CreateTagRequest): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(this.apiUrl, request);
   }
 
   /**
    * Deletes a tag by its ID.
    */
-  deleteTag(id: string): Observable<ApiResponse<void>> {
-    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`);
+  deleteTag(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

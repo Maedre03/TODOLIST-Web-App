@@ -203,6 +203,7 @@ ade96e3 feat: complete Tags feature implementation (API, DB, UI)
   - Made `isMobile()` reactive to window resizing.
   - Replaced deprecated `p-input-icon-left` with modern `p-iconField` from PrimeNG v18.
 - **Tagging Bug Fixes:**
+  - Fixed a silent failure in `TagService` where `getTags` expected a wrapped `ApiResponse<Tag[]>` but the backend `TagsController` returns a raw `TagDto[]` array. Corrected the Observable types to map the raw array properly.
   - Fixed an issue where newly created tags did not appear in the sidebar or the task creation form. Updated `TagService` to use a `BehaviorSubject` (`tags$`) so `AppLayoutComponent` and `TodoListComponent` can passively subscribe and automatically sync tag state globally.
   - Fixed a backend bug preventing users from assigning tags to existing tasks. Removed the explicit `_todoRepository.Update(todo)` call in `UpdateTodoCommandHandler` since the entity was already tracked via EF Core, which previously overwrote and broke EF's automatic tracking of the `TodoTags` many-to-many join table.
 - **Phase 9.2 — Due Date Feature:**
