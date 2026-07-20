@@ -56,7 +56,8 @@ public class TodosController : ControllerBase
         [FromQuery] int pageSize = 10, 
         [FromQuery] string? searchTerm = null, 
         [FromQuery] string? sortBy = null, 
-        [FromQuery] bool sortDescending = false)
+        [FromQuery] bool sortDescending = false,
+        [FromQuery] bool? isCompleted = null)
     {
         var query = new GetTodosPagedQuery
         {
@@ -64,7 +65,8 @@ public class TodosController : ControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm,
             SortBy = sortBy,
-            SortDescending = sortDescending
+            SortDescending = sortDescending,
+            IsCompleted = isCompleted
         };
         var result = await _mediator.Send(query);
         return Ok(result);

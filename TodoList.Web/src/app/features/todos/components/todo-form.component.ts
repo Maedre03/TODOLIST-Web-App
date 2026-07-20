@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -146,7 +146,7 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
     .priority-dot.low { background: var(--color-info); }
   `]
 })
-export class TodoFormComponent implements OnInit {
+export class TodoFormComponent implements OnInit, OnChanges {
   private readonly fb = inject(FormBuilder);
 
   @Input() visible = false;
@@ -168,11 +168,8 @@ export class TodoFormComponent implements OnInit {
     this.initForm();
   }
 
-  // Need to use ngOnChanges to react when the dialog opens and todoToEdit changes
-  // Alternatively, providing a setter for visible is cleaner
-  @Input() set show(val: boolean) {
-    this.visible = val;
-    if (val) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible']?.currentValue === true || (this.visible && changes['todoToEdit'])) {
       this.initForm();
     }
   }

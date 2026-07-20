@@ -1,6 +1,8 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -62,6 +64,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           [(ngModel)]="selectedSort" 
           (ngModelChange)="onSortChange()"
           optionLabel="label" 
+          optionValue="value"
           placeholder="Sort By" />
       </div>
 
@@ -107,11 +110,21 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 
     <!-- Create/Edit Form Dialog -->
     <app-todo-form 
-      [show]="isFormVisible" 
+      [visible]="isFormVisible" 
       (visibleChange)="isFormVisible = $event"
       [todoToEdit]="todoToEdit"
       [isSaving]="isSaving()"
       (save)="onSaveForm($event)" />
+
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+      <p-button 
+        icon="pi pi-plus" 
+        [rounded]="true" 
+        size="large" 
+        (onClick)="openCreateForm()" 
+        styleClass="p-button-primary shadow-6" />
+    </div>
   `,
   styles: [`
     .todo-list-page {
@@ -142,6 +155,20 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     .search-input {
       flex: 1;
       min-width: 250px;
+      position: relative;
+    }
+
+    .search-input i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-color-secondary);
+      z-index: 1;
+    }
+
+    .search-input input {
+      padding-left: 2.5rem !important;
     }
 
     .list-container {
@@ -179,12 +206,22 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
         align-items: stretch;
       }
     }
+
+    .fab-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
   `]
 })
 export class TodoListComponent implements OnInit {
   private readonly todoService = inject(TodoService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   // State
   todos = signal<Todo[]>([]);
@@ -196,6 +233,7 @@ export class TodoListComponent implements OnInit {
   currentPage = 1;
   pageSize = 10;
   searchTerm = '';
+  isCompletedFilter?: boolean;
   private searchTimeout: any;
 
   // Sorting
@@ -212,7 +250,18 @@ export class TodoListComponent implements OnInit {
   todoToEdit: Todo | null = null;
 
   ngOnInit(): void {
-    this.loadTodos();
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const filter = params['filter'];
+      if (filter === 'active') {
+        this.isCompletedFilter = false;
+      } else if (filter === 'completed') {
+        this.isCompletedFilter = true;
+      } else {
+        this.isCompletedFilter = undefined;
+      }
+      this.currentPage = 1; // Reset to page 1 on filter change
+      this.loadTodos();
+    });
   }
 
   // ─── Data Loading ──────────────────────────────────────────
@@ -225,7 +274,8 @@ export class TodoListComponent implements OnInit {
       pageSize: this.pageSize,
       searchTerm: this.searchTerm,
       sortBy: this.selectedSort.sortBy,
-      sortDescending: this.selectedSort.desc
+      sortDescending: this.selectedSort.desc,
+      isCompleted: this.isCompletedFilter
     };
 
     this.todoService.getPaged(params).subscribe({

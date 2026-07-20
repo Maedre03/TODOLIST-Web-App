@@ -78,4 +78,5 @@ export interface TodoPagedParams {
   searchTerm?: string;
   sortBy?: string;
   sortDescending?: boolean;
+  isCompleted?: boolean;
 }

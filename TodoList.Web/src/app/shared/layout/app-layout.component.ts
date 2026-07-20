@@ -20,9 +20,9 @@ import { AuthService } from '../../core/services/auth.service';
       <!-- Sidebar -->
       <aside class="layout-sidebar">
         <div class="sidebar-header">
-          <div class="logo">
+          <div class="logo" *ngIf="!isSidebarCollapsed()">
             <i class="pi pi-check-square text-primary text-2xl"></i>
-            <span class="logo-text" *ngIf="!isSidebarCollapsed()">TaskFlow</span>
+            <span class="logo-text">TaskFlow</span>
           </div>
           <button class="collapse-btn" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
             <i class="pi" [class.pi-angle-left]="!isSidebarCollapsed()" [class.pi-angle-right]="isSidebarCollapsed()"></i>
@@ -32,7 +32,7 @@ import { AuthService } from '../../core/services/auth.service';
         <nav class="sidebar-nav">
           <ul class="nav-list">
             <li>
-              <a routerLink="/todos" routerLinkActive="active" class="nav-link">
+              <a routerLink="/todos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
                 <i class="pi pi-list"></i>
                 <span class="nav-text" *ngIf="!isSidebarCollapsed()">All Tasks</span>
               </a>
@@ -113,6 +113,11 @@ import { AuthService } from '../../core/services/auth.service';
       width: var(--sidebar-collapsed);
     }
 
+    .layout-wrapper.sidebar-collapsed .sidebar-header {
+      padding: 0;
+      justify-content: center;
+    }
+
     .sidebar-header {
       height: var(--topbar-height);
       display: flex;
@@ -134,21 +139,23 @@ import { AuthService } from '../../core/services/auth.service';
     }
 
     .collapse-btn {
-      background: transparent;
-      border: none;
+      width: 32px;
+      height: 32px;
+      background: var(--surface-hover);
+      border: 1px solid var(--surface-border);
       color: var(--text-color-secondary);
       cursor: pointer;
-      padding: var(--space-1);
       border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background var(--transition-fast), color var(--transition-fast);
+      transition: all var(--transition-fast);
     }
 
     .collapse-btn:hover {
-      background: var(--surface-hover);
+      background: var(--surface-card);
       color: var(--text-color);
+      border-color: var(--primary-color);
     }
 
     .sidebar-nav {

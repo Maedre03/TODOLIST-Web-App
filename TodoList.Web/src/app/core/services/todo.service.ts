@@ -65,6 +65,9 @@ export class TodoService {
     if (params.sortDescending !== undefined) {
       httpParams = httpParams.set('sortDescending', params.sortDescending.toString());
     }
+    if (params.isCompleted !== undefined && params.isCompleted !== null) {
+      httpParams = httpParams.set('isCompleted', params.isCompleted.toString());
+    }
 
     return this.http.get<PaginatedResult<Todo>>(`${this.baseUrl}/paged`, {
       params: httpParams

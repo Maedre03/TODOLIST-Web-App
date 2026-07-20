@@ -14,4 +14,5 @@ public record GetTodosPagedQuery : IRequest<PaginatedList<TodoDto>>
     public string? SearchTerm { get; init; }
     public string? SortBy { get; init; }
     public bool SortDescending { get; init; }
+    public bool? IsCompleted { get; init; }
 }

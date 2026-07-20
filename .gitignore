@@ -9,6 +9,7 @@
 packages/
 TestResults/
 *.log
+logs/
 
 # Node / Angular
 node_modules/
