@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
+5118d7a journal: Day 2 - record phase 9.6 auth pages enhancements
 6c88efe feat: implement phase 9.6 auth pages enhancements with feature bullets and stats
 9a662de journal: Day 2 - record phase 9.5 task card redesign
 fa43298 feat: implement phase 9.5 task card redesign with priority indicators
-b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
-5873fab feat: implement phase 9.4 todo list redesign with kanban view and filter tabs
 ```
 
 ### ✅ Tasks Completed
@@ -215,6 +215,9 @@ b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
   - Enriched the split-screen layout on `LoginComponent` and `RegisterComponent`.
   - Added a high-conversion feature bullet list to the branding section.
   - Added a glassmorphic "Stats Counter" container showing mock metrics (Active Users, Tasks Done, Uptime) to increase perceived product value.
+- **Phase 9.7 — Polish:**
+  - Defined explicit `:root.light-mode` overrides in `styles.css` ensuring full contrast and theme toggle support.
+  - Enhanced the `EmptyStateComponent` with a subtle gradient background and a glowing box-shadow for a more premium default state.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -225,6 +228,7 @@ b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
 - **Kanban Drag-and-Drop:** Implemented optimistic UI updates for moving items between Kanban columns. If the underlying `todoService.update` HTTP call fails, the UI is immediately reverted back to its original state, ensuring UI consistency without stalling the user experience on loading spinners.
 - **Micro-Visuals for Priority:** Moved priority indicators from a bulky bottom badge to the left border and title line. This aligns with modern SaaS design, reducing vertical card height and allowing users to scan priority instantly by looking down the left edge of the list.
 - **SaaS Conversion Elements:** Auth pages in modern web apps aren't just forms; they are landing pages. Adding feature lists and social proof (stats) directly to the login/register screens decreases bounce rates and sets a premium tone before the user even enters the app.
+- **Design System Resilience:** By adding `.light-mode` overrides directly to `styles.css` instead of relying entirely on PrimeNG presets, we ensure our custom utility classes and layout backgrounds respect the theme toggle consistently.
 
 ### ⚠️ Problems / Blockers
 - None today.
@@ -235,7 +239,10 @@ b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
 - [x] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
 - [x] Phase 9.5 — Task Card Redesign (priority indicators)
 - [x] Phase 9.6 — Auth Pages (features list, stats counter)
-- [ ] Phase 9.7 — Polish (PrimeNG theme, empty states)
+- [x] Phase 9.7 — Polish (PrimeNG theme, empty states)
+
+### 🎉 Frontend Redesign Complete
+The entire 7-phase UI/UX redesign has been successfully implemented.
 
 ---
 

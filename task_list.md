@@ -280,4 +280,4 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 - [x] Phase 4: Todo List Page (tab bar, kanban view switcher)
 - [x] Phase 5: Task Card Redesign (priority indicators)
 - [x] Phase 6: Auth Pages (features list, stats counter)
-- [ ] Phase 7: Polish (PrimeNG theme, empty states)
+- [x] Phase 7: Polish (PrimeNG theme, empty states)
