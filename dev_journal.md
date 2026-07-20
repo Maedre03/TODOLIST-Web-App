@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+a5e220b fix: resolve tagging system bugs (sidebar refresh, form dropdown sync, and many-to-many entity updates)
+25262e8 fix: resolve double v1 in tags API URL
+fb02d54 journal: Day 2 - record Tags feature completion
 ade96e3 feat: complete Tags feature implementation (API, DB, UI)
 8f6a7ab fix: adjust date range filtering to encompass full days
-b27843d fix: resolve datepicker signal binding issue preventing filtering
-629c413 feat: add date range filtering for due dates
-5c8fa91 journal: Day 2 - record kanban board layout fix
 ```
 
 ### ✅ Tasks Completed
@@ -202,6 +202,9 @@ b27843d fix: resolve datepicker signal binding issue preventing filtering
   - Fixed mobile sidebar logic by adding `isMobileMenuOpen` signal and responsive backdrop overlay.
   - Made `isMobile()` reactive to window resizing.
   - Replaced deprecated `p-input-icon-left` with modern `p-iconField` from PrimeNG v18.
+- **Tagging Bug Fixes:**
+  - Fixed an issue where newly created tags did not appear in the sidebar or the task creation form. Updated `TagService` to use a `BehaviorSubject` (`tags$`) so `AppLayoutComponent` and `TodoListComponent` can passively subscribe and automatically sync tag state globally.
+  - Fixed a backend bug preventing users from assigning tags to existing tasks. Removed the explicit `_todoRepository.Update(todo)` call in `UpdateTodoCommandHandler` since the entity was already tracked via EF Core, which previously overwrote and broke EF's automatic tracking of the `TodoTags` many-to-many join table.
 - **Phase 9.2 — Due Date Feature:**
   - Added PrimeNG `p-datepicker` to `TodoFormComponent` for setting due dates.
   - Updated `TodoItemComponent` to display the due date.
@@ -251,6 +254,8 @@ b27843d fix: resolve datepicker signal binding issue preventing filtering
 - **Date Range Architecture**: By pushing the date filtering logic all the way down to the EF Core `IQueryable` in `TodoRepository`, we ensure that only the requested slice of data is ever retrieved from SQL Server, maintaining the performance benefits of our existing server-side pagination.
 - **Responsive Kanban Layout**: Adjusted Kanban column scaling by removing explicit `min-width: 300px` in favor of `min-width: 0` inside the flex container. This ensures flex items can shrink properly when screen real-estate is limited, avoiding horizontal scrolling while maintaining proportional column widths.
 - **Security by Default**: Due to the adherence to Clean Architecture and modern .NET practices in the earlier phases, the security hardening tasks (Phase 7) were naturally fulfilled without requiring retrofits. Using MediatR handlers with `_currentUserService.UserId` and `EF Core` parameterization ensures security is baked into the foundation.
+- **RxJS BehaviorSubjects for Global State**: We used a `BehaviorSubject` inside `TagService` to stream tag data (`tags$`) across detached components (`AppLayoutComponent` in the shell and `TodoListComponent` in the router outlet). This ensures all areas of the app update instantly when a tag is created without manual reloads or complex component coupling.
+- **EF Core Tracked Entities**: EF Core automatically detects changes to navigation collections (like `.Clear()` and `.Add()` for many-to-many). Calling `DbContext.Update()` on an already-tracked entity is an anti-pattern that forces the state manager to mark the relationships as 'Modified', which can break join table inserts/deletes. Removing this call fixed our tag saving bug.
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
 - **Reactive Mobile View:** We replaced the static `window.innerWidth` check with an `@HostListener('window:resize')` and proper signal usage in `AppLayoutComponent`. This ensures layout accurately reflects desktop/mobile state without requiring page reloads.
 - **PrimeNG IconField API:** Shifted to `<p-iconField>` and `<p-inputIcon>` wrapper to remain compliant with PrimeNG 18, ensuring we don't carry technical debt from v17 patterns.
