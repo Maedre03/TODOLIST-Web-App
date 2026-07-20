@@ -179,14 +179,15 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+7eaf3cd fix: align Priority enum between frontend and backend to fix low priority creation
+de2a4c3 journal: Day 2 - record phase 9.7 global polish and frontend redesign completion
 e6b9584 feat: implement phase 9.7 global polish with light mode and empty states
 5118d7a journal: Day 2 - record phase 9.6 auth pages enhancements
 6c88efe feat: implement phase 9.6 auth pages enhancements with feature bullets and stats
-9a662de journal: Day 2 - record phase 9.5 task card redesign
-fa43298 feat: implement phase 9.5 task card redesign with priority indicators
 ```
 
 ### ✅ Tasks Completed
+- **Bug Fix**: Aligned Priority enum values between the frontend and backend to fix 'Low' priority creation issues, and introduced 'Critical' priority to the frontend UI including the Kanban board.
 - Removed CSS hack and activated the official PrimeUI Community License.
 - **Phase 9.1 — Critical UI Bug Fixes:**
   - Deleted unused `app.component.html` placeholder to reduce noise.
@@ -229,6 +230,7 @@ fa43298 feat: implement phase 9.5 task card redesign with priority indicators
 - **Micro-Visuals for Priority:** Moved priority indicators from a bulky bottom badge to the left border and title line. This aligns with modern SaaS design, reducing vertical card height and allowing users to scan priority instantly by looking down the left edge of the list.
 - **SaaS Conversion Elements:** Auth pages in modern web apps aren't just forms; they are landing pages. Adding feature lists and social proof (stats) directly to the login/register screens decreases bounce rates and sets a premium tone before the user even enters the app.
 - **Design System Resilience:** By adding `.light-mode` overrides directly to `styles.css` instead of relying entirely on PrimeNG presets, we ensure our custom utility classes and layout backgrounds respect the theme toggle consistently.
+- **Frontend-Backend Enum Alignment:** The frontend Priority enum was zero-indexed (`Low = 0`), while the backend domain enum started at 1 (`Low = 1`). This caused the backend's `IsInEnum` validator to reject frontend requests for Low priority. We aligned the frontend `todo.model.ts` to exactly match `TodoList.Domain.Enums.Priority` and exposed the missing `Critical` priority level throughout the UI to ensure 1:1 parity.
 
 ### ⚠️ Problems / Blockers
 - None today.
