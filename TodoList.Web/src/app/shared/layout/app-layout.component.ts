@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -16,38 +16,47 @@ import { AuthService } from '../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <div class="layout-wrapper" [class.sidebar-collapsed]="isSidebarCollapsed()">
+    <div class="layout-wrapper" 
+         [class.sidebar-collapsed]="isSidebarCollapsed() && !isMobile()"
+         [class.mobile-menu-open]="isMobileMenuOpen() && isMobile()">
+      
+      <!-- Mobile Backdrop -->
+      <div class="mobile-backdrop" *ngIf="isMobile() && isMobileMenuOpen()" (click)="closeMobileMenu()"></div>
+
       <!-- Sidebar -->
-      <aside class="layout-sidebar">
+      <aside class="layout-sidebar" [class.open]="isMobileMenuOpen() && isMobile()">
         <div class="sidebar-header">
-          <div class="logo" *ngIf="!isSidebarCollapsed()">
+          <div class="logo" *ngIf="!isSidebarCollapsed() || isMobile()">
             <i class="pi pi-check-square text-primary text-2xl"></i>
             <span class="logo-text">TaskFlow</span>
           </div>
-          <button class="collapse-btn" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
+          <button class="collapse-btn" (click)="toggleSidebar()" aria-label="Toggle Sidebar" *ngIf="!isMobile()">
             <i class="pi" [class.pi-angle-left]="!isSidebarCollapsed()" [class.pi-angle-right]="isSidebarCollapsed()"></i>
+          </button>
+          <button class="collapse-btn" (click)="closeMobileMenu()" aria-label="Close Sidebar" *ngIf="isMobile()">
+            <i class="pi pi-times"></i>
           </button>
         </div>
 
         <nav class="sidebar-nav">
           <ul class="nav-list">
             <li>
-              <a routerLink="/todos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+              <a routerLink="/todos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link" (click)="onNavClick()">
                 <i class="pi pi-list"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed()">All Tasks</span>
+                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">All Tasks</span>
               </a>
             </li>
             <!-- Placeholder for future filters -->
             <li>
-              <a routerLink="/todos" [queryParams]="{ filter: 'active' }" routerLinkActive="active" class="nav-link">
+              <a routerLink="/todos" [queryParams]="{ filter: 'active' }" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
                 <i class="pi pi-clock"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed()">Active</span>
+                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Active</span>
               </a>
             </li>
             <li>
-              <a routerLink="/todos" [queryParams]="{ filter: 'completed' }" routerLinkActive="active" class="nav-link">
+              <a routerLink="/todos" [queryParams]="{ filter: 'completed' }" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
                 <i class="pi pi-check-circle"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed()">Completed</span>
+                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Completed</span>
               </a>
             </li>
           </ul>
@@ -56,7 +65,7 @@ import { AuthService } from '../../core/services/auth.service';
         <div class="sidebar-footer">
           <button class="nav-link logout-btn" (click)="logout()">
             <i class="pi pi-sign-out"></i>
-            <span class="nav-text" *ngIf="!isSidebarCollapsed()">Logout</span>
+            <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Logout</span>
           </button>
         </div>
       </aside>
@@ -66,7 +75,9 @@ import { AuthService } from '../../core/services/auth.service';
         <!-- Top Bar -->
         <header class="layout-topbar">
           <div class="topbar-left">
-             <!-- Mobile menu toggle could go here -->
+             <button class="mobile-menu-btn" *ngIf="isMobile()" (click)="toggleMobileMenu()" aria-label="Open Sidebar">
+               <i class="pi pi-bars text-xl"></i>
+             </button>
           </div>
           <div class="topbar-right">
              <div class="user-profile" *ngIf="authService.currentUser() as user">
@@ -94,6 +105,20 @@ import { AuthService } from '../../core/services/auth.service';
       min-height: 100vh;
       background: var(--surface-ground);
       transition: all var(--transition-base);
+      position: relative;
+    }
+
+    /* ── Mobile Backdrop ── */
+    .mobile-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 99;
+      backdrop-filter: blur(2px);
+      animation: fadeIn var(--transition-fast) forwards;
     }
 
     /* ── Sidebar ── */
@@ -103,17 +128,17 @@ import { AuthService } from '../../core/services/auth.service';
       border-right: 1px solid var(--surface-border);
       display: flex;
       flex-direction: column;
-      transition: width var(--transition-base);
+      transition: width var(--transition-base), transform var(--transition-base);
       position: fixed;
       height: 100vh;
       z-index: 100;
     }
 
-    .layout-wrapper.sidebar-collapsed .layout-sidebar {
+    .layout-wrapper.sidebar-collapsed:not(.mobile-menu-open) .layout-sidebar {
       width: var(--sidebar-collapsed);
     }
 
-    .layout-wrapper.sidebar-collapsed .sidebar-header {
+    .layout-wrapper.sidebar-collapsed:not(.mobile-menu-open) .sidebar-header {
       padding: 0;
       justify-content: center;
     }
@@ -183,6 +208,7 @@ import { AuthService } from '../../core/services/auth.service';
       transition: all var(--transition-fast);
       overflow: hidden;
       white-space: nowrap;
+      text-decoration: none;
     }
 
     .nav-link:hover {
@@ -197,7 +223,7 @@ import { AuthService } from '../../core/services/auth.service';
 
     .nav-link i {
       font-size: 1.1rem;
-      min-width: 1.1rem; /* Ensure icon doesn't shrink when collapsed */
+      min-width: 1.1rem;
     }
 
     .sidebar-footer {
@@ -229,7 +255,7 @@ import { AuthService } from '../../core/services/auth.service';
       min-height: 100vh;
     }
 
-    .layout-wrapper.sidebar-collapsed .layout-main-container {
+    .layout-wrapper.sidebar-collapsed:not(.mobile-menu-open) .layout-main-container {
       margin-left: var(--sidebar-collapsed);
     }
 
@@ -244,7 +270,25 @@ import { AuthService } from '../../core/services/auth.service';
       padding: 0 var(--space-6);
       position: sticky;
       top: 0;
-      z-index: 99;
+      z-index: 90;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      transition: background var(--transition-fast);
+    }
+
+    .mobile-menu-btn:hover {
+      background: var(--surface-hover);
     }
 
     .user-profile {
@@ -289,8 +333,9 @@ import { AuthService } from '../../core/services/auth.service';
       .layout-sidebar {
         transform: translateX(-100%);
       }
-      .layout-wrapper.sidebar-collapsed .layout-sidebar {
+      .layout-sidebar.open {
         transform: translateX(0);
+        width: 280px;
       }
       .layout-main-container {
         margin-left: 0 !important;
@@ -298,16 +343,51 @@ import { AuthService } from '../../core/services/auth.service';
       .layout-content {
         padding: var(--space-4);
       }
+      .layout-topbar {
+        padding: 0 var(--space-4);
+      }
     }
   `]
 })
-export class AppLayoutComponent {
+export class AppLayoutComponent implements OnInit {
   authService = inject(AuthService);
   
   isSidebarCollapsed = signal(false);
+  isMobileMenuOpen = signal(false);
+  isMobile = signal(false);
+
+  ngOnInit() {
+    this.checkMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+    if (!this.isMobile() && this.isMobileMenuOpen()) {
+      this.isMobileMenuOpen.set(false);
+    }
+  }
+
+  private checkMobile() {
+    this.isMobile.set(window.innerWidth <= 768);
+  }
 
   toggleSidebar() {
     this.isSidebarCollapsed.update(v => !v);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update(v => !v);
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
+  }
+
+  onNavClick() {
+    if (this.isMobile()) {
+      this.closeMobileMenu();
+    }
   }
 
   logout() {
@@ -322,9 +402,5 @@ export class AppLayoutComponent {
   getDisplayName(email: string): string {
     if (!email) return 'User';
     return email.split('@')[0];
-  }
-
-  isMobile(): boolean {
-    return window.innerWidth <= 768;
   }
 }

@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
@@ -27,6 +29,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     InputTextModule,
     SelectModule,
     PaginatorModule,
+    IconFieldModule,
+    InputIconModule,
     TodoItemComponent,
     TodoFormComponent,
     LoadingSkeletonComponent,
@@ -48,8 +52,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 
       <!-- Controls (Search & Sort) -->
       <div class="controls-bar">
-        <span class="p-input-icon-left search-input">
-          <i class="pi pi-search"></i>
+        <p-iconField iconPosition="left" class="search-input">
+          <p-inputIcon styleClass="pi pi-search" />
           <input 
             pInputText 
             type="text" 
@@ -57,7 +61,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
             (ngModelChange)="onSearchChange()"
             placeholder="Search tasks..." 
             class="w-full" />
-        </span>
+        </p-iconField>
 
         <p-select 
           [options]="sortOptions" 
@@ -155,20 +159,12 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     .search-input {
       flex: 1;
       min-width: 250px;
+      width: 100%;
       position: relative;
     }
 
-    .search-input i {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-color-secondary);
-      z-index: 1;
-    }
-
-    .search-input input {
-      padding-left: 2.5rem !important;
+    ::ng-deep .search-input .p-iconfield {
+      width: 100%;
     }
 
     .list-container {
