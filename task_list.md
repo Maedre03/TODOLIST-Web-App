@@ -168,7 +168,7 @@ No professional project ships without tests. Tests are your safety net.
 ## 🎨 PHASE 6 — Angular Frontend (`TodoList.Web`)
 
 ### Architecture Setup
-- [ ] Create a **feature-based folder structure**:
+- [x] Create a **feature-based folder structure**:
   ```
   src/app/
   ├── core/         (singleton services: auth, http interceptors)
@@ -177,30 +177,30 @@ No professional project ships without tests. Tests are your safety net.
       ├── auth/     (login, register pages)
       └── todos/    (todo list, todo detail)
   ```
-- [ ] Create an `HttpInterceptor` to auto-attach JWT token to every API request
-- [ ] Create an `HttpInterceptor` for global error handling (show toast on 500, redirect on 401)
-- [ ] Create `AuthGuard` to protect routes that require login
-- [ ] Set up `environment.ts` and `environment.prod.ts` for API base URL
+- [x] Create an `HttpInterceptor` to auto-attach JWT token to every API request
+- [x] Create an `HttpInterceptor` for global error handling (show toast on 500, redirect on 401)
+- [x] Create `AuthGuard` to protect routes that require login
+- [x] Set up `environment.ts` and `environment.prod.ts` for API base URL
 
 ### Auth Feature
-- [ ] `LoginComponent` — login form (email + password)
-- [ ] `RegisterComponent` — registration form
-- [ ] `AuthService` — handles login/logout, stores JWT in `localStorage`
+- [x] `LoginComponent` — login form (email + password)
+- [x] `RegisterComponent` — registration form
+- [x] `AuthService` — handles login/logout, stores JWT in `localStorage`
 
 ### Todos Feature
-- [ ] `TodoListComponent` — displays all todos with filters (All / Active / Completed) and sort
-- [ ] `TodoItemComponent` — single todo row with toggle, edit, delete actions
-- [ ] `TodoFormComponent` — create/edit form (title, description, priority, due date)
-- [ ] `TodoService` — wraps all HTTP calls to the API
+- [x] `TodoListComponent` — displays all todos with filters (All / Active / Completed) and sort
+- [x] `TodoItemComponent` — single todo row with toggle, edit, delete actions
+- [x] `TodoFormComponent` — create/edit form (title, description, priority, due date)
+- [x] `TodoService` — wraps all HTTP calls to the API
 
 ### UI/UX Polish
-- [ ] Set up PrimeNG theme in `styles.css`
-- [ ] Create responsive layout with a proper Navbar
-- [ ] Add loading skeletons while data is being fetched
-- [ ] Add success/error toast notifications using PrimeNG's `ToastModule`
-- [ ] Add confirmation dialog before deleting a todo
-- [ ] Implement client-side pagination or infinite scroll
-- [ ] Make the layout fully **responsive** (mobile-friendly)
+- [x] Set up PrimeNG theme in `styles.css`
+- [x] Create responsive layout with a proper Navbar
+- [x] Add loading skeletons while data is being fetched
+- [x] Add success/error toast notifications using PrimeNG's `ToastModule`
+- [x] Add confirmation dialog before deleting a todo
+- [x] Implement client-side pagination or infinite scroll
+- [x] Make the layout fully **responsive** (mobile-friendly)
 
 ### Angular Frontend Testing
 - [ ] Unit test `AuthService`
