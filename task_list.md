@@ -203,9 +203,9 @@ No professional project ships without tests. Tests are your safety net.
 - [x] Make the layout fully **responsive** (mobile-friendly)
 
 ### Angular Frontend Testing
-- [ ] Unit test `AuthService`
-- [ ] Unit test `TodoService`
-- [ ] Component tests for `TodoListComponent` and `TodoFormComponent`
+- [x] Unit test `AuthService`
+- [x] Unit test `TodoService`
+- [x] Component tests for `TodoListComponent` and `TodoFormComponent`
 
 ---
 

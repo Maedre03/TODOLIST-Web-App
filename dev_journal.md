@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+b1110c4 test: add vitest unit tests for angular services and components
+b1caf54 journal: Day 2 - record sidebar collapsible features
 eff96b8 feat: make sidebar features collapsible and navigable
 ca49d8d journal: Day 2 - record search icon fix
 f84a2d2 fix: render search icon explicitly inside inputicon to fix missing glyph
-8f85553 journal: Day 2 - record kanban icon fix
-2578487 fix: update kanban view switcher icon to valid primeicon
 ```
 
 ### ✅ Tasks Completed
@@ -232,6 +232,12 @@ f84a2d2 fix: render search icon explicitly inside inputicon to fix missing glyph
   - Replaced the invalid `pi-table-columns` PrimeIcon on the Kanban view switcher with the widely supported `pi-th-large` grid icon to fix the empty-box rendering bug.
   - Fixed a missing search icon within the `TodoListComponent` by explicitly nesting an `<i>` tag inside `<p-inputicon>`, resolving a PrimeNG v18 component projection bug where the `styleClass` attribute failed to render the glyph.
 - **Sidebar UX Update**: Refactored sidebar feature sections (Tags, Pinned, Upcoming, Progress) into interactive, collapsible directories that apply query parameters to simulate site-specific navigation.
+- **Phase 6.6 — Angular Frontend Testing**:
+  - Implemented unit tests for `AuthService` covering login, logout, and token management using `HttpTestingController`.
+  - Implemented unit tests for `TodoService` verifying CRUD operations and proper HTTP params building for pagination.
+  - Implemented component tests for `TodoListComponent` ensuring accurate state updates on load, optimistic updates for toggling complete, and proper filtering.
+  - Implemented component tests for `TodoFormComponent` validating form initialization for both create and edit modes, and correct `EventEmitter` payload emissions.
+  - Mocked global `localStorage` explicitly to ensure Vitest environment runs correctly in Node without jsdom friction.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -249,17 +255,16 @@ f84a2d2 fix: render search icon explicitly inside inputicon to fix missing glyph
 - **Global DateTime Conversion for EF Core**: SQL Server does not store timezone information (`datetime2` drops the `DateTimeKind`). As a result, when data comes out, ASP.NET returns `"2026-07-20T08:08:00"` instead of `"2026-07-20T08:08:00Z"`. By forcing EF Core to map all `DateTime` properties to `DateTimeKind.Utc` within `ApplicationDbContext.OnModelCreating()`, we ensure standard ISO8601 formatting during JSON serialization. 
 - **Robust Frontend Timezones**: Relying solely on the backend to append 'Z' is risky if the backend isn't rebooted immediately. By piping the HTTP responses through a `fixDateStrings` helper in Angular's `TodoService`, the frontend intercepts all dates and forcefully standardizes them to UTC before Angular's date pipes process them, completely bulletproofing the timezone shift.
 - **Collapsible Sidebar Architecture**: Transformed static sidebar lists into interactive directory-like features. Adding `routerLink` to the section headers provides the requested URL tracking (`?section=tags`), and Angular signals manage the open/close state cleanly. It improves space utilization for power users who might have many tags.
+- **Vitest Over Jasmine**: Leveraged the native Vitest integration introduced via the `@angular/build:unit-test` executor in Angular's modern builder, moving away from Karma/Jasmine to execute tests significantly faster natively in Node.
+- **Service Mocking with vi.fn()**: Adapted test fixtures to use Vitest's `vi.fn()` and `vi.spyOn` instead of `jasmine.createSpyObj`, ensuring tests fully utilize Vitest's native mock capabilities and type definitions.
+- **Test Timers**: Replaced Angular's `fakeAsync`/`tick` with Vitest's `vi.useFakeTimers()` to verify debounce operations cleanly without requiring `zone.js/testing`, perfectly aligning with Angular's push toward zoneless applications.
 
 ### ⚠️ Problems / Blockers
 - None today.
 
 ### 📌 Tomorrow / Next Session
-- [x] Phase 9.2 — Due Date Feature (form picker, card badge, overdue pulse)
-- [x] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
-- [x] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
-- [x] Phase 9.5 — Task Card Redesign (priority indicators)
-- [x] Phase 9.6 — Auth Pages (features list, stats counter)
-- [x] Phase 9.7 — Polish (PrimeNG theme, empty states)
+- [ ] Phase 7 — Advanced Features & Security Hardening (BCrypt, JWT expiration)
+- [ ] Phase 8 — DevOps & Project Hygiene
 
 ### 🎉 Frontend Redesign Complete
 The entire 7-phase UI/UX redesign has been successfully implemented.
