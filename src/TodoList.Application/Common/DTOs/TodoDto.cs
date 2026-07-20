@@ -15,4 +15,5 @@ public class TodoDto
     public Priority Priority { get; set; }
     public DateTime? DueDate { get; set; }
     public DateTime CreatedAt { get; set; }
+    public IReadOnlyList<TagDto> Tags { get; set; } = Array.Empty<TagDto>();
 }

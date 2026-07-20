@@ -11,6 +11,7 @@ namespace TodoList.UnitTests.Application.Todos.Commands;
 public class CreateTodoCommandHandlerTests
 {
     private readonly ITodoRepository _todoRepositoryMock;
+    private readonly ITagRepository _tagRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
     private readonly ICurrentUserService _currentUserServiceMock;
     private readonly CreateTodoCommandHandler _handler;
@@ -18,11 +19,13 @@ public class CreateTodoCommandHandlerTests
     public CreateTodoCommandHandlerTests()
     {
         _todoRepositoryMock = Substitute.For<ITodoRepository>();
+        _tagRepositoryMock = Substitute.For<ITagRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
         _currentUserServiceMock = Substitute.For<ICurrentUserService>();
 
         _handler = new CreateTodoCommandHandler(
             _todoRepositoryMock,
+            _tagRepositoryMock,
             _unitOfWorkMock,
             _currentUserServiceMock);
     }

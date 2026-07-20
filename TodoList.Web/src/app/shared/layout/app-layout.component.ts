@@ -1,21 +1,30 @@
 import { Component, inject, signal, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { MessageService, ConfirmationService } from 'primeng/api';
+
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
+import { TagService } from '../../core/services/tag.service';
+import { Tag } from '../../core/models/tag.model';
 
-/**
- * AppLayoutComponent — the main application shell.
- *
- * This wraps all authenticated pages with:
- * - Sidebar navigation (left) with stats, upcoming, tags, pinned
- * - Top bar (top)
- * - Content area (center) via <router-outlet>
- */
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [
+    CommonModule, 
+    RouterOutlet, 
+    RouterLink, 
+    RouterLinkActive,
+    FormsModule,
+    DialogModule,
+    InputTextModule,
+    ButtonModule
+  ],
   template: `
     <div class="layout-wrapper" 
          [class.sidebar-collapsed]="isSidebarCollapsed() && !isMobile()"
@@ -102,25 +111,25 @@ import { ThemeService } from '../../core/services/theme.service';
 
             <!-- Tags Section -->
             <div class="sidebar-section">
-              <div class="section-header interactive" (click)="toggleSection('tags')" routerLink="/todos" [queryParams]="{ section: 'tags' }">
+              <div class="section-header interactive" (click)="toggleSection('tags')">
                 <div class="flex align-items-center gap-2">
                   <i class="pi" [class.pi-chevron-down]="isTagsExpanded()" [class.pi-chevron-right]="!isTagsExpanded()"></i>
                   <h3 class="section-title mb-0">Tags</h3>
                 </div>
-                <button class="icon-btn" title="Add Tag" (click)="preventProp($event)"><i class="pi pi-plus"></i></button>
+                <button class="icon-btn" title="Add Tag" (click)="preventProp($event); openCreateTag()"><i class="pi pi-plus"></i></button>
               </div>
               <ul class="nav-list small-list" *ngIf="isTagsExpanded()">
-                <li>
-                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
-                    <span class="color-dot bg-blue-500 mr-2"></span>
-                    <span class="nav-text">Work</span>
+                <li *ngFor="let tag of userTags()">
+                  <a [routerLink]="['/todos']" [queryParams]="{ tagId: tag.id }" routerLinkActive="active" class="nav-link text-sm" (click)="onNavClick()">
+                    <span class="color-dot mr-2" [style.backgroundColor]="tag.color"></span>
+                    <span class="nav-text text-truncate flex-1" [title]="tag.name">{{ tag.name }}</span>
+                    <button class="icon-btn delete-tag-btn ml-auto" (click)="preventProp($event); confirmDeleteTag(tag)" title="Delete tag">
+                      <i class="pi pi-times text-xs"></i>
+                    </button>
                   </a>
                 </li>
-                <li>
-                  <a href="javascript:void(0)" class="nav-link text-sm" (click)="onNavClick()">
-                    <span class="color-dot bg-green-500 mr-2"></span>
-                    <span class="nav-text">Personal</span>
-                  </a>
+                <li *ngIf="userTags().length === 0" class="text-xs text-color-secondary p-2 ml-4">
+                  No tags yet
                 </li>
               </ul>
             </div>
@@ -195,6 +204,59 @@ import { ThemeService } from '../../core/services/theme.service';
         </main>
       </div>
     </div>
+
+    <!-- Create Tag Dialog -->
+    <p-dialog 
+      header="Create New Tag" 
+      [(visible)]="isCreateTagVisible" 
+      [modal]="true" 
+      [style]="{ width: '100%', maxWidth: '400px' }"
+      [draggable]="false"
+      [resizable]="false"
+      (onHide)="isCreateTagVisible = false">
+      
+      <div class="flex flex-column gap-3 mt-2">
+        <div class="field">
+          <label for="tagName" class="block font-medium mb-2">Name <span class="text-danger">*</span></label>
+          <input 
+            pInputText 
+            id="tagName" 
+            [(ngModel)]="newTagName" 
+            placeholder="e.g. Work, Personal" 
+            autofocus 
+            class="w-full" />
+        </div>
+
+        <div class="field">
+          <label class="block font-medium mb-2">Color</label>
+          <div class="flex gap-2 flex-wrap">
+            <button 
+              *ngFor="let color of predefinedColors"
+              class="color-btn"
+              [style.backgroundColor]="color"
+              [class.selected]="newTagColor === color"
+              (click)="newTagColor = color">
+              <i class="pi pi-check" *ngIf="newTagColor === color"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-4 pt-4 border-top-1 surface-border">
+          <p-button 
+            type="button" 
+            label="Cancel" 
+            severity="secondary" 
+            [text]="true" 
+            (onClick)="isCreateTagVisible = false" />
+          <p-button 
+            type="button" 
+            label="Create" 
+            [disabled]="!newTagName.trim() || isSavingTag()" 
+            [loading]="isSavingTag()"
+            (onClick)="saveTag()" />
+        </div>
+      </div>
+    </p-dialog>
   `,
   styles: [`
     .layout-wrapper {
@@ -501,6 +563,36 @@ import { ThemeService } from '../../core/services/theme.service';
       color: var(--color-danger) !important;
     }
 
+    /* ── Tag Dialog Styles ── */
+    .color-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: transform 0.2s;
+    }
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+    .color-btn.selected {
+      border-color: var(--text-color);
+    }
+    .delete-tag-btn {
+      opacity: 0;
+      color: var(--text-color-secondary);
+    }
+    .delete-tag-btn:hover {
+      color: var(--color-danger);
+    }
+    .nav-link:hover .delete-tag-btn {
+      opacity: 1;
+    }
+
     /* ── Main Container ── */
     .layout-main-container {
       display: flex;
@@ -608,6 +700,9 @@ import { ThemeService } from '../../core/services/theme.service';
 export class AppLayoutComponent implements OnInit {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
+  private readonly tagService = inject(TagService);
+  private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
   
   isSidebarCollapsed = signal(false);
   isMobileMenuOpen = signal(false);
@@ -618,8 +713,79 @@ export class AppLayoutComponent implements OnInit {
   isTagsExpanded = signal(true);
   isPinnedExpanded = signal(true);
 
+  userTags = signal<Tag[]>([]);
+
+  // Tag creation state
+  isCreateTagVisible = false;
+  newTagName = '';
+  newTagColor = '#3b82f6';
+  isSavingTag = signal(false);
+
+  predefinedColors = [
+    '#ef4444', '#f97316', '#f59e0b', '#84cc16', 
+    '#22c55e', '#10b981', '#06b6d4', '#3b82f6', 
+    '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'
+  ];
+
   ngOnInit() {
     this.checkMobile();
+    this.loadTags();
+  }
+
+  loadTags(): void {
+    this.tagService.getTags().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.userTags.set(res.data);
+        }
+      }
+    });
+  }
+
+  openCreateTag(): void {
+    this.newTagName = '';
+    this.newTagColor = this.predefinedColors[7]; // Default to blue
+    this.isCreateTagVisible = true;
+  }
+
+  saveTag(): void {
+    if (!this.newTagName.trim()) return;
+
+    this.isSavingTag.set(true);
+    this.tagService.createTag({ name: this.newTagName.trim(), color: this.newTagColor }).subscribe({
+      next: () => {
+        this.isSavingTag.set(false);
+        this.isCreateTagVisible = false;
+        this.messageService.add({ severity: 'success', summary: 'Tag Created', detail: 'New tag added successfully.' });
+        this.loadTags();
+      },
+      error: () => {
+        this.isSavingTag.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create tag.' });
+      }
+    });
+  }
+
+  confirmDeleteTag(tag: Tag): void {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete the tag "${tag.name}"? This will remove it from all tasks.`,
+      header: 'Confirm Delete Tag',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: () => {
+        this.tagService.deleteTag(tag.id).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Tag Deleted', detail: 'Tag removed successfully.' });
+            this.loadTags();
+            // In a real app we might also need to tell the todo list to refresh if we're filtering by this tag.
+          },
+          error: () => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete tag.' });
+          }
+        });
+      }
+    });
   }
 
   @HostListener('window:resize')

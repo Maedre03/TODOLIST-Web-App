@@ -18,6 +18,11 @@ public class User : Entity<Guid>
     public virtual ICollection<Todo> Todos { get; set; } = new List<Todo>();
 
     /// <summary>
+    /// Collection navigation property representing the Tags created by this user.
+    /// </summary>
+    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+
+    /// <summary>
     /// Parameterless constructor required by EF Core for materialization.
     /// </summary>
     protected User() { }

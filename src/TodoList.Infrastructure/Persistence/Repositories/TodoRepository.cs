@@ -13,6 +13,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     public async Task<IReadOnlyList<Todo>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await DbContext.Todos
+            .Include(t => t.Tags)
             .Where(t => t.CreatedByUserId == userId)
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -21,12 +22,15 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     public async Task<Todo?> GetByIdAndUserAsync(Guid id, Guid userId, CancellationToken cancellationToken = default)
     {
         return await DbContext.Todos
+            .Include(t => t.Tags)
             .FirstOrDefaultAsync(t => t.Id == id && t.CreatedByUserId == userId, cancellationToken);
     }
 
-    public async Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default)
+    public async Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, DateTime? startDate, DateTime? endDate, Guid? tagId, CancellationToken cancellationToken = default)
     {
-        var query = DbContext.Todos.Where(t => t.CreatedByUserId == userId);
+        var query = DbContext.Todos
+            .Include(t => t.Tags)
+            .Where(t => t.CreatedByUserId == userId);
 
         if (isCompleted.HasValue)
         {
@@ -41,6 +45,11 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
         if (endDate.HasValue)
         {
             query = query.Where(t => t.DueDate <= endDate.Value);
+        }
+
+        if (tagId.HasValue)
+        {
+            query = query.Where(t => t.Tags.Any(tag => tag.Id == tagId.Value));
         }
 
         if (!string.IsNullOrWhiteSpace(searchTerm))

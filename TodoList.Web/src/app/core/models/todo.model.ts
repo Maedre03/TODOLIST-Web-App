@@ -1,3 +1,5 @@
+import { Tag } from './tag.model';
+
 /**
  * Priority levels for Todo items.
  * Must match the backend enum: TodoList.Domain.Enums.Priority
@@ -22,6 +24,7 @@ export interface Todo {
   priority: Priority;
   dueDate: string | null;
   createdAt: string;
+  tags?: Tag[];
 }
 
 /**
@@ -33,6 +36,7 @@ export interface CreateTodoRequest {
   description: string;
   priority: Priority;
   dueDate: string | null;
+  tagIds?: string[];
 }
 
 /**
@@ -44,6 +48,7 @@ export interface UpdateTodoRequest {
   description: string;
   priority: Priority;
   dueDate: string | null;
+  tagIds?: string[];
 }
 
 /**
@@ -82,4 +87,5 @@ export interface TodoPagedParams {
   isCompleted?: boolean;
   startDate?: string;
   endDate?: string;
+  tagId?: string;
 }

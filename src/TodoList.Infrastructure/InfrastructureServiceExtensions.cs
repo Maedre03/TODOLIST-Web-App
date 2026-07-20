@@ -18,6 +18,7 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<ITodoRepository, TodoRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<TodoList.Domain.Repositories.IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
         services.AddTransient<TodoList.Application.Common.Interfaces.IDateTimeProvider, TodoList.Infrastructure.Services.DateTimeProvider>();

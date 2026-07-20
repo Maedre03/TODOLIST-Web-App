@@ -5,13 +5,12 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { Todo, Priority } from '../../../core/models/todo.model';
-import { PriorityBadgeComponent } from '../../../shared/components/priority-badge.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-todo-item',
   standalone: true,
-  imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, MenuModule, PriorityBadgeComponent],
+  imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, MenuModule],
   template: `
     <div class="todo-card" [class.completed]="todo.isCompleted" [ngClass]="priorityClass">
       <!-- Checkbox & Title Area -->
@@ -57,6 +56,12 @@ import { FormsModule } from '@angular/forms';
             Due: {{ todo.dueDate | date:'MMM d, y, HH:mm' }}
           </span>
           <span class="created-date">Created: {{ todo.createdAt | date:'MMM d, y' }}</span>
+        </div>
+        
+        <div class="tags-container" *ngIf="todo.tags && todo.tags.length > 0">
+          <span *ngFor="let tag of todo.tags" class="tag-badge" [style.backgroundColor]="tag.color">
+            {{ tag.name }}
+          </span>
         </div>
       </div>
     </div>
@@ -163,10 +168,15 @@ import { FormsModule } from '@angular/forms';
       word-break: break-word;
     }
 
+    .attention-icon {
+      font-size: 1.1rem;
+      animation: pulse 2s infinite;
+    }
+
     .todo-footer {
       display: flex;
-      align-items: center;
-      gap: var(--space-4);
+      flex-direction: column;
+      gap: var(--space-2);
       margin-left: 32px;
       margin-top: var(--space-2);
     }
@@ -204,9 +214,21 @@ import { FormsModule } from '@angular/forms';
       color: var(--text-color-disabled);
     }
 
-    .attention-icon {
-      font-size: 1.1rem;
-      animation: pulse 2s infinite;
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+      margin-top: var(--space-1);
+    }
+
+    .tag-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: inline-block;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
   `]
 })

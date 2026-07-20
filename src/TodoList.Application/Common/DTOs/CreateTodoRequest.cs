@@ -12,4 +12,5 @@ public record CreateTodoRequest
     public string Description { get; init; } = string.Empty;
     public Priority Priority { get; init; }
     public DateTime? DueDate { get; init; }
+    public List<Guid>? TagIds { get; init; }
 }

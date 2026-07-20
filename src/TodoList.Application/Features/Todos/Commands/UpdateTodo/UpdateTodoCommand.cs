@@ -12,4 +12,5 @@ public record UpdateTodoCommand(
     string Title,
     string Description,
     Priority Priority,
-    DateTime? DueDate) : IRequest<Unit>;
+    DateTime? DueDate,
+    List<Guid>? TagIds = null) : IRequest<Unit>;

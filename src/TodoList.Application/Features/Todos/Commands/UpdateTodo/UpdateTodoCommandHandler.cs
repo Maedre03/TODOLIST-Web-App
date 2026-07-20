@@ -14,15 +14,18 @@ namespace TodoList.Application.Features.Todos.Commands.UpdateTodo;
 public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, Unit>
 {
     private readonly ITodoRepository _todoRepository;
+    private readonly ITagRepository _tagRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
     public UpdateTodoCommandHandler(
         ITodoRepository todoRepository,
+        ITagRepository tagRepository,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService)
     {
         _todoRepository = todoRepository;
+        _tagRepository = tagRepository;
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
@@ -42,6 +45,22 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, Unit>
         todo.Description = request.Description;
         todo.Priority = request.Priority;
         todo.DueDate = request.DueDate;
+
+        if (request.TagIds != null)
+        {
+            todo.Tags.Clear();
+            if (request.TagIds.Any())
+            {
+                var userTags = await _tagRepository.GetTagsByUserIdAsync(_currentUserService.UserId, cancellationToken);
+                var validTagIds = userTags.Select(t => t.Id).Intersect(request.TagIds).ToList();
+                var tagsToAdd = userTags.Where(t => validTagIds.Contains(t.Id)).ToList();
+                
+                foreach (var tag in tagsToAdd)
+                {
+                    todo.Tags.Add(tag);
+                }
+            }
+        }
 
         // 3. Mark entity as updated in the repository
         _todoRepository.Update(todo);

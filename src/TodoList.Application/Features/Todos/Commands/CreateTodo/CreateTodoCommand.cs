@@ -11,4 +11,5 @@ public record CreateTodoCommand(
     string Title,
     string Description,
     Priority Priority,
-    DateTime? DueDate) : IRequest<Guid>;
+    DateTime? DueDate,
+    List<Guid>? TagIds = null) : IRequest<Guid>;

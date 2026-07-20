@@ -7,7 +7,9 @@ import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../core/models/todo.model';
+import { Tag } from '../../../core/models/tag.model';
 
 @Component({
   selector: 'app-todo-form',
@@ -20,7 +22,8 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
     SelectModule,
     ButtonModule,
     DialogModule,
-    DatePickerModule
+    DatePickerModule,
+    MultiSelectModule
   ],
   template: `
     <p-dialog 
@@ -102,6 +105,27 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
           </p-datepicker>
         </div>
 
+        <div class="field">
+          <label for="tagIds">Tags</label>
+          <p-multiselect 
+            id="tagIds" 
+            formControlName="tagIds" 
+            [options]="userTags" 
+            optionLabel="name" 
+            optionValue="id" 
+            placeholder="Select Tags"
+            [maxSelectedLabels]="3"
+            styleClass="w-full"
+            appendTo="body">
+            <ng-template let-tag pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <span class="tag-color-dot" [style.backgroundColor]="tag.color"></span>
+                <span>{{ tag.name }}</span>
+              </div>
+            </ng-template>
+          </p-multiselect>
+        </div>
+
         <div class="dialog-footer">
           <p-button 
             type="button" 
@@ -163,6 +187,12 @@ import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../c
     .priority-dot.high { background: var(--color-danger); }
     .priority-dot.medium { background: var(--color-warning); }
     .priority-dot.low { background: var(--color-info); }
+    .tag-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
   `]
 })
 export class TodoFormComponent implements OnInit, OnChanges {
@@ -171,6 +201,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Input() todoToEdit: Todo | null = null;
   @Input() isSaving = false;
+  @Input() userTags: Tag[] = [];
   
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() save = new EventEmitter<{ request: CreateTodoRequest | UpdateTodoRequest, id?: string }>();
@@ -217,11 +248,14 @@ export class TodoFormComponent implements OnInit, OnChanges {
       this.minDate = today;
     }
 
+    const tagIds = this.todoToEdit?.tags?.map(t => t.id) || [];
+
     this.form = this.fb.group({
       title: [this.todoToEdit?.title || '', [Validators.required, Validators.maxLength(200)]],
       description: [this.todoToEdit?.description || '', [Validators.maxLength(1000)]],
       priority: [this.todoToEdit?.priority ?? Priority.Medium, [Validators.required]],
-      dueDate: [initialDueDate]
+      dueDate: [initialDueDate],
+      tagIds: [tagIds]
     });
   }
 
@@ -237,7 +271,8 @@ export class TodoFormComponent implements OnInit, OnChanges {
         title: formValue.title,
         description: formValue.description,
         priority: formValue.priority,
-        dueDate: dueDateVal
+        dueDate: dueDateVal,
+        tagIds: formValue.tagIds
       };
       this.save.emit({ request, id: this.todoToEdit!.id });
     } else {
@@ -245,7 +280,8 @@ export class TodoFormComponent implements OnInit, OnChanges {
         title: formValue.title,
         description: formValue.description,
         priority: formValue.priority,
-        dueDate: dueDateVal
+        dueDate: dueDateVal,
+        tagIds: formValue.tagIds
       };
       this.save.emit({ request });
     }

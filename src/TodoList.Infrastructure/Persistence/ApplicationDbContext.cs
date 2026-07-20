@@ -23,6 +23,7 @@ public class ApplicationDbContext : DbContext, TodoList.Domain.Repositories.IUni
 
     public DbSet<Todo> Todos => Set<Todo>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<Tag> Tags => Set<Tag>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

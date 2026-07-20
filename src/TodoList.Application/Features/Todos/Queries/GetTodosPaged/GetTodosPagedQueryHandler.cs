@@ -35,6 +35,7 @@ public class GetTodosPagedQueryHandler : IRequestHandler<GetTodosPagedQuery, Pag
             request.IsCompleted,
             request.StartDate,
             request.EndDate,
+            request.TagId,
             cancellationToken);
 
         var dtoItems = items.Select(t => new TodoDto
@@ -45,7 +46,13 @@ public class GetTodosPagedQueryHandler : IRequestHandler<GetTodosPagedQuery, Pag
             IsCompleted = t.IsCompleted,
             Priority = t.Priority,
             DueDate = t.DueDate,
-            CreatedAt = t.CreatedAt
+            CreatedAt = t.CreatedAt,
+            Tags = t.Tags.Select(tag => new TagDto
+            {
+                Id = tag.Id,
+                Name = tag.Name,
+                Color = tag.Color
+            }).ToList()
         }).ToList();
 
         return new PaginatedList<TodoDto>(dtoItems, totalCount, request.PageNumber, request.PageSize);

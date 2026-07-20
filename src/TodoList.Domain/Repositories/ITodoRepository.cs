@@ -9,5 +9,5 @@ public interface ITodoRepository : IRepository<Todo, Guid>
 {
     Task<IReadOnlyList<Todo>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<Todo?> GetByIdAndUserAsync(Guid id, Guid userId, CancellationToken cancellationToken = default);
-    Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default);
+    Task<(IReadOnlyList<Todo> Items, int TotalCount)> GetPagedByUserIdAsync(Guid userId, int pageNumber, int pageSize, string? searchTerm, string? sortBy, bool sortDescending, bool? isCompleted, DateTime? startDate, DateTime? endDate, Guid? tagId, CancellationToken cancellationToken = default);
 }

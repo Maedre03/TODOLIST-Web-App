@@ -14,7 +14,9 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
+import { TagService } from '../../../core/services/tag.service';
 import { Todo, TodoPagedParams, CreateTodoRequest, UpdateTodoRequest, Priority } from '../../../core/models/todo.model';
+import { Tag } from '../../../core/models/tag.model';
 import { TodoItemComponent } from '../components/todo-item.component';
 import { TodoFormComponent } from '../components/todo-form.component';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton.component';
@@ -75,6 +77,15 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           optionLabel="label" 
           optionValue="value"
           placeholder="Sort By" />
+
+        <p-select
+          [options]="tagOptions()"
+          [(ngModel)]="selectedTagId"
+          (ngModelChange)="onTagChange()"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Filter by Tag"
+          [showClear]="true" />
 
         <p-datepicker 
           [ngModel]="dateRange()" 
@@ -249,6 +260,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
       (visibleChange)="isFormVisible = $event"
       [todoToEdit]="todoToEdit"
       [isSaving]="isSaving()"
+      [userTags]="userTags()"
       (save)="onSaveForm($event)" />
 
     <!-- Floating Action Button (Mobile Only) -->
@@ -506,6 +518,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 })
 export class TodoListComponent implements OnInit {
   private readonly todoService = inject(TodoService);
+  private readonly tagService = inject(TagService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
 
@@ -514,6 +527,7 @@ export class TodoListComponent implements OnInit {
 
   // State
   todos = signal<Todo[]>([]);
+  userTags = signal<Tag[]>([]);
   totalItems = signal<number>(0);
   isLoading = signal<boolean>(true);
   isSaving = signal<boolean>(false);
@@ -556,8 +570,13 @@ export class TodoListComponent implements OnInit {
   pageSize = 10;
   searchTerm = '';
   isCompletedFilter?: boolean;
+  selectedTagId?: string;
   dateRange = signal<Date[] | null>(null);
   private searchTimeout: any;
+
+  tagOptions = computed(() => {
+    return this.userTags();
+  });
 
   // Sorting
   sortOptions = [
@@ -579,10 +598,27 @@ export class TodoListComponent implements OnInit {
       if (savedMode === 'kanban') this.pageSize = 50;
     }
 
+    this.loadTags();
+
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       // Intentionally ignoring query parameters to favor the local Tab State.
       this.loadTodos();
     });
+  }
+
+  loadTags(): void {
+    this.tagService.getTags().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.userTags.set(response.data);
+        }
+      }
+    });
+  }
+
+  onTagChange(): void {
+    this.currentPage = 1;
+    this.loadTodos();
   }
 
   // ─── Controls ──────────────────────────────────────────────
@@ -645,7 +681,8 @@ export class TodoListComponent implements OnInit {
       sortDescending: this.selectedSort.desc,
       isCompleted: this.isCompletedFilter,
       startDate: startIso,
-      endDate: endIso
+      endDate: endIso,
+      tagId: this.selectedTagId
     };
 
     this.todoService.getPaged(params).subscribe({

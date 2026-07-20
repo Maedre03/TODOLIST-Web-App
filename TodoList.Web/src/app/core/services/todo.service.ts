@@ -79,6 +79,9 @@ export class TodoService {
     if (params.endDate) {
       httpParams = httpParams.set('endDate', params.endDate);
     }
+    if (params.tagId) {
+      httpParams = httpParams.set('tagId', params.tagId);
+    }
 
     return this.http.get<PaginatedResult<Todo>>(`${this.baseUrl}/paged`, {
       params: httpParams

@@ -26,6 +26,11 @@ public class Todo : Entity<Guid>
     public virtual User CreatedByUser { get; set; } = null!;
 
     /// <summary>
+    /// Collection navigation property for the Tags assigned to this Todo.
+    /// </summary>
+    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+
+    /// <summary>
     /// Parameterless constructor required by EF Core for materialization.
     /// </summary>
     protected Todo() { }

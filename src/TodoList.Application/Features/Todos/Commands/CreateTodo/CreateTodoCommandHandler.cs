@@ -14,15 +14,18 @@ namespace TodoList.Application.Features.Todos.Commands.CreateTodo;
 public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
 {
     private readonly ITodoRepository _todoRepository;
+    private readonly ITagRepository _tagRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
     public CreateTodoCommandHandler(
         ITodoRepository todoRepository,
+        ITagRepository tagRepository,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService)
     {
         _todoRepository = todoRepository;
+        _tagRepository = tagRepository;
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
@@ -37,6 +40,18 @@ public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
             request.DueDate,
             _currentUserService.UserId // Automatically assign to the logged-in user
         );
+
+        if (request.TagIds != null && request.TagIds.Any())
+        {
+            var userTags = await _tagRepository.GetTagsByUserIdAsync(_currentUserService.UserId, cancellationToken);
+            var validTagIds = userTags.Select(t => t.Id).Intersect(request.TagIds).ToList();
+            var tagsToAdd = userTags.Where(t => validTagIds.Contains(t.Id)).ToList();
+            
+            foreach (var tag in tagsToAdd)
+            {
+                todo.Tags.Add(tag);
+            }
+        }
 
         // 2. Add to the repository (this doesn't hit the DB yet)
         await _todoRepository.AddAsync(todo, cancellationToken);

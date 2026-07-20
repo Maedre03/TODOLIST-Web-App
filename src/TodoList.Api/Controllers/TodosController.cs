@@ -59,7 +59,8 @@ public class TodosController : ControllerBase
         [FromQuery] bool sortDescending = false,
         [FromQuery] bool? isCompleted = null,
         [FromQuery] DateTime? startDate = null,
-        [FromQuery] DateTime? endDate = null)
+        [FromQuery] DateTime? endDate = null,
+        [FromQuery] Guid? tagId = null)
     {
         var query = new GetTodosPagedQuery
         {
@@ -70,7 +71,8 @@ public class TodosController : ControllerBase
             SortDescending = sortDescending,
             IsCompleted = isCompleted,
             StartDate = startDate,
-            EndDate = endDate
+            EndDate = endDate,
+            TagId = tagId
         };
         var result = await _mediator.Send(query);
         return Ok(result);
@@ -82,7 +84,7 @@ public class TodosController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateTodoRequest request)
     {
-        var command = new CreateTodoCommand(request.Title, request.Description, request.Priority, request.DueDate);
+        var command = new CreateTodoCommand(request.Title, request.Description, request.Priority, request.DueDate, request.TagIds);
         var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = id }, new { Id = id });
     }
@@ -93,7 +95,7 @@ public class TodosController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTodoRequest request)
     {
-        var command = new UpdateTodoCommand(id, request.Title, request.Description, request.Priority, request.DueDate);
+        var command = new UpdateTodoCommand(id, request.Title, request.Description, request.Priority, request.DueDate, request.TagIds);
         await _mediator.Send(command);
         return NoContent();
     }
