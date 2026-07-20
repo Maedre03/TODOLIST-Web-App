@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and theme service
+2832450 journal: Day 2 - record phase 9.2 due date feature
 2806208 feat: implement phase 9.2 due date form picker and card overdue pulse
 7494066 journal: Day 2 - record phase 9.1 critical bug fixes
 ef8770f fix: resolve critical ui bugs (app.component.html, mobile sidebar, search input)
-a7e72d6 chore: sync task_list.md with completed Phase 6 items from dev journal
-fa7cf23 chore: commit pending changes from previous sessions
 ```
 
 ### ✅ Tasks Completed
@@ -197,20 +197,26 @@ fa7cf23 chore: commit pending changes from previous sessions
   - Added PrimeNG `p-datepicker` to `TodoFormComponent` for setting due dates.
   - Updated `TodoItemComponent` to display the due date.
   - Implemented an `isOverdue` check that adds a red CSS pulse animation and red text to overdue tasks.
+- **Phase 9.3 — Sidebar Redesign:**
+  - Built out entirely new UI sections for the sidebar: Today's Progress ring, Upcoming dates, Tags, and Pinned Tasks.
+  - Created a new `ThemeService` using Angular `signal` and `effect` to handle Light/Dark mode toggles and local storage persistence.
+  - Added theme toggle buttons to the sidebar footer.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
 - **Reactive Mobile View:** We replaced the static `window.innerWidth` check with an `@HostListener('window:resize')` and proper signal usage in `AppLayoutComponent`. This ensures layout accurately reflects desktop/mobile state without requiring page reloads.
 - **PrimeNG IconField API:** Shifted to `<p-iconField>` and `<p-inputIcon>` wrapper to remain compliant with PrimeNG 18, ensuring we don't carry technical debt from v17 patterns.
 - **Due Date UX:** Used a simple CSS keyframe pulse animation for overdue indicators. This provides immediate visual urgency without relying on heavy JS animations. We reset hours on the date comparison in `isOverdue` to ensure tasks due today don't prematurely trigger the overdue state.
+- **Mocked Feature Skeletons:** We scaffolded the UI for Tags, Pinned tasks, and Progress using static HTML. This allows us to finalize the visual redesign first, enabling rapid frontend iterations before investing in the required backend domain and CQRS changes.
 
 ### ⚠️ Problems / Blockers
 - None today.
 
 ### 📌 Tomorrow / Next Session
 - [x] Phase 9.2 — Due Date Feature (form picker, card badge, overdue pulse)
-- [ ] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
+- [x] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
 - [ ] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
+- [ ] Phase 9.5 — Task Card Redesign (priority indicators)
 
 ---
 
