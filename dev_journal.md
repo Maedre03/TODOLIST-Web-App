@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+ef3ce1a refactor: remove redundant Today's Progress from sidebar
+d2cef09 journal: Day 2 - record Stats and Progress feature completion
 7b16b66 feat: implement Stats and Progress page with charts
 d1f0398 fix: resolve TS compilation error in inline tag creation
 f34c96a feat: add inline tag creation inside TodoFormComponent
-6f93aa9 fix: add preventDefault to tag delete button and HasQueryFilter to TagConfiguration
-694be41 fix: resolve backend issues preventing tag saving and updating
 ```
 
 ### ✅ Tasks Completed
@@ -193,6 +193,7 @@ f34c96a feat: add inline tag creation inside TodoFormComponent
   - Implemented dynamic calculation of task stats (Total, Completed, Pending, Completion Rate) entirely on the frontend using `TodoService.getAll()`.
   - Built a dynamic UI with animated metric cards, and two doughnut charts (Tasks by Priority, Completion Status) using `p-chart`.
   - Updated `AppLayoutComponent` sidebar with a direct navigation link.
+  - Removed the static mock "Today's Progress" from the sidebar as the new dedicated page supersedes it.
 - **Tags Feature:** Implemented a full-stack Tag system allowing users to organize tasks.
   - Backend: Created `Tag` entity, many-to-many relationship with `Todo` via `TodoTags` join table.
   - API: Developed `TagsController` for CRUD operations and updated `TodosController` to filter by `tagId` and accept `tagIds` on creation/update.
