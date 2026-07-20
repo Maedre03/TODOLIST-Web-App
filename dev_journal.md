@@ -179,11 +179,11 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ### 🔀 Git Commits / Version
 ```
+6c88efe feat: implement phase 9.6 auth pages enhancements with feature bullets and stats
+9a662de journal: Day 2 - record phase 9.5 task card redesign
 fa43298 feat: implement phase 9.5 task card redesign with priority indicators
 b6baa35 journal: Day 2 - record phase 9.4 todo list redesign
 5873fab feat: implement phase 9.4 todo list redesign with kanban view and filter tabs
-7ded2da journal: Day 2 - record phase 9.3 sidebar redesign
-f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and theme service
 ```
 
 ### ✅ Tasks Completed
@@ -211,6 +211,10 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
   - Replaced the standalone badge component in the footer with a small inline priority badge next to the task title.
   - Added a thick colored left border (Red/Yellow/Blue) to instantly identify task priority.
   - Added a subtle background tint gradient for High Priority tasks to make them stand out further.
+- **Phase 9.6 — Auth Pages Enhancements:**
+  - Enriched the split-screen layout on `LoginComponent` and `RegisterComponent`.
+  - Added a high-conversion feature bullet list to the branding section.
+  - Added a glassmorphic "Stats Counter" container showing mock metrics (Active Users, Tasks Done, Uptime) to increase perceived product value.
 
 ### 🧠 Key Decisions & Why
 - **Official License Configuration**: Removed the temporary CSS `.p-license` overrides in `styles.css` and injected the official PrimeUI Community License key directly into the `providePrimeNG` configuration block in `app.config.ts`. This is the architecturally correct way to handle PrimeNG v18+ commercial components, ensuring full compliance and preventing any hydration or rendering issues that CSS hacks might cause.
@@ -220,6 +224,7 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
 - **Mocked Feature Skeletons:** We scaffolded the UI for Tags, Pinned tasks, and Progress using static HTML. This allows us to finalize the visual redesign first, enabling rapid frontend iterations before investing in the required backend domain and CQRS changes.
 - **Kanban Drag-and-Drop:** Implemented optimistic UI updates for moving items between Kanban columns. If the underlying `todoService.update` HTTP call fails, the UI is immediately reverted back to its original state, ensuring UI consistency without stalling the user experience on loading spinners.
 - **Micro-Visuals for Priority:** Moved priority indicators from a bulky bottom badge to the left border and title line. This aligns with modern SaaS design, reducing vertical card height and allowing users to scan priority instantly by looking down the left edge of the list.
+- **SaaS Conversion Elements:** Auth pages in modern web apps aren't just forms; they are landing pages. Adding feature lists and social proof (stats) directly to the login/register screens decreases bounce rates and sets a premium tone before the user even enters the app.
 
 ### ⚠️ Problems / Blockers
 - None today.
@@ -229,7 +234,7 @@ f035db3 feat: implement phase 9.3 sidebar redesign with mocked sections and them
 - [x] Phase 9.3 — Sidebar Redesign (stats, timeline, tags, pinned, settings)
 - [x] Phase 9.4 — Todo List Page (tab bar, kanban view switcher)
 - [x] Phase 9.5 — Task Card Redesign (priority indicators)
-- [ ] Phase 9.6 — Auth Pages (features list, stats counter)
+- [x] Phase 9.6 — Auth Pages (features list, stats counter)
 - [ ] Phase 9.7 — Polish (PrimeNG theme, empty states)
 
 ---
