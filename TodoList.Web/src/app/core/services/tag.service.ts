@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Tag, CreateTagRequest } from '../models/tag.model';
 import { ApiResponse } from '../models/todo.model';
@@ -10,6 +10,9 @@ import { ApiResponse } from '../models/todo.model';
 })
 export class TagService {
   private apiUrl = `${environment.apiUrl}/tags`;
+  
+  private tagsSubject = new BehaviorSubject<Tag[]>([]);
+  public tags$ = this.tagsSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -17,7 +20,13 @@ export class TagService {
    * Retrieves all tags for the current user.
    */
   getTags(): Observable<ApiResponse<Tag[]>> {
-    return this.http.get<ApiResponse<Tag[]>>(this.apiUrl);
+    return this.http.get<ApiResponse<Tag[]>>(this.apiUrl).pipe(
+      tap(res => {
+        if (res.success && res.data) {
+          this.tagsSubject.next(res.data);
+        }
+      })
+    );
   }
 
   /**

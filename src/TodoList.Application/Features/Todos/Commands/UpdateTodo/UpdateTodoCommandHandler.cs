@@ -62,8 +62,7 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, Unit>
             }
         }
 
-        // 3. Mark entity as updated in the repository
-        _todoRepository.Update(todo);
+        // 3. Entity is already tracked, EF Core will detect changes including collection modifications
 
         // 4. Commit the transaction
         await _unitOfWork.SaveChangesAsync(cancellationToken);

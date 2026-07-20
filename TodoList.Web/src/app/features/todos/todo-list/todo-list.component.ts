@@ -598,6 +598,10 @@ export class TodoListComponent implements OnInit {
       if (savedMode === 'kanban') this.pageSize = 50;
     }
 
+    this.tagService.tags$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
+      this.userTags.set(tags);
+    });
+
     this.loadTags();
 
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
@@ -607,13 +611,7 @@ export class TodoListComponent implements OnInit {
   }
 
   loadTags(): void {
-    this.tagService.getTags().subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.userTags.set(response.data);
-        }
-      }
-    });
+    this.tagService.getTags().subscribe();
   }
 
   onTagChange(): void {

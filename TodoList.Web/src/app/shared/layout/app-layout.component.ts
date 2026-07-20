@@ -11,6 +11,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { TagService } from '../../core/services/tag.service';
 import { Tag } from '../../core/models/tag.model';
+import { DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-layout',
@@ -703,6 +705,7 @@ export class AppLayoutComponent implements OnInit {
   private readonly tagService = inject(TagService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly destroyRef = inject(DestroyRef);
   
   isSidebarCollapsed = signal(false);
   isMobileMenuOpen = signal(false);
@@ -729,17 +732,17 @@ export class AppLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.checkMobile();
+    
+    // Subscribe to tags$ to automatically get tag updates
+    this.tagService.tags$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
+      this.userTags.set(tags);
+    });
+    
     this.loadTags();
   }
 
   loadTags(): void {
-    this.tagService.getTags().subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.userTags.set(res.data);
-        }
-      }
-    });
+    this.tagService.getTags().subscribe();
   }
 
   openCreateTag(): void {
