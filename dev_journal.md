@@ -175,6 +175,33 @@ a297ada feat: implement Phase 6.1 Angular frontend foundation (services, interce
 
 ---
 
+## 📅 Day 2 — 2026-07-20
+
+### 🔀 Git Commits / Version
+```
+e8aa39b fix: hide PrimeUI license watermark by removing invalid ng-deep from global styles
+4be9d9d journal: Day 1 - phase 6 frontend ui implementation completed
+b1c4dc6 feat: implement Phase 6.4 Todos UI (TodoList, TodoItem, TodoForm with PrimeNG Select/Dialog/Paginator)
+a03477e feat: implement Phase 6.3 Auth UI with premium split-screen design
+81d18af feat: implement Phase 6.2 Angular shared components and layout (AppLayout, PriorityBadge, EmptyState, LoadingSkeleton)
+```
+
+### ✅ Tasks Completed
+- Fixed the "Invalid PrimeUI License" watermark issue that was obscuring the UI.
+
+### 🧠 Key Decisions & Why
+- **Global CSS Selectors for Watermarks**: Removed `::ng-deep` from `.p-license` overrides in `styles.css`. Since `styles.css` is a global stylesheet, Angular-specific view encapsulation pseudo-classes like `::ng-deep` are invalid syntax and were preventing the browser from applying the rule to hide the newly introduced PrimeNG v18+ commercial watermark.
+
+### ⚠️ Problems / Blockers
+- None today.
+
+### 📌 Tomorrow / Next Session
+- [ ] Manual verification of Phase 6 UI flows in Safari
+- [ ] Phase 6.5 — Routing & Wiring
+- [ ] Phase 7 — Advanced Features (optional polish)
+
+---
+
 <!-- ============================================================ -->
 <!-- TEMPLATE FOR NEW DAYS — copy the block below for each new day -->
 <!-- ============================================================
