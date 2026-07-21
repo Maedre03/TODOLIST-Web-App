@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TodoService } from '../../../core/services/todo.service';
-import { Todo } from '../../../core/models/todo.model';
+import { TodoService } from '../../core/services/todo.service';
+import { Todo } from '../../core/models/todo.model';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -190,8 +190,8 @@ export class CalendarComponent implements OnInit {
   loadTodos() {
     // For calendar, we ideally load ALL tasks for the month, but getting all is fine for now
     this.todoService.getAll().subscribe({
-      next: (data) => this.todos.set(data),
-      error: (err) => console.error(err)
+      next: (data: Todo[]) => this.todos.set(data),
+      error: (err: any) => console.error(err)
     });
   }
 

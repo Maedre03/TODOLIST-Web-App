@@ -97,7 +97,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
               </div>
               <ul class="nav-list small-list" *ngIf="isUpcomingExpanded()">
                 <li *ngFor="let todo of upcomingTodos()">
-                  <a [routerLink]="['/todos']" [queryParams]="{ searchTerm: todo.title }" class="nav-link text-sm" (click)="onNavClick()">
+                  <a [routerLink]="['/todos', todo.id]" class="nav-link text-sm" (click)="onNavClick()">
                     <span class="pulse-dot mr-2" *ngIf="isOverdue(todo.dueDate!)"></span>
                     <i class="pi pi-calendar mr-2 text-color-secondary" *ngIf="!isOverdue(todo.dueDate!)"></i>
                     <span class="nav-text text-truncate" [title]="todo.title">{{ todo.title }}</span>
@@ -140,26 +140,26 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
         <div class="sidebar-footer">
           <div class="settings-menu" *ngIf="!isSidebarCollapsed() || isMobile()">
-            <a routerLink="/settings" routerLinkActive="active" class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="onNavClick()">
-              <i class="pi pi-cog"></i>
-              <span>Settings</span>
-            </a>
             <button class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="toggleTheme()">
               <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
               <span>{{ themeService.isDarkMode() ? 'Dark Mode' : 'Light Mode' }}</span>
             </button>
+            <a routerLink="/settings" routerLinkActive="active" class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="onNavClick()">
+              <i class="pi pi-cog"></i>
+              <span>Settings</span>
+            </a>
             <button class="nav-link w-full flex align-items-center gap-3 logout-btn" (click)="logout()">
               <i class="pi pi-sign-out"></i>
               <span>Logout</span>
             </button>
           </div>
           <div class="settings-menu-collapsed" *ngIf="isSidebarCollapsed() && !isMobile()">
-            <a routerLink="/settings" routerLinkActive="active" class="icon-btn mb-2 w-full flex justify-content-center text-color-secondary hover:text-color transition-colors" title="Settings">
-              <i class="pi pi-cog"></i>
-            </a>
             <button class="icon-btn mb-2 w-full" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode'">
                <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
             </button>
+            <a routerLink="/settings" routerLinkActive="active" class="icon-btn mb-2 w-full flex justify-content-center text-color-secondary hover:text-color transition-colors" title="Settings">
+              <i class="pi pi-cog"></i>
+            </a>
             <button class="icon-btn text-danger w-full logout-icon" (click)="logout()" title="Logout">
                <i class="pi pi-sign-out"></i>
             </button>
@@ -176,9 +176,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                <i class="pi pi-bars text-xl"></i>
              </button>
           </div>
-          <div class="topbar-right flex align-items-center">
+          <div class="topbar-right flex align-items-center gap-4">
              <!-- Notification Bell -->
-             <div class="notification-container mr-3" *ngIf="authService.currentUser()">
+             <div class="notification-container" *ngIf="authService.currentUser()">
                 <button class="icon-btn notification-btn" (click)="op.toggle($event)" aria-label="Notifications">
                    <i class="pi pi-bell text-xl"></i>
                    <span class="notification-badge" *ngIf="notificationService.notificationCount() > 0">
@@ -198,7 +198,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                       </div>
 
                       <ul *ngIf="notificationService.notificationCount() > 0" class="list-none p-0 m-0 notification-list">
-                         <li *ngFor="let todo of notificationService.dueTodos()" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
+                         <li *ngFor="let todo of dueTodos()" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
                             <a [routerLink]="['/todos', todo.id]" (click)="op.hide()" class="flex align-items-start gap-3 text-decoration-none">
                                <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
                                   <i class="pi pi-exclamation-circle"></i>
@@ -214,7 +214,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 </p-popover>
              </div>
 
-             <div class="user-profile" *ngIf="authService.currentUser() as user">
+             <div class="user-profile cursor-pointer" *ngIf="authService.currentUser() as user" routerLink="/settings">
                 <div class="avatar">
                   {{ getInitials(user.email) }}
                 </div>
@@ -708,6 +708,7 @@ export class AppLayoutComponent implements OnInit {
   isMobileMenuOpen = signal(false);
   isMobile = signal(false);
 
+  dueTodos = computed(() => this.notificationService.dueTodos());
 
   isUpcomingExpanded = signal(true);
   isTagsExpanded = signal(true);

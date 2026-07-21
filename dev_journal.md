@@ -416,3 +416,27 @@ a9c66b6 journal: Day 3 - tier 1 features complete
 - **Build Failures from Constructor signature changes**: Changing the MediatR record definitions (e.g. `CreateTodoCommand`) instantly broke many Unit Tests.
 - How it was resolved: Used default values for optional properties (`RecurrenceInterval` and `TagIds`) in the C# records to seamlessly support legacy test invocations without refactoring all tests.
 
+
+## 📅 Day 3 (Continued) — UI/UX Polish & Bug Fixes
+
+### 🔀 Git Commits / Version
+```
+(run: git log --oneline -5 and paste here)
+```
+
+### ✅ Tasks Completed
+- Phase 12 (Polish) — Addressed a suite of user-reported UI/UX bugs in the Angular frontend.
+- Fixed notification bell overlapping with the user profile on smaller screens by increasing flex gap.
+- Fixed empty notification dropdown issue where the list said '3 notifications' but was blank inside the PrimeNG `p-popover`. This was resolved by binding `dueTodos` directly via the component computed property.
+- Enhanced Task Cards to allow clicking anywhere on the card to open details, while preventing event propagation for checkboxes and menus.
+- Re-arranged spacing in `TodoListComponent` between "Import", "Export" and "New Task" buttons.
+- Reordered the sidebar footer to put Settings at the bottom, just above Logout, and added click-to-route for user profile avatars.
+- Ensured clicking on "Upcoming" tasks and "Tags" in the sidebar correctly navigate and filter the view.
+- Improved layout spacing in `SettingsComponent` forms for a cleaner appearance.
+
+### 🧠 Key Decisions & Why
+- **Event Propagation Management:** For the click-to-open-detail feature on Task Cards, we used explicit checking of `event.target.closest()` to prevent the `(click)` event from firing when the user was just trying to toggle the completion checkbox or open the context menu.
+- **Component Proxied Signals:** PrimeNG's `p-popover` encapsulates its `<ng-template>` which can cause change detection issues for detached views when reading service signals directly. Proxied the `notificationService.dueTodos()` via a local `computed()` to guarantee it evaluates in the component's change detection cycle.
+
+### ⚠️ Problems / Blockers
+- None.

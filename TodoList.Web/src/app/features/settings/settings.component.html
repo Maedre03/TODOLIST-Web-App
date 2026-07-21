@@ -10,7 +10,7 @@
     <p-card styleClass="mb-5 surface-card shadow-1">
       <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Profile Information</h3>
 
-      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column gap-4 max-w-2xl">
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column gap-6 max-w-2xl mt-4">
         <div class="flex flex-column gap-2">
           <label for="username" class="font-medium text-color-secondary">Username</label>
           <input pInputText id="username" formControlName="username" class="w-full" />
@@ -38,7 +38,7 @@
     <p-card styleClass="mb-5 surface-card shadow-1">
       <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Security</h3>
 
-      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="flex flex-column gap-4 max-w-2xl">
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="flex flex-column gap-6 max-w-2xl mt-4">
         <div class="flex flex-column gap-2">
           <label for="currentPassword" class="font-medium text-color-secondary">Current Password</label>
           <p-password id="currentPassword" formControlName="currentPassword" [feedback]="false" [toggleMask]="true"

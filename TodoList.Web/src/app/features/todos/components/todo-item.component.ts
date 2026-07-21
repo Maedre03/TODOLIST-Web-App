@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule, CheckboxModule, ButtonModule, MenuModule],
   template: `
-    <div class="todo-card" [class.completed]="todo.isCompleted" [ngClass]="priorityClass">
+    <div class="todo-card" [class.completed]="todo.isCompleted" [ngClass]="priorityClass" (click)="onCardClick($event)" style="cursor: pointer;">
       <!-- Checkbox & Title Area -->
       <div class="todo-header">
         <p-checkbox 
@@ -239,6 +239,14 @@ export class TodoItemComponent {
   @Output() edit = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<Todo>();
   @Output() view = new EventEmitter<Todo>();
+
+  onCardClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('p-checkbox') || target.closest('p-button') || target.closest('.p-menu')) {
+      return; // Ignore clicks on action items
+    }
+    this.view.emit(this.todo);
+  }
 
   get priorityClass(): string {
     switch (this.todo.priority) {

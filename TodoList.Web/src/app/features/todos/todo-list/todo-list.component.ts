@@ -13,7 +13,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DatePickerModule } from 'primeng/datepicker';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileUpload } from 'primeng/fileupload';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
@@ -42,8 +42,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     TodoItemComponent,
     TodoFormComponent,
     LoadingSkeletonComponent,
-    EmptyStateComponent,
-    FileUploadModule
+    EmptyStateComponent
   ],
   template: `
     <div class="todo-list-page fade-in">
@@ -52,23 +51,19 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           <h1>My Tasks</h1>
           <p class="text-secondary">Manage and track your daily goals.</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-4">
           <p-button 
             label="Export" 
             icon="pi pi-download" 
             (onClick)="exportTasks()" 
             styleClass="p-button-secondary p-button-outlined hidden md:inline-flex" />
           
-          <p-fileUpload 
-            mode="basic" 
-            chooseLabel="Import" 
-            chooseIcon="pi pi-upload"
-            accept=".csv"
-            [customUpload]="true"
-            (uploadHandler)="importTasks($event)"
-            [auto]="true"
-            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex">
-          </p-fileUpload>
+          <p-button 
+            label="Import" 
+            icon="pi pi-upload"
+            (onClick)="fileInput.click()"
+            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex" />
+          <input #fileInput type="file" accept=".csv" style="display: none;" (change)="onFileSelected($event)" />
 
           <p-button 
             label="New Task" 
@@ -684,7 +679,11 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.loadTags();
 
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      // Intentionally ignoring query parameters to favor the local Tab State.
+      if (params['tagId']) {
+        this.selectedTagId = params['tagId'];
+      } else if (params['searchTerm']) {
+        this.searchTerm = params['searchTerm'];
+      }
       this.loadTodos();
     });
   }
@@ -855,9 +854,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
     });
   }
 
-  importTasks(event: any) {
-    const file = event.files[0];
-    if (!file) return;
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
 
     this.todoService.importTodos(file).subscribe({
       next: (res) => {
