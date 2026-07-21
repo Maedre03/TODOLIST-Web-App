@@ -186,7 +186,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                    </span>
                 </button>
                 <ng-container *ngIf="dueTodos() as dueList">
-                   <p-popover #op [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
+                   <p-popover #op appendTo="body" [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
                       <ng-template pTemplate="content">
                          <div class="flex align-items-center justify-content-between border-bottom-1 surface-border pb-2 mb-2">
                          <h3 class="m-0 text-lg font-semibold">Notifications</h3>
@@ -642,6 +642,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     }
 
     /* ── Notifications ── */
+    .notification-container {
+      display: flex;
+      align-items: center;
+    }
     .notification-btn {
       position: relative;
     }
