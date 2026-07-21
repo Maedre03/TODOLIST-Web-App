@@ -307,8 +307,18 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
   - Updated `TodoListComponent` to navigate to the detailed view
   - Updated `AppLayoutComponent` to show Settings link and Notification Badge
 
-### Untouched Features
+### Untouched Features (Tier 1)
 - [ ] Subtasks full UI interaction inside `TodoDetailComponent` (Adding/Deleting/Toggling subtasks logic might need connecting to the backend correctly)
 - [ ] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
-- [ ] Any Tier 2 Features (Email notifications, file attachments, recurring tasks, offline mode)
 
+## 🚀 PHASE 11 — Extra Features (Tier 2: Advanced Organization)
+- [ ] **File Attachments**: Allow users to attach documents or images to tasks. (Requires Azure Blob Storage or AWS S3 integration).
+- [ ] **Recurring Tasks**: Ability to set a task to repeat daily, weekly, or monthly.
+- [ ] **Task Comments/Notes**: A dedicated section in the `TodoDetailComponent` to add timestamped comments or progress notes to a task.
+- [ ] **Advanced Filtering & Search**: Full-text search and complex filtering (e.g., "Show all high priority tasks due this week").
+
+## 🚀 PHASE 12 — Extra Features (Tier 3: Productivity & Sync)
+- [ ] **Calendar View**: A monthly calendar view to visualize task distribution.
+- [ ] **Offline Support (PWA)**: Make the Angular app a Progressive Web App (PWA) so tasks can be viewed offline and synced when reconnected.
+- [ ] **Email Notifications**: Send a daily digest of due/overdue tasks using a background worker (e.g., Quartz.NET or Hangfire) and an email provider (SendGrid/SMTP).
+- [ ] **Export/Import Tasks**: Ability to export tasks to CSV/PDF or import from other tools.
