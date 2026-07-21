@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TodoList.Domain.Entities;
+using TodoList.Domain.Enums;
 using TodoList.Domain.Repositories;
 
 namespace TodoList.Infrastructure.Persistence.Repositories;
@@ -73,7 +74,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
         query = sortBy?.ToLower() switch
         {
             "title" => sortDescending ? query.OrderByDescending(t => t.Title) : query.OrderBy(t => t.Title),
-            "priority" => sortDescending ? query.OrderByDescending(t => t.Priority) : query.OrderBy(t => t.Priority),
+            "priority" => sortDescending ? query.OrderByDescending(t => t.Priority == Priority.Critical ? 4 : t.Priority == Priority.High ? 3 : t.Priority == Priority.Medium ? 2 : 1) : query.OrderBy(t => t.Priority == Priority.Critical ? 4 : t.Priority == Priority.High ? 3 : t.Priority == Priority.Medium ? 2 : 1),
             "duedate" => sortDescending ? query.OrderByDescending(t => t.DueDate) : query.OrderBy(t => t.DueDate),
             _ => sortDescending ? query.OrderByDescending(t => t.CreatedAt) : query.OrderBy(t => t.CreatedAt)
         };
