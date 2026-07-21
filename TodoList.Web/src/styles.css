@@ -504,3 +504,10 @@ p {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* Fix for notification popover going off-screen on the right edge */
+.notification-panel {
+  left: auto !important;
+  right: var(--space-4) !important;
+  margin-top: var(--space-2);
+}

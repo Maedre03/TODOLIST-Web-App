@@ -52,7 +52,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           <h1>My Tasks</h1>
           <p class="text-secondary">Manage and track your daily goals.</p>
         </div>
-        <div class="flex gap-4">
+        <div class="header-actions">
           <p-button 
             label="Export" 
             icon="pi pi-download" 
@@ -315,6 +315,12 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
 
     h1 {
       margin-bottom: var(--space-1);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
     }
 
     .controls-bar {
