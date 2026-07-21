@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { PopoverModule } from 'primeng/popover';
+import { BadgeModule } from 'primeng/badge';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { AuthService } from '../../core/services/auth.service';
@@ -28,7 +30,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     FormsModule,
     DialogModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    PopoverModule,
+    BadgeModule
   ],
   template: `
     <div class="layout-wrapper" 
@@ -166,7 +170,44 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                <i class="pi pi-bars text-xl"></i>
              </button>
           </div>
-          <div class="topbar-right">
+          <div class="topbar-right flex align-items-center">
+             <!-- Notification Bell -->
+             <div class="notification-container mr-3" *ngIf="authService.currentUser()">
+                <button class="icon-btn notification-btn" (click)="op.toggle($event)" aria-label="Notifications">
+                   <i class="pi pi-bell text-xl"></i>
+                   <span class="notification-badge" *ngIf="notificationService.notificationCount() > 0">
+                     {{ notificationService.notificationCount() }}
+                   </span>
+                </button>
+                <p-popover #op [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
+                   <ng-template pTemplate="content">
+                      <div class="flex align-items-center justify-content-between border-bottom-1 surface-border pb-2 mb-2">
+                         <h3 class="m-0 text-lg font-semibold">Notifications</h3>
+                         <p-badge *ngIf="notificationService.notificationCount() > 0" [value]="notificationService.notificationCount().toString()" severity="danger"></p-badge>
+                      </div>
+                      
+                      <div *ngIf="notificationService.notificationCount() === 0" class="text-center py-4 text-color-secondary">
+                         <i class="pi pi-check-circle text-4xl mb-3 text-green-500"></i>
+                         <p class="m-0">You're all caught up!</p>
+                      </div>
+
+                      <ul *ngIf="notificationService.notificationCount() > 0" class="list-none p-0 m-0 notification-list">
+                         <li *ngFor="let todo of notificationService.dueTodos()" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
+                            <a [routerLink]="['/todos', todo.id]" (click)="op.hide()" class="flex align-items-start gap-3 text-decoration-none">
+                               <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                  <i class="pi pi-exclamation-circle"></i>
+                               </div>
+                               <div class="flex-1">
+                                  <p class="m-0 text-sm font-medium line-height-2 text-color">{{ todo.title }}</p>
+                                  <p class="m-0 text-xs text-color-secondary mt-1">Due {{ todo.dueDate | date:'mediumDate' }}</p>
+                               </div>
+                            </a>
+                         </li>
+                      </ul>
+                   </ng-template>
+                </p-popover>
+             </div>
+
              <div class="user-profile" *ngIf="authService.currentUser() as user">
                 <div class="avatar">
                   {{ getInitials(user.email) }}
@@ -582,6 +623,31 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       font-weight: 600;
       font-size: var(--font-size-sm);
       text-transform: uppercase;
+    }
+
+    /* ── Notifications ── */
+    .notification-btn {
+      position: relative;
+    }
+    .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--color-danger);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: bold;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--surface-ground);
+    }
+    .notification-list {
+      max-height: 300px;
+      overflow-y: auto;
     }
 
     .user-info {

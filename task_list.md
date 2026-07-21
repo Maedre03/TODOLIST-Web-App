@@ -308,8 +308,8 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
   - Updated `AppLayoutComponent` to show Settings link and Notification Badge
 
 ### Untouched Features (Tier 1)
-- [ ] Subtasks full UI interaction inside `TodoDetailComponent` (Adding/Deleting/Toggling subtasks logic might need connecting to the backend correctly)
-- [ ] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
+- [x] Subtasks full UI interaction inside `TodoDetailComponent` (Adding/Deleting/Toggling subtasks logic might need connecting to the backend correctly)
+- [x] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
 
 ## 🚀 PHASE 11 — Extra Features (Tier 2: Advanced Organization)
 - [ ] **File Attachments**: Allow users to attach documents or images to tasks. (Requires Azure Blob Storage or AWS S3 integration).
