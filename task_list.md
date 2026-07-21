@@ -316,10 +316,10 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 - [x] **File Attachments**: Upload and link files (PDFs, images) to tasks.
 - [x] **Recurring Tasks**: Mark a task to repeat daily, weekly, or monthly.
 - [x] **Advanced Filtering**: Filter by exact strings (search).
-- [ ] **Frontend Integration**: Implement the UI for comments, attachments, recurrence, and search.
+- [x] **Frontend Integration**: Implement the UI for comments, attachments, recurrence, and search.
 
 ## 🚀 PHASE 12 — Extra Features (Tier 3: Productivity & Sync)
-- [ ] **Calendar View**: A monthly calendar view to visualize task distribution.
-- [ ] **Offline Support (PWA)**: Make the Angular app a Progressive Web App (PWA) so tasks can be viewed offline and synced when reconnected.
-- [ ] **Email Notifications**: Send a daily digest of due/overdue tasks using a background worker (e.g., Quartz.NET or Hangfire) and an email provider (SendGrid/SMTP).
-- [ ] **Export/Import Tasks**: Ability to export tasks to CSV/PDF or import from other tools.
+- [x] **Calendar View**: A monthly calendar view to visualize task distribution.
+- [x] **Offline Support (PWA)**: Make the Angular app a Progressive Web App (PWA) so tasks can be viewed offline and synced when reconnected.
+- [x] **Email Notifications**: Send a daily digest of due/overdue tasks using a background worker (e.g., Quartz.NET or Hangfire) and an email provider (SendGrid/SMTP).
+- [x] **Export/Import Tasks**: Ability to export tasks to CSV/PDF or import from other tools.
