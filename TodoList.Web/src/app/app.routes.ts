@@ -62,6 +62,11 @@ export const routes: Routes = [
         path: 'settings',
         loadComponent: () =>
           import('./features/settings/settings.component').then(m => m.SettingsComponent)
+      },
+      {
+        path: 'calendar',
+        loadComponent: () =>
+          import('./features/calendar/calendar.component').then(m => m.CalendarComponent)
       }
     ]
   },

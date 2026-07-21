@@ -28,6 +28,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<TodoList.Application.Common.Interfaces.IPasswordHasher, TodoList.Infrastructure.Services.PasswordHasher>();
         services.AddScoped<TodoList.Application.Common.Interfaces.IJwtTokenService, TodoList.Infrastructure.Services.JwtTokenService>();
 
+        services.AddHostedService<DailyDigestBackgroundService>();
+
         return services;
     }
 }

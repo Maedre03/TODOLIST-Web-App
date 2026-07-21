@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest } from '../../../core/models/todo.model';
+import { Todo, Priority, CreateTodoRequest, UpdateTodoRequest, RecurrenceInterval } from '../../../core/models/todo.model';
 import { Tag } from '../../../core/models/tag.model';
 import { TagService } from '../../../core/services/tag.service';
 import { MessageService } from 'primeng/api';
@@ -108,6 +108,20 @@ import { TooltipModule } from 'primeng/tooltip';
             appendTo="body"
             styleClass="w-full">
           </p-datepicker>
+        </div>
+
+        <div class="field">
+          <label for="recurrence">Recurrence</label>
+          <p-select 
+            id="recurrence" 
+            formControlName="recurrence" 
+            [options]="recurrenceOptions" 
+            optionLabel="label" 
+            optionValue="value" 
+            placeholder="Does this task repeat?"
+            styleClass="w-full" 
+            appendTo="body">
+          </p-select>
         </div>
 
         <div class="field">
@@ -233,6 +247,14 @@ export class TodoFormComponent implements OnInit, OnChanges {
     { label: 'Critical', value: Priority.Critical }
   ];
 
+  recurrenceOptions = [
+    { label: 'Does not repeat', value: RecurrenceInterval.None },
+    { label: 'Daily', value: RecurrenceInterval.Daily },
+    { label: 'Weekly', value: RecurrenceInterval.Weekly },
+    { label: 'Monthly', value: RecurrenceInterval.Monthly },
+    { label: 'Yearly', value: RecurrenceInterval.Yearly }
+  ];
+
   // Inline Tag Creation State
   showInlineTagForm = false;
   newTagName = '';
@@ -279,6 +301,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
       description: [this.todoToEdit?.description || '', [Validators.maxLength(1000)]],
       priority: [this.todoToEdit?.priority ?? Priority.Medium, [Validators.required]],
       dueDate: [initialDueDate],
+      recurrence: [this.todoToEdit?.recurrence ?? RecurrenceInterval.None],
       tagIds: [tagIds]
     });
   }
@@ -296,6 +319,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
         description: formValue.description,
         priority: formValue.priority,
         dueDate: dueDateVal,
+        recurrence: formValue.recurrence,
         tagIds: formValue.tagIds
       };
       this.save.emit({ request, id: this.todoToEdit!.id });
@@ -305,6 +329,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
         description: formValue.description,
         priority: formValue.priority,
         dueDate: dueDateVal,
+        recurrence: formValue.recurrence,
         tagIds: formValue.tagIds
       };
       this.save.emit({ request });
@@ -314,7 +339,7 @@ export class TodoFormComponent implements OnInit, OnChanges {
   onHide(): void {
     this.visible = false;
     this.visibleChange.emit(false);
-    this.form.reset({ priority: Priority.Medium });
+    this.form.reset({ priority: Priority.Medium, recurrence: RecurrenceInterval.None });
   }
 
   getPriorityClass(priority: Priority): string {

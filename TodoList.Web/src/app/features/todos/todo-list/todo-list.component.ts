@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, Subject } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +13,7 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DatePickerModule } from 'primeng/datepicker';
+import { FileUploadModule } from 'primeng/fileupload';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
@@ -39,7 +42,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
     TodoItemComponent,
     TodoFormComponent,
     LoadingSkeletonComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    FileUploadModule
   ],
   template: `
     <div class="todo-list-page fade-in">
@@ -48,11 +52,30 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           <h1>My Tasks</h1>
           <p class="text-secondary">Manage and track your daily goals.</p>
         </div>
-        <p-button 
-          label="New Task" 
-          icon="pi pi-plus" 
-          (onClick)="openCreateForm()" 
-          styleClass="p-button-primary hidden md:inline-flex" />
+        <div class="flex gap-2">
+          <p-button 
+            label="Export" 
+            icon="pi pi-download" 
+            (onClick)="exportTasks()" 
+            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex" />
+          
+          <p-fileUpload 
+            mode="basic" 
+            chooseLabel="Import" 
+            chooseIcon="pi pi-upload"
+            accept=".csv"
+            [customUpload]="true"
+            (uploadHandler)="importTasks($event)"
+            [auto]="true"
+            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex">
+          </p-fileUpload>
+
+          <p-button 
+            label="New Task" 
+            icon="pi pi-plus" 
+            (onClick)="openCreateForm()" 
+            styleClass="p-button-primary hidden md:inline-flex" />
+        </div>
       </div>
 
       <!-- Controls (Search & Sort) & View Switcher -->
@@ -66,7 +89,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
             pInputText 
             type="text" 
             [(ngModel)]="searchTerm" 
-            (ngModelChange)="onSearchChange()"
+            (ngModelChange)="onSearchChange($event)"
             placeholder="Search tasks... (/)" 
             class="w-full" />
         </p-iconfield>
@@ -579,7 +602,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
   isCompletedFilter?: boolean;
   selectedTagId?: string;
   dateRange = signal<Date[] | null>(null);
-  private searchTimeout: any;
+  
+  private searchSubject = new Subject<string>();
 
   tagOptions = computed(() => {
     return this.userTags();
@@ -629,9 +653,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
+    this.searchSubject.complete();
   }
 
   ngOnInit(): void {
@@ -645,6 +667,15 @@ export class TodoListComponent implements OnInit, OnDestroy {
       this.activeTab.set(savedTab);
     }
     if (this.viewMode() === 'kanban') this.pageSize = 50;
+
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.currentPage = 1;
+      this.loadTodos();
+    });
 
     this.tagService.tags$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
       this.userTags.set(tags);
@@ -744,14 +775,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSearchChange(): void {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-    this.searchTimeout = setTimeout(() => {
-      this.currentPage = 1;
-      this.loadTodos();
-    }, 400);
+  onSearchChange(term: string): void {
+    this.searchSubject.next(term);
   }
 
   onSortChange(): void {
@@ -791,7 +816,9 @@ export class TodoListComponent implements OnInit, OnDestroy {
         title: todo.title,
         description: todo.description || '',
         priority: newPriority,
-        dueDate: todo.dueDate
+        dueDate: todo.dueDate,
+        recurrence: todo.recurrence,
+        tagIds: todo.tags?.map(t => t.id) || []
       };
 
       this.todoService.update(todo.id, updateReq).subscribe({
@@ -806,6 +833,42 @@ export class TodoListComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  // --- Export / Import ---
+
+  exportTasks() {
+    this.todoService.exportTodos().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'todos-export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not export tasks' });
+      }
+    });
+  }
+
+  importTasks(event: any) {
+    const file = event.files[0];
+    if (!file) return;
+
+    this.todoService.importTodos(file).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message || 'Tasks imported successfully' });
+        this.loadTodos();
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not import tasks' });
+      }
+    });
   }
 
   onToggleComplete(todo: Todo): void {

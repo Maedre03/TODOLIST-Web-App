@@ -15,6 +15,7 @@ public class ToggleTodoCompleteCommandHandlerTests
     private readonly ITodoRepository _todoRepositoryMock;
     private readonly IUnitOfWork _unitOfWorkMock;
     private readonly ICurrentUserService _currentUserServiceMock;
+    private readonly IMediator _mediatorMock;
     private readonly ToggleTodoCompleteCommandHandler _handler;
 
     public ToggleTodoCompleteCommandHandlerTests()
@@ -22,11 +23,13 @@ public class ToggleTodoCompleteCommandHandlerTests
         _todoRepositoryMock = Substitute.For<ITodoRepository>();
         _unitOfWorkMock = Substitute.For<IUnitOfWork>();
         _currentUserServiceMock = Substitute.For<ICurrentUserService>();
+        _mediatorMock = Substitute.For<IMediator>();
 
         _handler = new ToggleTodoCompleteCommandHandler(
             _todoRepositoryMock,
             _unitOfWorkMock,
-            _currentUserServiceMock);
+            _currentUserServiceMock,
+            _mediatorMock);
     }
 
     [Fact]

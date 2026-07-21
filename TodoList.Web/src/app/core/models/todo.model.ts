@@ -13,6 +13,18 @@ export enum Priority {
 }
 
 /**
+ * Recurrence intervals for Todo items.
+ * Must match the backend enum: TodoList.Domain.Enums.RecurrenceInterval
+ */
+export enum RecurrenceInterval {
+  None = 0,
+  Daily = 1,
+  Weekly = 2,
+  Monthly = 3,
+  Yearly = 4
+}
+
+/**
  * Represents a Todo item as returned by the backend API.
  * Maps to: TodoList.Application.Common.DTOs.TodoDto
  */
@@ -23,9 +35,12 @@ export interface Todo {
   isCompleted: boolean;
   priority: Priority;
   dueDate: string | null;
+  recurrence: RecurrenceInterval;
   createdAt: string;
   tags?: Tag[];
   subTasks?: SubTask[];
+  comments?: TodoComment[];
+  attachments?: Attachment[];
 }
 
 /**
@@ -37,6 +52,7 @@ export interface CreateTodoRequest {
   description: string;
   priority: Priority;
   dueDate: string | null;
+  recurrence: RecurrenceInterval;
   tagIds?: string[];
 }
 
@@ -49,6 +65,7 @@ export interface UpdateTodoRequest {
   description: string;
   priority: Priority;
   dueDate: string | null;
+  recurrence: RecurrenceInterval;
   tagIds?: string[];
 }
 
@@ -98,4 +115,27 @@ export interface SubTask {
   id: string;
   title: string;
   isCompleted: boolean;
+}
+
+/**
+ * Comment model
+ */
+export interface TodoComment {
+  id: string;
+  text: string;
+  createdAt: string;
+  createdByUserId: string;
+  createdByUserName: string;
+}
+
+/**
+ * Attachment model
+ */
+export interface Attachment {
+  id: string;
+  fileName: string;
+  filePath: string;
+  contentType: string;
+  fileSize: number;
+  uploadedAt: string;
 }

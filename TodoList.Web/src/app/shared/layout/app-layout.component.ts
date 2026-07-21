@@ -77,6 +77,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                 <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Stats & Progress</span>
               </a>
             </li>
+            <li>
+              <a routerLink="/calendar" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
+                <i class="pi pi-calendar"></i>
+                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">Calendar</span>
+              </a>
+            </li>
           </ul>
 
           <ng-container *ngIf="!isSidebarCollapsed() || isMobile()">

@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -10,6 +10,7 @@ import { definePreset } from '@primeng/themes';
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { provideServiceWorker } from '@angular/service-worker';
 
 /**
  * Custom PrimeNG theme preset — extends Aura with our dark-first design tokens.
@@ -33,7 +34,7 @@ const TodoAppPreset = definePreset(Aura, {
       700: '{violet.700}',
       800: '{violet.800}',
       900: '{violet.900}',
-      950: '{violet.950}'
+      950: '{violet.950}',
     },
     colorScheme: {
       dark: {
@@ -49,11 +50,11 @@ const TodoAppPreset = definePreset(Aura, {
           700: '#1A1D24',
           800: '#111318',
           900: '#0B0D11',
-          950: '#060709'
-        }
-      }
-    }
-  }
+          950: '#060709',
+        },
+      },
+    },
+  },
 });
 
 /**
@@ -77,9 +78,7 @@ export const appConfig: ApplicationConfig = {
     // HTTP client with interceptors — ORDER MATTERS:
     // 1. authInterceptor runs first (attaches JWT token)
     // 2. errorInterceptor runs second (catches HTTP errors)
-    provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])
-    ),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
 
     // Animations — required by PrimeNG for smooth transitions
     provideAnimationsAsync(),
@@ -89,14 +88,19 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: TodoAppPreset,
         options: {
-          darkModeSelector: '.dark-mode'
-        }
+          darkModeSelector: '.dark-mode',
+        },
       },
-      license: 'eyJpZCI6IjFhZDExNmI1LTc1ODYtNDdiZC1hODYxLWRjMzYzYjc3YWJhMCIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODQ1Mjk2MDgsImV4cCI6MTgxNjA2NTYwOH0.K2q3cnpmhkA0JfZY0K-1HzZP01EWFW7nmFTVYk_4xg_u2555J_H-tau0bU0Je1e8zgz3NGQUkJUUHxsmULNbBA'
+      license:
+        'eyJpZCI6IjFhZDExNmI1LTc1ODYtNDdiZC1hODYxLWRjMzYzYjc3YWJhMCIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3ODQ1Mjk2MDgsImV4cCI6MTgxNjA2NTYwOH0.K2q3cnpmhkA0JfZY0K-1HzZP01EWFW7nmFTVYk_4xg_u2555J_H-tau0bU0Je1e8zgz3NGQUkJUUHxsmULNbBA',
     }),
 
     // PrimeNG global services (injected by Toast and ConfirmDialog components)
     MessageService,
-    ConfirmationService
-  ]
+    ConfirmationService,
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+  ],
 };

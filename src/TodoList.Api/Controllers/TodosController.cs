@@ -166,6 +166,37 @@ public class TodosController : ControllerBase
         await _mediator.Send(new ToggleSubTaskCompleteCommand { TodoId = id, SubTaskId = subTaskId });
         return NoContent();
     }
+
+    /// <summary>
+    /// Exports all todos to a CSV file.
+    /// </summary>
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportTodos()
+    {
+        var csvBytes = await _mediator.Send(new TodoList.Application.Features.Todos.Queries.ExportTodos.ExportTodosQuery());
+        return File(csvBytes, "text/csv", "todos-export.csv");
+    }
+
+    /// <summary>
+    /// Imports todos from a CSV file.
+    /// </summary>
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportTodos(Microsoft.AspNetCore.Http.IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest(new TodoList.Application.Common.Models.ApiResponse<int> { Success = false, Message = "File is empty" });
+
+        using var reader = new System.IO.StreamReader(file.OpenReadStream());
+        var content = await reader.ReadToEndAsync();
+
+        var command = new TodoList.Application.Features.Todos.Commands.ImportTodos.ImportTodosCommand { CsvContent = content };
+        var result = await _mediator.Send(command);
+        
+        if (result.Success)
+            return Ok(result);
+            
+        return BadRequest(result);
+    }
 }
 
 public class AddSubTaskRequest
