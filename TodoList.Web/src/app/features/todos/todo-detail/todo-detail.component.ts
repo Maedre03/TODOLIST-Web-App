@@ -49,12 +49,14 @@ export class TodoDetailComponent implements OnInit {
   apiUrl = environment.apiUrl.replace('/api/v1', ''); // Get base server URL for downloads
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadTodo(id);
-    } else {
-      this.router.navigate(['/todos']);
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.loadTodo(id);
+      } else {
+        this.router.navigate(['/todos']);
+      }
+    });
   }
 
   loadTodo(id: string) {
