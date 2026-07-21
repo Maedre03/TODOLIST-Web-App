@@ -288,7 +288,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   `,
   styles: [`
     .layout-wrapper {
-      display: flex;
       min-height: 100vh;
       background: var(--surface-ground);
       transition: all var(--transition-base);
