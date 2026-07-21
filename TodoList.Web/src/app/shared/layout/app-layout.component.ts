@@ -185,35 +185,35 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
                      {{ notificationService.notificationCount() }}
                    </span>
                 </button>
-                <ng-container *ngIf="dueTodos() as dueList">
-                   <p-popover #op appendTo="body" [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
-                      <ng-template pTemplate="content">
+                <p-popover #op appendTo="body" [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
+                   <ng-template pTemplate="content">
+                      <ng-container *ngIf="dueTodos() as dueList">
                          <div class="flex align-items-center justify-content-between border-bottom-1 surface-border pb-2 mb-2">
-                         <h3 class="m-0 text-lg font-semibold">Notifications</h3>
-                         <p-badge *ngIf="notificationService.notificationCount() > 0" [value]="notificationService.notificationCount().toString()" severity="danger"></p-badge>
-                      </div>
-                      
-                      <div *ngIf="dueList.length === 0" class="text-center py-4 text-color-secondary">
-                         <i class="pi pi-check-circle text-4xl mb-3 text-green-500"></i>
-                         <p class="m-0">You're all caught up!</p>
-                      </div>
+                            <h3 class="m-0 text-lg font-semibold">Notifications</h3>
+                            <p-badge *ngIf="notificationService.notificationCount() > 0" [value]="notificationService.notificationCount().toString()" severity="danger"></p-badge>
+                         </div>
+                         
+                         <div *ngIf="dueList.length === 0" class="text-center py-4 text-color-secondary">
+                            <i class="pi pi-check-circle text-4xl mb-3 text-green-500"></i>
+                            <p class="m-0">You're all caught up!</p>
+                         </div>
 
-                      <ul *ngIf="dueList.length > 0" class="list-none p-0 m-0 notification-list">
-                         <li *ngFor="let todo of dueList" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
-                            <a [routerLink]="['/todos', todo.id]" (click)="op.hide()" class="flex align-items-start gap-3 text-decoration-none">
-                               <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
-                                  <i class="pi pi-exclamation-circle"></i>
-                               </div>
-                               <div class="flex-1">
-                                  <p class="m-0 text-sm font-medium line-height-2 text-color">{{ todo.title }}</p>
-                                  <p class="m-0 text-xs text-color-secondary mt-1">Due {{ todo.dueDate | date:'mediumDate' }}</p>
-                               </div>
-                            </a>
-                         </li>
-                      </ul>
-                      </ng-template>
-                   </p-popover>
-                </ng-container>
+                         <ul *ngIf="dueList.length > 0" class="list-none p-0 m-0 notification-list">
+                            <li *ngFor="let todo of dueList" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
+                               <a [routerLink]="['/todos', todo.id]" (click)="op.hide()" class="flex align-items-start gap-3 text-decoration-none">
+                                  <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                     <i class="pi pi-exclamation-circle"></i>
+                                  </div>
+                                  <div class="flex-1">
+                                     <p class="m-0 text-sm font-medium line-height-2 text-color">{{ todo.title }}</p>
+                                     <p class="m-0 text-xs text-color-secondary mt-1">Due {{ todo.dueDate | date:'mediumDate' }}</p>
+                                  </div>
+                               </a>
+                            </li>
+                         </ul>
+                      </ng-container>
+                   </ng-template>
+                </p-popover>
              </div>
 
              <div class="user-profile cursor-pointer" *ngIf="authService.currentUser() as user" routerLink="/settings">
