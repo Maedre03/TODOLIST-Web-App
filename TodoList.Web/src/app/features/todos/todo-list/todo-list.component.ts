@@ -322,6 +322,10 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
       gap: var(--space-4);
       align-items: center;
     }
+    
+    .header-actions p-button {
+      margin-left: var(--space-3);
+    }
 
     .controls-bar {
       display: flex;

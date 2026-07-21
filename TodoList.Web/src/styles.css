@@ -434,6 +434,12 @@ p {
 }
 
 /* PrimeNG toast overrides */
+.p-toast {
+  right: 20px !important;
+  left: auto !important;
+  transform: translateX(0) !important;
+}
+
 .p-toast .p-toast-message {
   border-radius: var(--radius-md) !important;
   backdrop-filter: blur(12px);
