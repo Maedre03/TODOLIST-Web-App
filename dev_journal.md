@@ -369,11 +369,11 @@ d2cef09 journal: Day 2 - record Stats and Progress feature completion
 
 ### 🔀 Git Commits / Version
 ```
+0574734 feat: complete Phase 10 Tier 1 untouched features (notification dropdown)
+55fa1f7 docs: add tier 2 and tier 3 future features plan to task list
+a9c66b6 journal: Day 3 - tier 1 features complete
 5d6246c feat: complete tier 1 extra features (subtasks, user profiles, settings, notifications)
 067dad3 journal: Day 2 - system audit fixes and features completion
-6051a5a fix: resolve bugs and implement features from system audit
-876fd09 journal: Day 2 - record progress sidebar cleanup
-ef3ce1a refactor: remove redundant Today's Progress from sidebar
 ```
 
 ### ✅ Tasks Completed
@@ -382,16 +382,17 @@ ef3ce1a refactor: remove redundant Today's Progress from sidebar
 - Phase 3 (API Layer) — Users and SubTasks controllers
 - Phase 4 (Frontend Core) — User, Todo services and NotificationService
 - Phase 5 (Frontend UI) — SettingsComponent, TodoDetailComponent, routing updates, layout updates
+- Phase 10 (Tier 1 Untouched Features) — Verified full UI interaction for subtasks inside `TodoDetailComponent` and added missing Notification Dropdown Popover in the navbar (via PrimeNG `p-popover`).
 
 ### 🧠 Key Decisions & Why
 - **SubTasks & Clean Architecture**: We chose to keep SubTasks fully encapsulated within the Todo entity by mapping them as owned entities or related entities but processing them cleanly within the Todo aggregates. This ensures the domain logic remains tight.
 - **Frontend Effect vs Subscribe**: In `NotificationService`, we explicitly chose to use Angular's `effect()` rather than `subscribe()` for watching authentication state. This keeps us fully aligned with Angular 22's signal-based architecture, avoiding memory leaks and rxjs boilerplate.
+- **PrimeNG 18 Popover vs OverlayPanel**: PrimeNG 18 deprecated `OverlayPanel` in favor of `Popover`. We updated the notification modal to use `PopoverModule` and `<p-popover>` directly in `AppLayoutComponent` to stay current with the component library API and prevent future migration issues.
 
 ### ⚠️ Problems / Blockers
 - The workspace was interrupted by a quota limit reset just as the UI components were being wired up. Some code edits were lost locally while others were committed, leading to broken imports (`../../../` vs `../../`) and uncommitted modified changes.
 - How it was resolved: Fully recovered the state by fixing angular compilation errors one by one (imports, primeng case-sensitivity like `p-confirmdialog`, and tag severities) before pushing the final set of features.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Manual full QA run of all newly added extra features
-- [ ] Implement Tier 2 extra features if requested by user
+- [ ] Implement Tier 2 extra features (File Attachments, Recurring Tasks, Task Comments, Advanced Filtering)
 
