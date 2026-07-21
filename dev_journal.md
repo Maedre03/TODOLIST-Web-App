@@ -364,3 +364,34 @@ d2cef09 journal: Day 2 - record Stats and Progress feature completion
 - [ ] Next planned task...
 
 -->
+
+## 📅 Day 3 — 2026-07-21
+
+### 🔀 Git Commits / Version
+```
+5d6246c feat: complete tier 1 extra features (subtasks, user profiles, settings, notifications)
+067dad3 journal: Day 2 - system audit fixes and features completion
+6051a5a fix: resolve bugs and implement features from system audit
+876fd09 journal: Day 2 - record progress sidebar cleanup
+ef3ce1a refactor: remove redundant Today's Progress from sidebar
+```
+
+### ✅ Tasks Completed
+- Phase 1 (Domain & Infrastructure) — SubTasks
+- Phase 2 (Application) — SubTask & User Profiles Commands/Queries
+- Phase 3 (API Layer) — Users and SubTasks controllers
+- Phase 4 (Frontend Core) — User, Todo services and NotificationService
+- Phase 5 (Frontend UI) — SettingsComponent, TodoDetailComponent, routing updates, layout updates
+
+### 🧠 Key Decisions & Why
+- **SubTasks & Clean Architecture**: We chose to keep SubTasks fully encapsulated within the Todo entity by mapping them as owned entities or related entities but processing them cleanly within the Todo aggregates. This ensures the domain logic remains tight.
+- **Frontend Effect vs Subscribe**: In `NotificationService`, we explicitly chose to use Angular's `effect()` rather than `subscribe()` for watching authentication state. This keeps us fully aligned with Angular 22's signal-based architecture, avoiding memory leaks and rxjs boilerplate.
+
+### ⚠️ Problems / Blockers
+- The workspace was interrupted by a quota limit reset just as the UI components were being wired up. Some code edits were lost locally while others were committed, leading to broken imports (`../../../` vs `../../`) and uncommitted modified changes.
+- How it was resolved: Fully recovered the state by fixing angular compilation errors one by one (imports, primeng case-sensitivity like `p-confirmdialog`, and tag severities) before pushing the final set of features.
+
+### 📌 Tomorrow / Next Session
+- [ ] Manual full QA run of all newly added extra features
+- [ ] Implement Tier 2 extra features if requested by user
+
