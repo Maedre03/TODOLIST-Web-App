@@ -442,3 +442,4 @@ a9c66b6 journal: Day 3 - tier 1 features complete
 - None.
 - Fixed vertical alignment of the notification bell icon by ensuring its container uses flexbox layout and the popover correctly appends to the document body.
 - **UI Tweaks**: Fixed missing PrimeFlex `gap-4` utility class for `My Tasks` page header buttons by extracting a custom `.header-actions` flex class. Fixed PrimeNG `Popover` clipping on the right edge of the screen by forcing `left: auto !important` and `right: var(--space-4) !important`.
+- **Notification Fix**: Replaced the PrimeNG `p-popover` for notifications with a fully custom Angular dropdown component managed by a `@HostListener` for "click outside" detection. This bypasses PrimeNG's unreliable absolute positioning calculations on the right edge of the screen, guaranteeing that the notifications box always stays fully visible.
