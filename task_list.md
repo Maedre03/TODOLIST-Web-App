@@ -311,11 +311,12 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 - [x] Subtasks full UI interaction inside `TodoDetailComponent` (Adding/Deleting/Toggling subtasks logic might need connecting to the backend correctly)
 - [x] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
 
-## 🚀 PHASE 11 — Extra Features (Tier 2: Advanced Organization)
-- [ ] **File Attachments**: Allow users to attach documents or images to tasks. (Requires Azure Blob Storage or AWS S3 integration).
-- [ ] **Recurring Tasks**: Ability to set a task to repeat daily, weekly, or monthly.
-- [ ] **Task Comments/Notes**: A dedicated section in the `TodoDetailComponent` to add timestamped comments or progress notes to a task.
-- [ ] **Advanced Filtering & Search**: Full-text search and complex filtering (e.g., "Show all high priority tasks due this week").
+### Phase 11 — Tier 2 (Advanced Organization)
+- [x] **Task Comments/Notes**: Allow users to add discussion notes/comments to a task.
+- [x] **File Attachments**: Upload and link files (PDFs, images) to tasks.
+- [x] **Recurring Tasks**: Mark a task to repeat daily, weekly, or monthly.
+- [x] **Advanced Filtering**: Filter by exact strings (search).
+- [ ] **Frontend Integration**: Implement the UI for comments, attachments, recurrence, and search.
 
 ## 🚀 PHASE 12 — Extra Features (Tier 3: Productivity & Sync)
 - [ ] **Calendar View**: A monthly calendar view to visualize task distribution.
