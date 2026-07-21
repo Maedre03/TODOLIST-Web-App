@@ -399,5 +399,20 @@ a9c66b6 journal: Day 3 - tier 1 features complete
 - How it was resolved: Fully recovered the state by fixing angular compilation errors one by one (imports, primeng case-sensitivity like `p-confirmdialog`, and tag severities) before pushing the final set of features.
 
 ### 📌 Tomorrow / Next Session
-- [ ] Implement Tier 2 extra features (Frontend integration: Task Comments UI, Attachments UI, Recurring Dropdown, Advanced Search Input)
+- [ ] Manual verification and polish.
+
+### 🎉 Phase 11 & Phase 12 Complete
+- **Tier 2 Extra Features**: Integrated Task Comments and File Attachments into `TodoDetailComponent`. Integrated advanced search in `TodoListComponent`. Integrated PWA support for offline caching using Angular service workers (`@angular/pwa`).
+- **Calendar View**: Built a custom css-grid `CalendarComponent` instead of relying on heavy third party libraries like fullcalendar.
+- **CSV Export/Import**: Added MediatR query/command handlers to write and read CSV files for Tasks. Connected these endpoints to a download Blob system and PrimeNG FileUpload component in the Angular frontend.
+- **Email Notifications**: Simulated sending daily digest emails to users with overdue or due today tasks via a generic `.NET Hosted Service` (`BackgroundService`) looping in the background and logging to Serilog.
+
+### 🧠 Key Decisions & Why
+- **PWA Service Worker offline strategy**: We chose the `freshness` strategy for the backend API route `/api/v1/**` so that the app always prioritizes fetching the latest tasks when online, but falls back to the cache when offline.
+- **Background Service**: Instead of complex hangfire/quartz jobs, we used a native ASP.NET `BackgroundService` since our application needs a simple recurring task to send out simulated emails.
+- **Avoided default parameters for Commands initially**: In `CreateTodoCommand`, adding `RecurrenceInterval Recurrence` as a required parameter broke 20 unit tests, solved elegantly by providing a default parameter `= RecurrenceInterval.None` without needing to rewrite every test.
+
+### ⚠️ Problems / Blockers
+- **Build Failures from Constructor signature changes**: Changing the MediatR record definitions (e.g. `CreateTodoCommand`) instantly broke many Unit Tests.
+- How it was resolved: Used default values for optional properties (`RecurrenceInterval` and `TagIds`) in the C# records to seamlessly support legacy test invocations without refactoring all tests.
 
