@@ -11,17 +11,17 @@
       <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Profile Information</h3>
 
       <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column gap-6 max-w-2xl mt-4">
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-column gap-3 mb-4">
           <label for="username" class="font-medium text-color-secondary">Username</label>
-          <input pInputText id="username" formControlName="username" class="w-full" />
+          <input pInputText id="username" formControlName="username" class="w-full p-inputtext-lg" />
           <small class="p-error" *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">
             Username is required (max 50 chars).
           </small>
         </div>
 
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-column gap-3 mb-4">
           <label for="email" class="font-medium text-color-secondary">Email Address</label>
-          <input pInputText id="email" type="email" formControlName="email" class="w-full" />
+          <input pInputText id="email" type="email" formControlName="email" class="w-full p-inputtext-lg" />
           <small class="p-error" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
             A valid email is required.
           </small>
@@ -39,20 +39,20 @@
       <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Security</h3>
 
       <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="flex flex-column gap-6 max-w-2xl mt-4">
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-column gap-3 mb-4">
           <label for="currentPassword" class="font-medium text-color-secondary">Current Password</label>
           <p-password id="currentPassword" formControlName="currentPassword" [feedback]="false" [toggleMask]="true"
-            styleClass="w-full" inputStyleClass="w-full"></p-password>
+            styleClass="w-full" inputStyleClass="w-full p-inputtext-lg"></p-password>
           <small class="p-error"
             *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
             Current password is required.
           </small>
         </div>
 
-        <div class="flex flex-column gap-2">
+        <div class="flex flex-column gap-3 mb-4">
           <label for="newPassword" class="font-medium text-color-secondary">New Password</label>
           <p-password id="newPassword" formControlName="newPassword" [feedback]="true" [toggleMask]="true"
-            styleClass="w-full" inputStyleClass="w-full"></p-password>
+            styleClass="w-full" inputStyleClass="w-full p-inputtext-lg"></p-password>
           <small class="p-error"
             *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
             New password must be at least 6 characters.
