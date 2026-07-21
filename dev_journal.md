@@ -448,3 +448,13 @@ c646dff journal: Day 3 - update notification fix
 - **Notification Fix**: Replaced the PrimeNG `p-popover` for notifications with a fully custom Angular dropdown component managed by a `@HostListener` for "click outside" detection. This bypasses PrimeNG's unreliable absolute positioning calculations on the right edge of the screen, guaranteeing that the notifications box always stays fully visible.
 - **Critical Layout Fix**: Discovered that the entire right side of the screen was being pushed 280px out of bounds (off-screen) due to an invalid CSS flex layout interaction between `.layout-wrapper` and the sidebar's 280px `margin-left`. Removing `display: flex;` from `.layout-wrapper` resolved the issue, pulling the notification bell, user avatar, and action buttons back into the visible viewport.
 - **Fail-safe UI Fallbacks**: Implemented hard CSS overrides for the UI bugs to bypass potential local browser caching or Angular hot-reload failures. Added explicit `margin-left` to the "Export/Import/New Task" buttons (bypassing flexbox gap issues on certain viewports) and clamped the global PrimeNG Toast (`p-toast`) to `right: 20px !important;` to ensure pop-up notifications (like the Export success message) can never be pushed off the screen by animation bugs.
+- **Priority Sorting Fix**: Fixed a bug where sorting by "Lowest Priority" was returning Highest Priority tasks (or alphabetical order) by refactoring the EF Core `OrderBy` clause in `TodoRepository.cs`. We replaced a complex ternary expression with `(int)t.Priority` to allow EF Core's native enum translation to handle sorting correctly, even when the enum is mapped as a string in the database.
+
+### 🔀 Git Commits / Version (Update)
+```
+03635f0 fix: resolve priority sorting issue
+e34eddf journal: Day 3 - update priority sort fix
+4dc397c fix: resolve priority sorting bug by mapping enum strings to integers in EF Core query
+c646dff journal: Day 3 - update notification fix
+565496f fix: dismiss notifications on click and persist in local storage
+```
