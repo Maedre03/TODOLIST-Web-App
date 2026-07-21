@@ -827,6 +827,7 @@ export class AppLayoutComponent implements OnInit {
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Tag Deleted', detail: 'Tag removed successfully.' });
             this.loadTags();
+            this.notificationService.refresh();
             // In a real app we might also need to tell the todo list to refresh if we're filtering by this tag.
           },
           error: () => {

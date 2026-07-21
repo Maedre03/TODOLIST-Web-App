@@ -18,6 +18,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
 import { TagService } from '../../../core/services/tag.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { Todo, TodoPagedParams, CreateTodoRequest, UpdateTodoRequest, Priority } from '../../../core/models/todo.model';
 import { Tag } from '../../../core/models/tag.model';
 import { TodoItemComponent } from '../components/todo-item.component';
@@ -545,6 +546,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   private readonly tagService = inject(TagService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly notificationService = inject(NotificationService);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -913,6 +915,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
           this.currentPage--;
         }
         this.loadTodos();
+        this.notificationService.refresh();
       }
     });
   }
@@ -939,6 +942,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
           this.isFormVisible = false;
           this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Task updated successfully.', life: 3000 });
           this.loadTodos();
+          this.notificationService.refresh();
         },
         error: () => this.isSaving.set(false)
       });
