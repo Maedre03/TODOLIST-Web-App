@@ -440,3 +440,4 @@ a9c66b6 journal: Day 3 - tier 1 features complete
 
 ### ⚠️ Problems / Blockers
 - None.
+- Fixed vertical alignment of the notification bell icon by ensuring its container uses flexbox layout and the popover correctly appends to the document body.
