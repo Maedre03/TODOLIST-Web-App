@@ -179,41 +179,39 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <div class="topbar-right flex align-items-center gap-4">
              <!-- Notification Bell -->
              <div class="notification-container" *ngIf="authService.currentUser()">
-                <button #notifBtn class="icon-btn notification-btn" (click)="op.toggle($event, notifBtn)" aria-label="Notifications">
+                <button class="icon-btn notification-btn" (click)="toggleNotifications($event)" aria-label="Notifications">
                    <i class="pi pi-bell text-xl"></i>
                    <span class="notification-badge" *ngIf="notificationService.notificationCount() > 0">
                      {{ notificationService.notificationCount() }}
                    </span>
                 </button>
-                <p-popover #op appendTo="body" [style]="{width: '350px'}" styleClass="notification-panel shadow-4">
-                   <ng-template pTemplate="content">
-                      <ng-container *ngIf="dueTodos() as dueList">
-                         <div class="flex align-items-center justify-content-between border-bottom-1 surface-border pb-2 mb-2">
-                            <h3 class="m-0 text-lg font-semibold">Notifications</h3>
-                            <p-badge *ngIf="notificationService.notificationCount() > 0" [value]="notificationService.notificationCount().toString()" severity="danger"></p-badge>
-                         </div>
-                         
-                         <div *ngIf="dueList.length === 0" class="text-center py-4 text-color-secondary">
-                            <i class="pi pi-check-circle text-4xl mb-3 text-green-500"></i>
-                            <p class="m-0">You're all caught up!</p>
-                         </div>
+                <div class="custom-notification-panel shadow-4" *ngIf="isNotificationVisible">
+                   <ng-container *ngIf="dueTodos() as dueList">
+                      <div class="flex align-items-center justify-content-between border-bottom-1 surface-border pb-2 mb-2">
+                         <h3 class="m-0 text-lg font-semibold">Notifications</h3>
+                         <p-badge *ngIf="notificationService.notificationCount() > 0" [value]="notificationService.notificationCount().toString()" severity="danger"></p-badge>
+                      </div>
+                      
+                      <div *ngIf="dueList.length === 0" class="text-center py-4 text-color-secondary">
+                         <i class="pi pi-check-circle text-4xl mb-3 text-green-500"></i>
+                         <p class="m-0">You're all caught up!</p>
+                      </div>
 
-                         <ul *ngIf="dueList.length > 0" class="list-none p-0 m-0 notification-list">
-                            <li *ngFor="let todo of dueList" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
-                               <a [routerLink]="['/todos', todo.id]" (click)="op.hide()" class="flex align-items-start gap-3 text-decoration-none">
-                                  <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
-                                     <i class="pi pi-exclamation-circle"></i>
-                                  </div>
-                                  <div class="flex-1">
-                                     <p class="m-0 text-sm font-medium line-height-2 text-color">{{ todo.title }}</p>
-                                     <p class="m-0 text-xs text-color-secondary mt-1">Due {{ todo.dueDate | date:'mediumDate' }}</p>
-                                  </div>
-                               </a>
-                            </li>
-                         </ul>
-                      </ng-container>
-                   </ng-template>
-                </p-popover>
+                      <ul *ngIf="dueList.length > 0" class="list-none p-0 m-0 notification-list">
+                         <li *ngFor="let todo of dueList" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
+                            <a [routerLink]="['/todos', todo.id]" (click)="isNotificationVisible = false" class="flex align-items-start gap-3 text-decoration-none">
+                               <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
+                                  <i class="pi pi-exclamation-circle"></i>
+                               </div>
+                               <div class="flex-1">
+                                  <p class="m-0 text-sm font-medium line-height-2 text-color">{{ todo.title }}</p>
+                                  <p class="m-0 text-xs text-color-secondary mt-1">Due {{ todo.dueDate | date:'mediumDate' }}</p>
+                               </div>
+                            </a>
+                         </li>
+                      </ul>
+                   </ng-container>
+                </div>
              </div>
 
              <div class="user-profile cursor-pointer" *ngIf="authService.currentUser() as user" routerLink="/settings">
@@ -645,7 +643,24 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     .notification-container {
       display: flex;
       align-items: center;
+      position: relative;
     }
+    
+    .custom-notification-panel {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 350px;
+      background: var(--surface-card);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      margin-top: 0.5rem;
+      padding: 1rem;
+      z-index: 1000;
+      transform-origin: top right;
+      animation: fadeIn var(--transition-fast) forwards;
+    }
+    
     .notification-btn {
       position: relative;
     }
@@ -738,6 +753,21 @@ export class AppLayoutComponent implements OnInit {
   upcomingTodos = signal<Todo[]>([]);
   private readonly todoService = inject(TodoService);
   isSavingTag = signal(false);
+  isNotificationVisible = false;
+
+  toggleNotifications(event: Event) {
+    event.stopPropagation();
+    this.isNotificationVisible = !this.isNotificationVisible;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isNotificationVisible) return;
+    const target = event.target as HTMLElement;
+    if (!target.closest('.notification-container')) {
+      this.isNotificationVisible = false;
+    }
+  }
 
   predefinedColors = [
     '#ef4444', '#f97316', '#f59e0b', '#84cc16',
