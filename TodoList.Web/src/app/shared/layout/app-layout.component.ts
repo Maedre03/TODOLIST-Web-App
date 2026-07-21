@@ -179,7 +179,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <div class="topbar-right flex align-items-center gap-4">
              <!-- Notification Bell -->
              <div class="notification-container" *ngIf="authService.currentUser()">
-                <button class="icon-btn notification-btn" (click)="op.toggle($event)" aria-label="Notifications">
+                <button #notifBtn class="icon-btn notification-btn" (click)="op.toggle($event, notifBtn)" aria-label="Notifications">
                    <i class="pi pi-bell text-xl"></i>
                    <span class="notification-badge" *ngIf="notificationService.notificationCount() > 0">
                      {{ notificationService.notificationCount() }}
