@@ -369,11 +369,11 @@ d2cef09 journal: Day 2 - record Stats and Progress feature completion
 
 ### 🔀 Git Commits / Version
 ```
+4dc397c fix: resolve priority sorting bug by mapping enum strings to integers in EF Core query
+c646dff journal: Day 3 - update notification fix
 565496f fix: dismiss notifications on click and persist in local storage
 05dfa30 journal: Day 3 - update routing fix
 0a66e64 fix: resolve routing issue in todo detail component when switching tasks
-751355e fix: import primeflex in global styles to enable flexbox utilities
-b3f5e9d style: fix spacing between form fields in settings page
 ```
 
 ### ✅ Tasks Completed
@@ -387,6 +387,7 @@ b3f5e9d style: fix spacing between form fields in settings page
 - Phase 11 (Tier 2 Logic) — Implemented `LocalFileStorageService` for writing attachments. Updated `ToggleTodoCompleteCommandHandler` to duplicate recurring tasks upon completion. Implemented Advanced Filtering by SearchTerm on `GetTodosPagedQuery` down to the DB Repository.
 - **Bug Fix**: Fixed `TodoDetailComponent` routing issue. Changed `route.snapshot.paramMap` to `route.paramMap.subscribe` so that navigating between different todo details pages dynamically reloads the content without requiring a full page refresh.
 - **Bug Fix**: Added a feature to dismiss notifications. Clicking on a notification in the `AppLayoutComponent` now calls `NotificationService.dismiss()`, which hides it from the due list and persists the dismissed state to `localStorage` keyed by user ID.
+- **Bug Fix**: Fixed priority sorting bug in `TodoRepository`. EF Core was sorting priorities alphabetically because they are stored as strings in the database. Added a ternary conditional mapping in the `OrderBy` query to explicitly map `Priority.Critical` to 4, `High` to 3, `Medium` to 2, and `Low` to 1.
 
 ### 🧠 Key Decisions & Why
 - **SubTasks & Clean Architecture**: We chose to keep SubTasks fully encapsulated within the Todo entity by mapping them as owned entities or related entities but processing them cleanly within the Todo aggregates. This ensures the domain logic remains tight.
