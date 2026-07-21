@@ -199,7 +199,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
                       <ul *ngIf="dueList.length > 0" class="list-none p-0 m-0 notification-list">
                          <li *ngFor="let todo of dueList" class="p-3 border-bottom-1 surface-border hover:surface-hover transition-colors border-round">
-                            <a [routerLink]="['/todos', todo.id]" (click)="isNotificationVisible = false" class="flex align-items-start gap-3 text-decoration-none">
+                            <a [routerLink]="['/todos', todo.id]" (click)="isNotificationVisible = false; notificationService.dismiss(todo.id)" class="flex align-items-start gap-3 text-decoration-none">
                                <div class="notification-icon bg-red-100 text-red-500 border-circle flex align-items-center justify-content-center" style="width: 32px; height: 32px; min-width: 32px;">
                                   <i class="pi pi-exclamation-circle"></i>
                                </div>

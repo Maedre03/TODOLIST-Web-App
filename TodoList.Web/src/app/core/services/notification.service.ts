@@ -10,15 +10,17 @@ export class NotificationService {
 
   // State for all todos
   private readonly todos = signal<Todo[]>([]);
+  private readonly dismissedIds = signal<Set<string>>(new Set());
 
   // Computed state for due notifications
   public readonly dueTodos = computed(() => {
     const now = new Date();
     // Start of today
     now.setHours(0, 0, 0, 0);
+    const dismissed = this.dismissedIds();
 
     return this.todos().filter(t => {
-      if (t.isCompleted || !t.dueDate) return false;
+      if (t.isCompleted || !t.dueDate || dismissed.has(t.id)) return false;
       const dueDate = new Date(t.dueDate);
       // Strip time from due date for comparison
       dueDate.setHours(0, 0, 0, 0);
@@ -33,12 +35,35 @@ export class NotificationService {
   constructor() {
     // When user logs in, load todos for notifications
     effect(() => {
-      if (this.authService.isAuthenticated()) {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.loadDismissed(user.sub);
         this.loadTodos();
       } else {
         this.todos.set([]);
+        this.dismissedIds.set(new Set());
       }
-    });
+    }, { allowSignalWrites: true });
+  }
+
+  private loadDismissed(userId: string) {
+    const saved = localStorage.getItem(`dismissed_notifications_${userId}`);
+    if (saved) {
+      this.dismissedIds.set(new Set(JSON.parse(saved)));
+    } else {
+      this.dismissedIds.set(new Set());
+    }
+  }
+
+  public dismiss(todoId: string) {
+    const next = new Set(this.dismissedIds());
+    next.add(todoId);
+    this.dismissedIds.set(next);
+    
+    const user = this.authService.currentUser();
+    if (user) {
+      localStorage.setItem(`dismissed_notifications_${user.sub}`, JSON.stringify(Array.from(next)));
+    }
   }
 
   public loadTodos() {
