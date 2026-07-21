@@ -620,6 +620,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       padding: var(--space-2);
       border-radius: var(--radius-md);
       transition: background-color var(--transition-fast);
+      cursor: pointer;
     }
     
     .user-profile.cursor-pointer:hover {
