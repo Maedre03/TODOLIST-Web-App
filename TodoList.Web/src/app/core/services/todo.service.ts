@@ -8,7 +8,8 @@ import {
   CreateTodoRequest,
   UpdateTodoRequest,
   PaginatedResult,
-  TodoPagedParams
+  TodoPagedParams,
+  SubTask
 } from '../models/todo.model';
 
 /**
@@ -143,5 +144,29 @@ export class TodoService {
    */
   toggleComplete(id: string): Observable<void> {
     return this.http.patch<void>(`${this.baseUrl}/${id}/toggle`, {});
+  }
+
+  /**
+   * Adds a subtask to a todo.
+   * Backend endpoint: POST /api/v1/todos/{id}/subtasks
+   */
+  addSubTask(id: string, title: string): Observable<SubTask> {
+    return this.http.post<SubTask>(`${this.baseUrl}/${id}/subtasks`, { title });
+  }
+
+  /**
+   * Deletes a subtask from a todo.
+   * Backend endpoint: DELETE /api/v1/todos/{id}/subtasks/{subTaskId}
+   */
+  deleteSubTask(id: string, subTaskId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}/subtasks/${subTaskId}`);
+  }
+
+  /**
+   * Toggles a subtask's completion status.
+   * Backend endpoint: PATCH /api/v1/todos/{id}/subtasks/{subTaskId}/toggle
+   */
+  toggleSubTaskComplete(id: string, subTaskId: string): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/${id}/subtasks/${subTaskId}/toggle`, {});
   }
 }

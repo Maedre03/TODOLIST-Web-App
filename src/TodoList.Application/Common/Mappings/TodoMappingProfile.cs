@@ -9,5 +9,6 @@ public class TodoMappingProfile : Profile
     public TodoMappingProfile()
     {
         CreateMap<Todo, TodoDto>();
+        CreateMap<SubTask, SubTaskDto>();
     }
 }

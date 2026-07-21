@@ -31,6 +31,11 @@ public class Todo : Entity<Guid>
     public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
 
     /// <summary>
+    /// Collection navigation property for the SubTasks under this Todo.
+    /// </summary>
+    public virtual ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
+
+    /// <summary>
     /// Parameterless constructor required by EF Core for materialization.
     /// </summary>
     protected Todo() { }

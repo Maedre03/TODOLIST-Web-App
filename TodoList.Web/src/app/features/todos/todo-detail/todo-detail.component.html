@@ -1,0 +1,76 @@
+<p-toast></p-toast>
+
+<div class="p-4 md:p-6 lg:p-8">
+  <div class="max-w-4xl mx-auto">
+    
+    <div class="mb-4">
+      <p-button icon="pi pi-arrow-left" label="Back to Todos" styleClass="p-button-text" (onClick)="goBack()"></p-button>
+    </div>
+
+    <p-card *ngIf="isLoading()" styleClass="p-4 text-center">
+      <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+      <p class="mt-3 text-secondary">Loading task details...</p>
+    </p-card>
+
+    <div *ngIf="todo() as t" class="fade-in">
+      
+      <div class="flex justify-content-between align-items-start flex-wrap gap-3 mb-5">
+        <div>
+          <h1 class="text-3xl font-bold text-color m-0 mb-2">{{ t.title }}</h1>
+          <div class="flex align-items-center gap-3 text-secondary text-sm">
+            <span><i class="pi pi-calendar mr-1"></i> Created {{ t.createdAt | date:'mediumDate' }}</span>
+            <span *ngIf="t.dueDate"><i class="pi pi-clock mr-1"></i> Due {{ t.dueDate | date:'mediumDate' }}</span>
+          </div>
+        </div>
+        <p-tag [value]="getPriorityLabel(t.priority)" [severity]="getPrioritySeverity(t.priority)"></p-tag>
+      </div>
+
+      <p-card styleClass="mb-5 surface-card shadow-1">
+        <h3 class="text-xl font-medium mt-0 mb-3 border-bottom-1 surface-border pb-2">Description</h3>
+        <p class="text-color-secondary line-height-3 m-0" *ngIf="t.description">{{ t.description }}</p>
+        <p class="text-color-secondary font-italic m-0" *ngIf="!t.description">No description provided.</p>
+
+        <div class="mt-4" *ngIf="t.tags && t.tags.length > 0">
+          <h4 class="text-sm font-semibold text-secondary uppercase mb-2">Tags</h4>
+          <div class="flex flex-wrap gap-2">
+            <span *ngFor="let tag of t.tags" class="px-2 py-1 border-round text-sm" [ngStyle]="{'background-color': tag.color + '20', 'color': tag.color}">
+              #{{ tag.name }}
+            </span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Subtasks Section -->
+      <p-card styleClass="surface-card shadow-1">
+        <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Checklist</h3>
+        
+        <div class="flex align-items-center gap-2 mb-4">
+          <input pInputText type="text" 
+                 class="w-full md:w-20rem p-inputtext-sm" 
+                 placeholder="Add a new subtask..." 
+                 [ngModel]="newSubTaskTitle()" 
+                 (ngModelChange)="newSubTaskTitle.set($event)"
+                 (keydown.enter)="addSubTask()" />
+          <p-button icon="pi pi-plus" size="small" (onClick)="addSubTask()" [disabled]="!newSubTaskTitle().trim()"></p-button>
+        </div>
+
+        <div *ngIf="!t.subTasks || t.subTasks.length === 0" class="text-secondary font-italic text-sm py-2">
+          No subtasks yet. Add one above to create a checklist.
+        </div>
+
+        <ul class="list-none p-0 m-0">
+          <li *ngFor="let st of t.subTasks" class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover border-round transition-colors transition-duration-150">
+            <div class="flex align-items-center gap-3">
+              <p-checkbox [binary]="true" [ngModel]="st.isCompleted" (onChange)="toggleSubTask(st)"></p-checkbox>
+              <span [class.line-through]="st.isCompleted" [class.text-secondary]="st.isCompleted" class="text-color">
+                {{ st.title }}
+              </span>
+            </div>
+            <p-button icon="pi pi-trash" styleClass="p-button-danger p-button-text p-button-rounded p-button-sm" (onClick)="deleteSubTask(st)"></p-button>
+          </li>
+        </ul>
+      </p-card>
+
+    </div>
+  </div>
+</div>

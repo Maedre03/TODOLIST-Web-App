@@ -9,6 +9,9 @@ using TodoList.Application.Features.Todos.Commands.UpdateTodo;
 using TodoList.Application.Features.Todos.Queries.GetAllTodos;
 using TodoList.Application.Features.Todos.Queries.GetTodoById;
 using TodoList.Application.Features.Todos.Queries.GetTodosPaged;
+using TodoList.Application.Features.Todos.Commands.AddSubTask;
+using TodoList.Application.Features.Todos.Commands.DeleteSubTask;
+using TodoList.Application.Features.Todos.Commands.ToggleSubTaskComplete;
 
 namespace TodoList.Api.Controllers;
 
@@ -119,4 +122,40 @@ public class TodosController : ControllerBase
         await _mediator.Send(new ToggleTodoCompleteCommand(id));
         return NoContent();
     }
+
+    /// <summary>
+    /// Adds a subtask to a todo.
+    /// </summary>
+    [HttpPost("{id:guid}/subtasks")]
+    public async Task<IActionResult> AddSubTask(Guid id, [FromBody] AddSubTaskRequest request)
+    {
+        var command = new AddSubTaskCommand { TodoId = id, Title = request.Title };
+        var subTaskDto = await _mediator.Send(command);
+        return Ok(subTaskDto);
+    }
+
+    /// <summary>
+    /// Deletes a subtask from a todo.
+    /// </summary>
+    [HttpDelete("{id:guid}/subtasks/{subTaskId:guid}")]
+    public async Task<IActionResult> DeleteSubTask(Guid id, Guid subTaskId)
+    {
+        await _mediator.Send(new DeleteSubTaskCommand { TodoId = id, SubTaskId = subTaskId });
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Toggles the completion status of a subtask.
+    /// </summary>
+    [HttpPatch("{id:guid}/subtasks/{subTaskId:guid}/toggle")]
+    public async Task<IActionResult> ToggleSubTaskComplete(Guid id, Guid subTaskId)
+    {
+        await _mediator.Send(new ToggleSubTaskCompleteCommand { TodoId = id, SubTaskId = subTaskId });
+        return NoContent();
+    }
+}
+
+public class AddSubTaskRequest
+{
+    public string Title { get; set; } = string.Empty;
 }

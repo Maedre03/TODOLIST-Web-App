@@ -16,4 +16,5 @@ public class TodoDto
     public DateTime? DueDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public IReadOnlyList<TagDto> Tags { get; set; } = Array.Empty<TagDto>();
+    public IReadOnlyList<SubTaskDto> SubTasks { get; set; } = Array.Empty<SubTaskDto>();
 }

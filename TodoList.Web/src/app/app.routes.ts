@@ -49,9 +49,19 @@ export const routes: Routes = [
           import('./features/todos/todo-list/todo-list.component').then(m => m.TodoListComponent)
       },
       {
+        path: 'todos/:id',
+        loadComponent: () =>
+          import('./features/todos/todo-detail/todo-detail.component').then(m => m.TodoDetailComponent)
+      },
+      {
         path: 'stats',
         loadComponent: () =>
           import('./features/stats/stats.component').then(m => m.StatsComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./features/settings/settings.component').then(m => m.SettingsComponent)
       }
     ]
   },

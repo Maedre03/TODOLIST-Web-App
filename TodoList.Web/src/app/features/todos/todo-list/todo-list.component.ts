@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef, Vie
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -138,7 +138,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                 [todo]="todo"
                 (toggle)="onToggleComplete($event)"
                 (edit)="openEditForm($event)"
-                (delete)="confirmDelete($event)" />
+                (delete)="confirmDelete($event)"
+                (view)="openDetail($event)" />
             }
           </div>
 
@@ -173,7 +174,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                       [todo]="todo"
                       (toggle)="onToggleComplete($event)"
                       (edit)="openEditForm($event)"
-                      (delete)="confirmDelete($event)" />
+                      (delete)="confirmDelete($event)"
+                      (view)="openDetail($event)" />
                   </div>
                 }
               </div>
@@ -197,7 +199,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                       [todo]="todo"
                       (toggle)="onToggleComplete($event)"
                       (edit)="openEditForm($event)"
-                      (delete)="confirmDelete($event)" />
+                      (delete)="confirmDelete($event)"
+                      (view)="openDetail($event)" />
                   </div>
                 }
               </div>
@@ -221,7 +224,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                       [todo]="todo"
                       (toggle)="onToggleComplete($event)"
                       (edit)="openEditForm($event)"
-                      (delete)="confirmDelete($event)" />
+                      (delete)="confirmDelete($event)"
+                      (view)="openDetail($event)" />
                   </div>
                 }
               </div>
@@ -245,7 +249,8 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
                       [todo]="todo"
                       (toggle)="onToggleComplete($event)"
                       (edit)="openEditForm($event)"
-                      (delete)="confirmDelete($event)" />
+                      (delete)="confirmDelete($event)"
+                      (view)="openDetail($event)" />
                   </div>
                 }
               </div>
@@ -524,6 +529,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   private readonly confirmationService = inject(ConfirmationService);
 
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   // State
@@ -633,7 +639,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     if (savedMode) {
       this.viewMode.set(savedMode);
     }
-    
+
     const savedTab = localStorage.getItem('todo_active_tab') as 'all' | 'active' | 'completed' | 'overdue';
     if (savedTab) {
       this.activeTab.set(savedTab);
@@ -673,7 +679,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     } else if (tab === 'completed') {
       this.isCompletedFilter = true;
     } else if (tab === 'overdue') {
-      this.isCompletedFilter = false; 
+      this.isCompletedFilter = false;
     }
     this.currentPage = 1;
     this.loadTodos();
@@ -706,7 +712,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
         const start = new Date(range[0]);
         start.setHours(0, 0, 0, 0);
         startIso = start.toISOString();
-        
+
         // If no end date is selected yet, use the start date to filter for that single day
         const end = range[1] ? new Date(range[1]) : new Date(range[0]);
         end.setHours(23, 59, 59, 999);
@@ -804,7 +810,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   onToggleComplete(todo: Todo): void {
     const previousState = todo.isCompleted;
-    this.todos.update(current => 
+    this.todos.update(current =>
       current.map(t => t.id === todo.id ? { ...t, isCompleted: !t.isCompleted } : t)
     );
 
@@ -814,11 +820,15 @@ export class TodoListComponent implements OnInit, OnDestroy {
         this.messageService.add({ severity: 'success', summary: 'Task Updated', detail: `Task marked as ${status}.`, life: 2000 });
       },
       error: () => {
-        this.todos.update(current => 
+        this.todos.update(current =>
           current.map(t => t.id === todo.id ? { ...t, isCompleted: previousState } : t)
         );
       }
     });
+  }
+
+  openDetail(todo: Todo): void {
+    this.router.navigate(['/todos', todo.id]);
   }
 
   confirmDelete(todo: Todo): void {

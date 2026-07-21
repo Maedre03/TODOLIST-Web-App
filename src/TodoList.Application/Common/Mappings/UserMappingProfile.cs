@@ -7,6 +7,6 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        // Add user mappings here if needed, e.g. User -> UserDto
+        CreateMap<User, TodoList.Application.Common.DTOs.UserProfileDto>();
     }
 }

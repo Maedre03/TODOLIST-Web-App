@@ -25,6 +25,7 @@ export interface Todo {
   dueDate: string | null;
   createdAt: string;
   tags?: Tag[];
+  subTasks?: SubTask[];
 }
 
 /**
@@ -88,4 +89,13 @@ export interface TodoPagedParams {
   startDate?: string;
   endDate?: string;
   tagId?: string;
+}
+
+/**
+ * SubTask model
+ */
+export interface SubTask {
+  id: string;
+  title: string;
+  isCompleted: boolean;
 }

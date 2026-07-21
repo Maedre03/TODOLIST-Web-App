@@ -234,10 +234,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class TodoItemComponent {
   @Input({ required: true }) todo!: Todo;
-  
+
   @Output() toggle = new EventEmitter<Todo>();
   @Output() edit = new EventEmitter<Todo>();
   @Output() delete = new EventEmitter<Todo>();
+  @Output() view = new EventEmitter<Todo>();
 
   get priorityClass(): string {
     switch (this.todo.priority) {
@@ -251,6 +252,11 @@ export class TodoItemComponent {
 
   get menuItems(): MenuItem[] {
     return [
+      {
+        label: 'View Details',
+        icon: 'pi pi-eye',
+        command: () => this.view.emit(this.todo)
+      },
       {
         label: 'Edit Task',
         icon: 'pi pi-pencil',

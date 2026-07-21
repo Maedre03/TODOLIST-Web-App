@@ -282,3 +282,33 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 - [x] Phase 6: Auth Pages (features list, stats counter)
 - [x] Phase 7: Polish (PrimeNG theme, empty states)
 - [x] Phase 8: Stats and Progress page with charts
+
+## 🚀 PHASE 10 — Extra Features (Tier 1)
+
+### Finished Features
+- [x] **Subtasks (Domain & Infrastructure)**
+  - Created `SubTask` entity, `SubTaskConfiguration`
+  - Updated `Todo` entity with `SubTasks` collection
+  - Applied EF Core migration
+- [x] **Subtasks (Application & API)**
+  - Created DTOs (`SubTaskDto`), Commands (`AddSubTaskCommand`, `ToggleSubTaskCompleteCommand`, `DeleteSubTaskCommand`)
+  - Updated `TodosController` with subtask endpoints
+- [x] **User Profiles (Application & API)**
+  - Created DTOs (`UserProfileDto`) and Queries/Commands (`GetUserProfileQuery`, `UpdateUserProfileCommand`, `ChangePasswordCommand`, `DeleteAccountCommand`)
+  - Created `UsersController` with profile endpoints
+- [x] **Frontend Core Integrations**
+  - Updated `todo.model.ts` and `TodoService` for SubTasks
+  - Created `user.model.ts` and `UserService` for User Profiles
+  - Created `NotificationService` for tracking upcoming due tasks
+- [x] **Frontend UI Integrations**
+  - Created `SettingsComponent` for user profile, password, and account deletion
+  - Created `TodoDetailComponent` for detailed task view with subtasks
+  - Added routes for `/settings` and `/todos/:id`
+  - Updated `TodoListComponent` to navigate to the detailed view
+  - Updated `AppLayoutComponent` to show Settings link and Notification Badge
+
+### Untouched Features
+- [ ] Subtasks full UI interaction inside `TodoDetailComponent` (Adding/Deleting/Toggling subtasks logic might need connecting to the backend correctly)
+- [ ] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
+- [ ] Any Tier 2 Features (Email notifications, file attachments, recurring tasks, offline mode)
+

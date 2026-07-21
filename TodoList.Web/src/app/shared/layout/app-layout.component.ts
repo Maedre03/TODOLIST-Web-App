@@ -13,6 +13,7 @@ import { TagService } from '../../core/services/tag.service';
 import { Tag } from '../../core/models/tag.model';
 import { TodoService } from '../../core/services/todo.service';
 import { Todo } from '../../core/models/todo.model';
+import { NotificationService } from '../../core/services/notification.service';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -20,9 +21,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-layout',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterOutlet, 
-    RouterLink, 
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
     RouterLinkActive,
     FormsModule,
     DialogModule,
@@ -56,8 +57,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <ul class="nav-list mb-4">
             <li>
               <a routerLink="/todos" routerLinkActive="active" class="nav-link" (click)="onNavClick()">
-                <i class="pi pi-inbox"></i>
-                <span class="nav-text" *ngIf="!isSidebarCollapsed() || isMobile()">All Tasks</span>
+                <div class="flex align-items-center flex-1">
+                  <i class="pi pi-inbox"></i>
+                  <span class="nav-text ml-2" *ngIf="!isSidebarCollapsed() || isMobile()">All Tasks</span>
+                </div>
+                <span class="badge" *ngIf="notificationService.notificationCount() > 0 && (!isSidebarCollapsed() || isMobile())">
+                  {{ notificationService.notificationCount() }}
+                </span>
+                <span class="badge-dot" *ngIf="notificationService.notificationCount() > 0 && isSidebarCollapsed() && !isMobile()"></span>
               </a>
             </li>
             <li>
@@ -123,6 +130,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
         <div class="sidebar-footer">
           <div class="settings-menu" *ngIf="!isSidebarCollapsed() || isMobile()">
+            <a routerLink="/settings" routerLinkActive="active" class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="onNavClick()">
+              <i class="pi pi-cog"></i>
+              <span>Settings</span>
+            </a>
             <button class="nav-link w-full flex align-items-center gap-3 mb-1" (click)="toggleTheme()">
               <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
               <span>{{ themeService.isDarkMode() ? 'Dark Mode' : 'Light Mode' }}</span>
@@ -133,6 +144,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
             </button>
           </div>
           <div class="settings-menu-collapsed" *ngIf="isSidebarCollapsed() && !isMobile()">
+            <a routerLink="/settings" routerLinkActive="active" class="icon-btn mb-2 w-full flex justify-content-center text-color-secondary hover:text-color transition-colors" title="Settings">
+              <i class="pi pi-cog"></i>
+            </a>
             <button class="icon-btn mb-2 w-full" (click)="toggleTheme()" [title]="themeService.isDarkMode() ? 'Light Mode' : 'Dark Mode'">
                <i class="pi" [class.pi-moon]="themeService.isDarkMode()" [class.pi-sun]="!themeService.isDarkMode()"></i>
             </button>
@@ -615,7 +629,9 @@ export class AppLayoutComponent implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly destroyRef = inject(DestroyRef);
-  
+
+  notificationService = inject(NotificationService);
+
   isSidebarCollapsed = signal(false);
   isMobileMenuOpen = signal(false);
   isMobile = signal(false);
@@ -637,14 +653,14 @@ export class AppLayoutComponent implements OnInit {
   isSavingTag = signal(false);
 
   predefinedColors = [
-    '#ef4444', '#f97316', '#f59e0b', '#84cc16', 
-    '#22c55e', '#10b981', '#06b6d4', '#3b82f6', 
+    '#ef4444', '#f97316', '#f59e0b', '#84cc16',
+    '#22c55e', '#10b981', '#06b6d4', '#3b82f6',
     '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e'
   ];
 
   ngOnInit() {
     this.checkMobile();
-    
+
     if (this.authService.isAuthenticated()) {
       this.tagService.getTags().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(tags => {
         this.userTags.set(tags);
@@ -659,13 +675,13 @@ export class AppLayoutComponent implements OnInit {
       now.setHours(0, 0, 0, 0);
       const in7Days = new Date(now);
       in7Days.setDate(in7Days.getDate() + 7);
-      
+
       const upcoming = todos.filter(t => {
         if (t.isCompleted || !t.dueDate) return false;
         const due = new Date(t.dueDate);
         return due >= now && due <= in7Days;
       }).sort((a, b) => new Date(a.dueDate!).getTime() - new Date(b.dueDate!).getTime());
-      
+
       this.upcomingTodos.set(upcoming);
     });
   }
@@ -675,16 +691,16 @@ export class AppLayoutComponent implements OnInit {
     const now = new Date();
     return due < now;
   }
-  
+
   getDueDateDisplay(dueDate: string): string {
     const due = new Date(dueDate);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     if (due.toDateString() === today.toDateString()) return 'Today';
     if (due.toDateString() === tomorrow.toDateString()) return 'Tom';
-    
+
     return due.toLocaleDateString('en-US', { weekday: 'short' });
   }
 

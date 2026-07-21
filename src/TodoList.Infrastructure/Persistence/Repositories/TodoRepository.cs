@@ -10,10 +10,19 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
     }
 
+    public override async Task<Todo?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await DbContext.Todos
+            .Include(t => t.Tags)
+            .Include(t => t.SubTasks)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Todo>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await DbContext.Todos
             .Include(t => t.Tags)
+            .Include(t => t.SubTasks)
             .Where(t => t.CreatedByUserId == userId)
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -23,6 +32,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         return await DbContext.Todos
             .Include(t => t.Tags)
+            .Include(t => t.SubTasks)
             .FirstOrDefaultAsync(t => t.Id == id && t.CreatedByUserId == userId, cancellationToken);
     }
 
@@ -30,6 +40,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         var query = DbContext.Todos
             .Include(t => t.Tags)
+            .Include(t => t.SubTasks)
             .Where(t => t.CreatedByUserId == userId);
 
         if (isCompleted.HasValue)
