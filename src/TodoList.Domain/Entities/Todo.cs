@@ -14,6 +14,7 @@ public class Todo : Entity<Guid>
     public bool IsCompleted { get; set; }
     public Priority Priority { get; set; }
     public DateTime? DueDate { get; set; }
+    public RecurrenceInterval? Recurrence { get; set; }
 
     /// <summary>
     /// Foreign key for the User who owns this Todo.
@@ -36,6 +37,16 @@ public class Todo : Entity<Guid>
     public virtual ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
 
     /// <summary>
+    /// Collection navigation property for the Comments on this Todo.
+    /// </summary>
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    /// <summary>
+    /// Collection navigation property for the Attachments on this Todo.
+    /// </summary>
+    public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+
+    /// <summary>
     /// Parameterless constructor required by EF Core for materialization.
     /// </summary>
     protected Todo() { }
@@ -50,6 +61,7 @@ public class Todo : Entity<Guid>
         Description = description;
         Priority = priority;
         DueDate = dueDate;
+        Recurrence = RecurrenceInterval.None;
         CreatedByUserId = createdByUserId;
         IsCompleted = false;
         IsDeleted = false;

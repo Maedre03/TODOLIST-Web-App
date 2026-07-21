@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TodoList.Domain.Repositories;
 using TodoList.Infrastructure.Persistence;
 using TodoList.Infrastructure.Persistence.Repositories;
+using TodoList.Application.Common.Interfaces;
+using TodoList.Infrastructure.Services;
 
 namespace TodoList.Infrastructure;
 
@@ -18,6 +20,7 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<ITodoRepository, TodoRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<TodoList.Domain.Repositories.IUnitOfWork>(provider => provider.GetRequiredService<ApplicationDbContext>());
         

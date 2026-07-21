@@ -87,8 +87,14 @@ public class TodosController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateTodoRequest request)
     {
-        var command = new CreateTodoCommand(request.Title, request.Description, request.Priority, request.DueDate, request.TagIds);
-        var id = await _mediator.Send(command);
+        var command = new CreateTodoCommand(
+            request.Title,
+            request.Description,
+            request.Priority,
+            request.DueDate,
+            request.Recurrence,
+            request.TagIds
+        );var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = id }, new { Id = id });
     }
 
@@ -98,8 +104,15 @@ public class TodosController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTodoRequest request)
     {
-        var command = new UpdateTodoCommand(id, request.Title, request.Description, request.Priority, request.DueDate, request.TagIds);
-        await _mediator.Send(command);
+        var command = new UpdateTodoCommand(
+            id,
+            request.Title,
+            request.Description,
+            request.Priority,
+            request.DueDate,
+            request.Recurrence,
+            request.TagIds
+        );await _mediator.Send(command);
         return NoContent();
     }
 

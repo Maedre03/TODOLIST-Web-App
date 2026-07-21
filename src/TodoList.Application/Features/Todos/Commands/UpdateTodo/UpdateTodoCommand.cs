@@ -13,4 +13,5 @@ public record UpdateTodoCommand(
     string Description,
     Priority Priority,
     DateTime? DueDate,
-    List<Guid>? TagIds = null) : IRequest<Unit>;
+    RecurrenceInterval Recurrence,
+    List<Guid> TagIds) : IRequest<Unit>;

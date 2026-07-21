@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TodoList.Domain.Enums;
 
 namespace TodoList.Application.Common.DTOs;
@@ -14,7 +15,10 @@ public class TodoDto
     public bool IsCompleted { get; set; }
     public Priority Priority { get; set; }
     public DateTime? DueDate { get; set; }
+    public RecurrenceInterval Recurrence { get; set; }
     public DateTime CreatedAt { get; set; }
-    public IReadOnlyList<TagDto> Tags { get; set; } = Array.Empty<TagDto>();
-    public IReadOnlyList<SubTaskDto> SubTasks { get; set; } = Array.Empty<SubTaskDto>();
+    public List<TagDto> Tags { get; set; } = new();
+    public List<SubTaskDto> SubTasks { get; set; } = new();
+    public List<CommentDto> Comments { get; set; } = new();
+    public List<AttachmentDto> Attachments { get; set; } = new();
 }

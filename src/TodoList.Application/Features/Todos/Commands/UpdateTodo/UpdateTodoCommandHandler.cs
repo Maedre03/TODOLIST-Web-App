@@ -45,6 +45,7 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, Unit>
         todo.Description = request.Description;
         todo.Priority = request.Priority;
         todo.DueDate = request.DueDate;
+        todo.Recurrence = request.Recurrence;
 
         if (request.TagIds != null)
         {

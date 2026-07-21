@@ -41,6 +41,8 @@ public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, Guid>
             _currentUserService.UserId // Automatically assign to the logged-in user
         );
 
+        todo.Recurrence = request.Recurrence;
+
         if (request.TagIds != null && request.TagIds.Any())
         {
             var userTags = await _tagRepository.GetTagsByUserIdAsync(_currentUserService.UserId, cancellationToken);

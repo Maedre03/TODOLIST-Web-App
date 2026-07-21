@@ -12,4 +12,5 @@ public record CreateTodoCommand(
     string Description,
     Priority Priority,
     DateTime? DueDate,
-    List<Guid>? TagIds = null) : IRequest<Guid>;
+    RecurrenceInterval Recurrence,
+    List<Guid> TagIds) : IRequest<Guid>;
