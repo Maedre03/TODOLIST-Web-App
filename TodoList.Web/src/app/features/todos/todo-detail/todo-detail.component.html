@@ -47,6 +47,21 @@
       <p-card styleClass="surface-card shadow-1">
         <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Checklist</h3>
         
+        <!-- Progress Bar -->
+        <div *ngIf="t.subTasks && t.subTasks.length > 0" class="mb-4">
+          <div class="flex justify-content-between text-sm text-secondary mb-1">
+            <span>Progress</span>
+            <span class="font-medium text-color">
+              {{ getCompletedSubTasksCount(t.subTasks) }} / {{ t.subTasks.length }}
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 border-round h-1rem overflow-hidden border-1 surface-border">
+            <div class="bg-primary h-full transition-all transition-duration-300" 
+                 [style.width]="(getCompletedSubTasksCount(t.subTasks) / t.subTasks.length * 100) + '%'">
+            </div>
+          </div>
+        </div>
+
         <div class="flex align-items-center gap-2 mb-4">
           <input pInputText type="text" 
                  class="w-full md:w-20rem p-inputtext-sm" 
@@ -61,15 +76,38 @@
           No subtasks yet. Add one above to create a checklist.
         </div>
 
-        <ul class="list-none p-0 m-0">
-          <li *ngFor="let st of t.subTasks" class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover border-round transition-colors transition-duration-150">
-            <div class="flex align-items-center gap-3">
+        <ul class="list-none p-0 m-0" cdkDropList (cdkDropListDropped)="dropSubTask($event)">
+          <li *ngFor="let st of t.subTasks" cdkDrag
+              class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover transition-colors transition-duration-150 cursor-move bg-white relative">
+            <div class="subtask-custom-placeholder" *cdkDragPlaceholder></div>
+            <div class="flex align-items-center gap-3 flex-1 w-full overflow-hidden">
+              <i class="pi pi-bars text-400 cursor-move" cdkDragHandle></i>
               <p-checkbox [binary]="true" [ngModel]="st.isCompleted" (onChange)="toggleSubTask(st)"></p-checkbox>
-              <span [class.line-through]="st.isCompleted" [class.text-secondary]="st.isCompleted" class="text-color">
+              
+              <!-- Display Mode -->
+              <span *ngIf="editingSubTaskId() !== st.id" 
+                    [class.line-through]="st.isCompleted" 
+                    [class.text-secondary]="st.isCompleted" 
+                    class="text-color flex-1 cursor-pointer select-none border-1 border-transparent py-1 px-2 border-round hover:surface-200 transition-colors"
+                    (dblclick)="startEditSubTask(st)">
                 {{ st.title }}
               </span>
+
+              <!-- Edit Mode -->
+              <div *ngIf="editingSubTaskId() === st.id" class="flex-1 flex gap-2">
+                <input pInputText type="text" 
+                       class="w-full p-inputtext-sm" 
+                       [ngModel]="editingSubTaskTitle()" 
+                       (ngModelChange)="editingSubTaskTitle.set($event)"
+                       (keydown.enter)="saveEditSubTask(st)"
+                       (keydown.escape)="cancelEditSubTask()"
+                       autofocus />
+                <p-button icon="pi pi-check" styleClass="p-button-success p-button-sm" (onClick)="saveEditSubTask(st)"></p-button>
+                <p-button icon="pi pi-times" styleClass="p-button-secondary p-button-sm" (onClick)="cancelEditSubTask()"></p-button>
+              </div>
+
             </div>
-            <p-button icon="pi pi-trash" styleClass="p-button-danger p-button-text p-button-rounded p-button-sm" (onClick)="deleteSubTask(st)"></p-button>
+            <p-button *ngIf="editingSubTaskId() !== st.id" icon="pi pi-trash" styleClass="p-button-danger p-button-text p-button-rounded p-button-sm ml-2" (onClick)="deleteSubTask(st)"></p-button>
           </li>
         </ul>
       </p-card>

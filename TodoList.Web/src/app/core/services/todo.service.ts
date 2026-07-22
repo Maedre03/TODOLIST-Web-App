@@ -173,6 +173,22 @@ export class TodoService {
   }
 
   /**
+   * Updates the title of a subtask.
+   * Backend endpoint: PUT /api/v1/todos/{id}/subtasks/{subTaskId}
+   */
+  updateSubTask(id: string, subTaskId: string, title: string): Observable<SubTask> {
+    return this.http.put<SubTask>(`${this.baseUrl}/${id}/subtasks/${subTaskId}`, { title });
+  }
+
+  /**
+   * Reorders subtasks.
+   * Backend endpoint: PUT /api/v1/todos/{id}/subtasks/reorder
+   */
+  reorderSubTasks(id: string, subTaskIds: string[]): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}/subtasks/reorder`, { subTaskIds });
+  }
+
+  /**
    * Adds a comment to a todo.
    * Backend endpoint: POST /api/v1/todos/{id}/comments
    */

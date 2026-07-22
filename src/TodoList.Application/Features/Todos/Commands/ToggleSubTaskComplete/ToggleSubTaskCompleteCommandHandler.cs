@@ -34,8 +34,7 @@ public class ToggleSubTaskCompleteCommandHandler : IRequestHandler<ToggleSubTask
         var subTask = todo.SubTasks.FirstOrDefault(s => s.Id == request.SubTaskId);
         if (subTask == null)
         {
-            // For simplicity, reusing the same exception type or we could create a SubTaskNotFoundException
-            throw new TodoNotFoundException(request.SubTaskId);
+            throw new SubTaskNotFoundException(request.SubTaskId);
         }
 
         subTask.IsCompleted = !subTask.IsCompleted;

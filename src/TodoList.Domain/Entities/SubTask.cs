@@ -16,6 +16,11 @@ public class SubTask : Entity<Guid>
     public Guid TodoId { get; set; }
 
     /// <summary>
+    /// Order in which the subtask is displayed.
+    /// </summary>
+    public int DisplayOrder { get; set; }
+
+    /// <summary>
     /// Reference navigation property to the parent Todo.
     /// </summary>
     public virtual Todo Todo { get; set; } = null!;
@@ -28,11 +33,12 @@ public class SubTask : Entity<Guid>
     /// <summary>
     /// Primary constructor for initializing a new SubTask.
     /// </summary>
-    public SubTask(string title, Guid todoId)
+    public SubTask(string title, Guid todoId, int displayOrder = 0)
     {
         Id = Guid.NewGuid();
         Title = title;
         TodoId = todoId;
+        DisplayOrder = displayOrder;
         IsCompleted = false;
         CreatedAt = DateTime.UtcNow;
         IsDeleted = false;

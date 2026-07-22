@@ -15,7 +15,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         return await DbContext.Todos
             .Include(t => t.Tags)
-            .Include(t => t.SubTasks)
+            .Include(t => t.SubTasks.OrderBy(s => s.DisplayOrder))
             .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
@@ -23,7 +23,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         return await DbContext.Todos
             .Include(t => t.Tags)
-            .Include(t => t.SubTasks)
+            .Include(t => t.SubTasks.OrderBy(s => s.DisplayOrder))
             .Where(t => t.CreatedByUserId == userId)
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync(cancellationToken);
@@ -33,7 +33,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         return await DbContext.Todos
             .Include(t => t.Tags)
-            .Include(t => t.SubTasks)
+            .Include(t => t.SubTasks.OrderBy(s => s.DisplayOrder))
             .FirstOrDefaultAsync(t => t.Id == id && t.CreatedByUserId == userId, cancellationToken);
     }
 
@@ -41,7 +41,7 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
     {
         var query = DbContext.Todos
             .Include(t => t.Tags)
-            .Include(t => t.SubTasks)
+            .Include(t => t.SubTasks.OrderBy(s => s.DisplayOrder))
             .Where(t => t.CreatedByUserId == userId);
 
         if (isCompleted.HasValue)

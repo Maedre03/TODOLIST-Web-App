@@ -12,6 +12,8 @@ using TodoList.Application.Features.Todos.Queries.GetTodosPaged;
 using TodoList.Application.Features.Todos.Commands.AddSubTask;
 using TodoList.Application.Features.Todos.Commands.DeleteSubTask;
 using TodoList.Application.Features.Todos.Commands.ToggleSubTaskComplete;
+using TodoList.Application.Features.Todos.Commands.UpdateSubTask;
+using TodoList.Application.Features.Todos.Commands.ReorderSubTasks;
 
 namespace TodoList.Api.Controllers;
 
@@ -168,6 +170,37 @@ public class TodosController : ControllerBase
     }
 
     /// <summary>
+    /// Updates the title of a subtask.
+    /// </summary>
+    [HttpPut("{id:guid}/subtasks/{subTaskId:guid}")]
+    public async Task<IActionResult> UpdateSubTask(Guid id, Guid subTaskId, [FromBody] UpdateSubTaskRequest request)
+    {
+        var command = new UpdateSubTaskCommand 
+        { 
+            TodoId = id, 
+            SubTaskId = subTaskId, 
+            Title = request.Title 
+        };
+        var subTaskDto = await _mediator.Send(command);
+        return Ok(subTaskDto);
+    }
+
+    /// <summary>
+    /// Reorders the subtasks of a todo.
+    /// </summary>
+    [HttpPut("{id:guid}/subtasks/reorder")]
+    public async Task<IActionResult> ReorderSubTasks(Guid id, [FromBody] ReorderSubTasksRequest request)
+    {
+        var command = new ReorderSubTasksCommand 
+        { 
+            TodoId = id, 
+            SubTaskIds = request.SubTaskIds 
+        };
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    /// <summary>
     /// Exports all todos to a CSV file.
     /// </summary>
     [HttpGet("export")]
@@ -202,4 +235,14 @@ public class TodosController : ControllerBase
 public class AddSubTaskRequest
 {
     public string Title { get; set; } = string.Empty;
+}
+
+public class UpdateSubTaskRequest
+{
+    public string Title { get; set; } = string.Empty;
+}
+
+public class ReorderSubTasksRequest
+{
+    public List<Guid> SubTaskIds { get; set; } = new();
 }

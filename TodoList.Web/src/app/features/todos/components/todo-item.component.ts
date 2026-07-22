@@ -50,6 +50,16 @@ import { FormsModule } from '@angular/forms';
 
       <!-- Footer: Priority & Dates -->
       <div class="todo-footer">
+        
+        <!-- Subtask Progress -->
+        <div class="subtask-progress" *ngIf="todo.subTasks && todo.subTasks.length > 0">
+          <i class="pi pi-check-square"></i>
+          <span class="font-medium">{{ completedSubTasksCount }}/{{ todo.subTasks.length }}</span>
+          <div class="mini-progress-bar">
+            <div class="mini-progress-fill" [style.width]="(completedSubTasksCount / todo.subTasks.length * 100) + '%'"></div>
+          </div>
+        </div>
+
         <div class="dates">
           <span *ngIf="todo.dueDate" class="due-date" [class.overdue]="isOverdue()">
             <span *ngIf="isOverdue()" class="pulse-dot"></span>
@@ -230,6 +240,31 @@ import { FormsModule } from '@angular/forms';
       display: inline-block;
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
+    
+    /* Subtask Progress */
+    .subtask-progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-color-secondary);
+      margin-bottom: var(--space-1);
+    }
+    
+    .mini-progress-bar {
+      flex: 1;
+      height: 4px;
+      background: var(--surface-border);
+      border-radius: 2px;
+      overflow: hidden;
+      max-width: 60px;
+    }
+    
+    .mini-progress-fill {
+      height: 100%;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
   `]
 })
 export class TodoItemComponent {
@@ -300,5 +335,10 @@ export class TodoItemComponent {
 
   get needsAttention(): boolean {
     return !this.todo.isCompleted && (this.todo.priority === Priority.Critical || this.isDueSoon());
+  }
+
+  get completedSubTasksCount(): number {
+    if (!this.todo.subTasks) return 0;
+    return this.todo.subTasks.filter(s => s.isCompleted).length;
   }
 }

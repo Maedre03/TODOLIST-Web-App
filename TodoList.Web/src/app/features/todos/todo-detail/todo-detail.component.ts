@@ -17,6 +17,7 @@ import { MessageService } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { FileUploadModule } from 'primeng/fileupload';
 import { environment } from '../../../../environments/environment';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-todo-detail',
@@ -32,6 +33,7 @@ import { environment } from '../../../../environments/environment';
     ToastModule,
     DividerModule,
     FileUploadModule,
+    DragDropModule,
     TodoFormComponent
   ],
   providers: [MessageService],
@@ -52,6 +54,8 @@ export class TodoDetailComponent implements OnInit {
   userTags = signal<Tag[]>([]);
 
   newSubTaskTitle = signal<string>('');
+  editingSubTaskId = signal<string | null>(null);
+  editingSubTaskTitle = signal<string>('');
   newCommentText = signal<string>('');
   isUploading = signal<boolean>(false);
   apiUrl = environment.apiUrl.replace('/api/v1', ''); // Get base server URL for downloads
@@ -102,6 +106,11 @@ export class TodoDetailComponent implements OnInit {
       case 4: return 'danger';
       default: return 'info';
     }
+  }
+
+  getCompletedSubTasksCount(subTasks: SubTask[] | undefined): number {
+    if (!subTasks) return 0;
+    return subTasks.filter(s => s.isCompleted).length;
   }
 
   goBack() {
@@ -185,6 +194,64 @@ export class TodoDetailComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not delete subtask' });
+      }
+    });
+  }
+
+  startEditSubTask(subTask: SubTask) {
+    this.editingSubTaskId.set(subTask.id);
+    this.editingSubTaskTitle.set(subTask.title);
+  }
+
+  cancelEditSubTask() {
+    this.editingSubTaskId.set(null);
+    this.editingSubTaskTitle.set('');
+  }
+
+  saveEditSubTask(subTask: SubTask) {
+    const currentTodo = this.todo();
+    const newTitle = this.editingSubTaskTitle().trim();
+    
+    if (!currentTodo || !newTitle || newTitle === subTask.title) {
+      this.cancelEditSubTask();
+      return;
+    }
+
+    this.todoService.updateSubTask(currentTodo.id, subTask.id, newTitle).subscribe({
+      next: (updatedSubTask) => {
+        const updated = { ...currentTodo };
+        const index = updated.subTasks?.findIndex(s => s.id === subTask.id);
+        if (index !== undefined && index > -1 && updated.subTasks) {
+          updated.subTasks[index] = updatedSubTask;
+        }
+        this.todo.set(updated);
+        this.cancelEditSubTask();
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not update subtask' });
+      }
+    });
+  }
+
+  dropSubTask(event: CdkDragDrop<SubTask[]>) {
+    const currentTodo = this.todo();
+    if (!currentTodo || !currentTodo.subTasks) return;
+
+    const subTasks = [...currentTodo.subTasks];
+    moveItemInArray(subTasks, event.previousIndex, event.currentIndex);
+    
+    // Optimistic UI update
+    const updated = { ...currentTodo, subTasks };
+    this.todo.set(updated);
+
+    const subTaskIds = subTasks.map(s => s.id);
+    this.todoService.reorderSubTasks(currentTodo.id, subTaskIds).subscribe({
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not reorder subtasks' });
+        // Revert on error
+        this.loadTodo(currentTodo.id);
       }
     });
   }

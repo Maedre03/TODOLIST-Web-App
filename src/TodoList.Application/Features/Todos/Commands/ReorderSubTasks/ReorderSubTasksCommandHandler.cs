@@ -1,17 +1,17 @@
 using MediatR;
-using TodoList.Domain.Exceptions;
 using TodoList.Application.Common.Interfaces;
+using TodoList.Domain.Exceptions;
 using TodoList.Domain.Repositories;
 
-namespace TodoList.Application.Features.Todos.Commands.DeleteSubTask;
+namespace TodoList.Application.Features.Todos.Commands.ReorderSubTasks;
 
-public class DeleteSubTaskCommandHandler : IRequestHandler<DeleteSubTaskCommand>
+public class ReorderSubTasksCommandHandler : IRequestHandler<ReorderSubTasksCommand>
 {
     private readonly ITodoRepository _todoRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public DeleteSubTaskCommandHandler(
+    public ReorderSubTasksCommandHandler(
         ITodoRepository todoRepository,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUserService)
@@ -21,7 +21,7 @@ public class DeleteSubTaskCommandHandler : IRequestHandler<DeleteSubTaskCommand>
         _currentUserService = currentUserService;
     }
 
-    public async Task Handle(DeleteSubTaskCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ReorderSubTasksCommand request, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.UserId;
         var todo = await _todoRepository.GetByIdAndUserAsync(request.TodoId, userId, cancellationToken);
@@ -31,13 +31,17 @@ public class DeleteSubTaskCommandHandler : IRequestHandler<DeleteSubTaskCommand>
             throw new TodoNotFoundException(request.TodoId);
         }
 
-        var subTask = todo.SubTasks.FirstOrDefault(s => s.Id == request.SubTaskId);
-        if (subTask == null)
+        // Assign DisplayOrder based on the index in the incoming array
+        for (int i = 0; i < request.SubTaskIds.Count; i++)
         {
-            throw new SubTaskNotFoundException(request.SubTaskId);
+            var id = request.SubTaskIds[i];
+            var subTask = todo.SubTasks.FirstOrDefault(s => s.Id == id);
+            
+            if (subTask != null)
+            {
+                subTask.DisplayOrder = i;
+            }
         }
-
-        todo.SubTasks.Remove(subTask);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
