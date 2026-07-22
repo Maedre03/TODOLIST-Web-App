@@ -494,6 +494,8 @@ aae69ef style: change tag create button severity to primary for visibility
 ### ⚠️ Problems / Blockers
 - **Frontend Bundle Size Budget**: Adding `@angular/cdk` caused the initial bundle size to exceed the strict 500kB warning and 1MB error budget in `angular.json`, breaking the build.
 - How it was resolved: Increased the `maximumWarning` to `2MB` and `maximumError` to `5MB` in `angular.json` to accommodate the CDK components, allowing the build to pass.
+- **Backend SubTask Creation Error**: Clicking "create subtask" threw a 500 Server Error (`DbUpdateConcurrencyException`). EF Core 7/8 has a known behavior where properties configured with `HasDefaultValue` are omitted from `INSERT` statements when the inserted value matches the CLR default (e.g. `0` for `DisplayOrder`), causing an expected row mismatch if the database doesn't correctly return the `OUTPUT` for the generated value. 
+- How it was resolved: Removed `.HasDefaultValue(0)` from EF Core `SubTaskConfiguration`. Updated `AddSubTaskCommandHandler` to explicitly calculate and assign `DisplayOrder = Max + 1` so that newly created subtasks are deliberately appended to the end of the list and fully tracked by EF Core.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
