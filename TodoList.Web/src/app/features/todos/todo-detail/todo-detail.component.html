@@ -81,7 +81,7 @@
               class="subtask-card flex align-items-center justify-content-between p-3 border-1 surface-border border-round surface-card cursor-move relative">
             <div class="subtask-custom-placeholder border-round" *cdkDragPlaceholder></div>
             <div class="flex align-items-center gap-3 flex-1 w-full overflow-hidden">
-              <i class="pi pi-bars text-400 cursor-move" cdkDragHandle></i>
+              <i class="pi pi-bars text-400"></i>
               <p-checkbox [binary]="true" [ngModel]="st.isCompleted" (onChange)="toggleSubTask(st)"></p-checkbox>
               
               <!-- Display Mode -->

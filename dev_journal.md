@@ -503,6 +503,8 @@ aae69ef style: change tag create button severity to primary for visibility
 - How it was resolved: Removed the hardcoded colors in `todo-detail.component.html` and `todo-detail.component.css`. Replaced them with PrimeNG's dynamic CSS variables (`var(--surface-card)`, `var(--surface-hover)`) so the dragged items seamlessly blend into whichever theme is active.
 - **SubTask Hover Styling Bug**: The subtask text span had an internal `hover:surface-200` effect that conflicted with the parent list item's `hover:surface-hover` effect, causing a mismatched "double dark box" effect when hovered.
 - How it was resolved: Changed the subtask list UI from flat rows to distinct card elements (using `subtask-card` class) to match the "classic hover style" used in the main Todo list across the site (`transform: translateY(-2px)`, dynamic border color, and drop shadow).
+- **SubTask Drag Handle Issue**: Users could only drag a subtask by strictly clicking on the left-most 'hamburger' icon (`pi-bars`), which was a very small hit area.
+- How it was resolved: Removed the Angular CDK `cdkDragHandle` directive from the specific icon, which falls back to making the entire `cdkDrag` parent element (the whole subtask card) the drag handle. This allows users to drag the subtask from anywhere on the card.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
