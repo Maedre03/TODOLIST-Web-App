@@ -88,4 +88,9 @@ public class TodoRepository : GenericRepository<Todo, Guid>, ITodoRepository
 
         return (items, totalCount);
     }
+
+    public void AddSubTask(SubTask subTask)
+    {
+        DbContext.SubTasks.Add(subTask);
+    }
 }

@@ -37,8 +37,12 @@ public class AddSubTaskCommandHandler : IRequestHandler<AddSubTaskCommand, SubTa
             throw new TodoNotFoundException(request.TodoId);
         }
 
-        var subTask = new SubTask(request.Title, request.TodoId);
-        todo.SubTasks.Add(subTask);
+        // Calculate the next display order
+        int nextOrder = todo.SubTasks.Any() ? todo.SubTasks.Max(s => s.DisplayOrder) + 1 : 0;
+        
+        var subTask = new SubTask(request.Title, request.TodoId, nextOrder);
+        
+        _todoRepository.AddSubTask(subTask);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

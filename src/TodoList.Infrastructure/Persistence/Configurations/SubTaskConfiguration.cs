@@ -17,8 +17,7 @@ public class SubTaskConfiguration : IEntityTypeConfiguration<SubTask>
             .HasMaxLength(200);
 
         builder.Property(t => t.DisplayOrder)
-            .IsRequired()
-            .HasDefaultValue(0);
+            .IsRequired();
 
         // A SubTask belongs to a Todo
         builder.HasOne(t => t.Todo)
