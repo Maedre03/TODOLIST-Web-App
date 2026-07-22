@@ -24,7 +24,6 @@ public class ApplicationDbContext : DbContext, TodoList.Domain.Repositories.IUni
     public DbSet<Todo> Todos => Set<Todo>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Tag> Tags => Set<Tag>();
-    public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<SubTask> SubTasks => Set<SubTask>();
 

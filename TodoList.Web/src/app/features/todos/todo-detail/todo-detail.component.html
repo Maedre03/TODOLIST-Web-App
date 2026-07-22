@@ -143,39 +143,7 @@
         </div>
       </p-card>
 
-      <!-- Comments Section -->
-      <p-card styleClass="surface-card shadow-1 mt-4 mb-4">
-        <h3 class="text-xl font-medium mt-0 mb-4 border-bottom-1 surface-border pb-2">Comments</h3>
-        
-        <div class="flex gap-3 mb-4">
-          <div class="flex-1">
-            <input pInputText type="text" 
-                   class="w-full" 
-                   placeholder="Write a comment..." 
-                   [ngModel]="newCommentText()" 
-                   (ngModelChange)="newCommentText.set($event)"
-                   (keydown.enter)="addComment()" />
-          </div>
-          <p-button icon="pi pi-send" (onClick)="addComment()" [disabled]="!newCommentText().trim()"></p-button>
-        </div>
 
-        <div *ngIf="!t.comments || t.comments.length === 0" class="text-secondary font-italic text-sm py-2">
-          No comments yet. Be the first to comment!
-        </div>
-
-        <div class="flex flex-column gap-3">
-          <div *ngFor="let comment of t.comments" class="p-3 border-round surface-ground border-1 surface-border">
-            <div class="flex justify-content-between align-items-center mb-2">
-              <div class="flex align-items-center gap-2">
-                <span class="font-semibold text-color">{{ comment.createdByUserName }}</span>
-                <span class="text-secondary text-xs">{{ comment.createdAt | date:'short' }}</span>
-              </div>
-              <p-button icon="pi pi-times" styleClass="p-button-text p-button-rounded p-button-danger p-button-sm m-0 p-0 h-auto w-auto" (onClick)="deleteComment(comment)"></p-button>
-            </div>
-            <p class="m-0 text-color-secondary line-height-3">{{ comment.text }}</p>
-          </div>
-        </div>
-      </p-card>
 
     </div>
   </div>

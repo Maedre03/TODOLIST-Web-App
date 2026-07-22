@@ -13,7 +13,6 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DatePickerModule } from 'primeng/datepicker';
-import { FileUpload } from 'primeng/fileupload';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { TodoService } from '../../../core/services/todo.service';
@@ -53,19 +52,6 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
           <p class="text-secondary">Manage and track your daily goals.</p>
         </div>
         <div class="header-actions">
-          <p-button 
-            label="Export" 
-            icon="pi pi-download" 
-            (onClick)="exportTasks()" 
-            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex" />
-          
-          <p-button 
-            label="Import" 
-            icon="pi pi-upload"
-            (onClick)="fileInput.click()"
-            styleClass="p-button-secondary p-button-outlined hidden md:inline-flex" />
-          <input #fileInput type="file" accept=".csv" style="display: none;" (change)="onFileSelected($event)" />
-
           <p-button 
             label="New Task" 
             icon="pi pi-plus" 
@@ -857,42 +843,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // --- Export / Import ---
 
-  exportTasks() {
-    this.todoService.exportTodos().subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'todos-export.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not export tasks' });
-      }
-    });
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
-    const file = input.files[0];
-
-    this.todoService.importTodos(file).subscribe({
-      next: (res) => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message || 'Tasks imported successfully' });
-        this.loadTodos();
-      },
-      error: (err) => {
-        console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not import tasks' });
-      }
-    });
-  }
 
   onToggleComplete(todo: Todo): void {
     const previousState = todo.isCompleted;

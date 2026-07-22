@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TodoService } from '../../../core/services/todo.service';
 import { TagService } from '../../../core/services/tag.service';
-import { Todo, SubTask, TodoComment, Attachment } from '../../../core/models/todo.model';
+import { Todo, SubTask, Attachment } from '../../../core/models/todo.model';
 import { Tag } from '../../../core/models/tag.model';
 import { TodoFormComponent } from '../components/todo-form.component';
 import { ButtonModule } from 'primeng/button';
@@ -56,7 +56,6 @@ export class TodoDetailComponent implements OnInit {
   newSubTaskTitle = signal<string>('');
   editingSubTaskId = signal<string | null>(null);
   editingSubTaskTitle = signal<string>('');
-  newCommentText = signal<string>('');
   isUploading = signal<boolean>(false);
   apiUrl = environment.apiUrl.replace('/api/v1', ''); // Get base server URL for downloads
 
@@ -256,42 +255,7 @@ export class TodoDetailComponent implements OnInit {
     });
   }
 
-  // --- Comments ---
-  addComment() {
-    const text = this.newCommentText().trim();
-    const currentTodo = this.todo();
-    if (!text || !currentTodo) return;
 
-    this.todoService.addComment(currentTodo.id, text).subscribe({
-      next: (comment) => {
-        const updated = { ...currentTodo };
-        updated.comments = [...(updated.comments || []), comment];
-        this.todo.set(updated);
-        this.newCommentText.set('');
-      },
-      error: (err) => {
-        console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not add comment' });
-      }
-    });
-  }
-
-  deleteComment(comment: TodoComment) {
-    const currentTodo = this.todo();
-    if (!currentTodo) return;
-
-    this.todoService.deleteComment(currentTodo.id, comment.id).subscribe({
-      next: () => {
-        const updated = { ...currentTodo };
-        updated.comments = updated.comments?.filter(c => c.id !== comment.id);
-        this.todo.set(updated);
-      },
-      error: (err) => {
-        console.error(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Could not delete comment' });
-      }
-    });
-  }
 
   // --- Attachments ---
   onUploadAttachment(event: any) {

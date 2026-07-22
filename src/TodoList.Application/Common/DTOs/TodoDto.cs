@@ -19,6 +19,5 @@ public class TodoDto
     public DateTime CreatedAt { get; set; }
     public List<TagDto> Tags { get; set; } = new();
     public List<SubTaskDto> SubTasks { get; set; } = new();
-    public List<CommentDto> Comments { get; set; } = new();
     public List<AttachmentDto> Attachments { get; set; } = new();
 }

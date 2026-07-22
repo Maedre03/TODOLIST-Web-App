@@ -37,11 +37,6 @@ public class Todo : Entity<Guid>
     public virtual ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
 
     /// <summary>
-    /// Collection navigation property for the Comments on this Todo.
-    /// </summary>
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-    /// <summary>
     /// Collection navigation property for the Attachments on this Todo.
     /// </summary>
     public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();

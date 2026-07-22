@@ -10,7 +10,6 @@ import {
   PaginatedResult,
   TodoPagedParams,
   SubTask,
-  TodoComment,
   Attachment
 } from '../models/todo.model';
 
@@ -188,28 +187,7 @@ export class TodoService {
     return this.http.put<void>(`${this.baseUrl}/${id}/subtasks/reorder`, { subTaskIds });
   }
 
-  /**
-   * Adds a comment to a todo.
-   * Backend endpoint: POST /api/v1/todos/{id}/comments
-   */
-  addComment(id: string, text: string): Observable<TodoComment> {
-    return this.http.post<TodoComment>(`${this.baseUrl}/${id}/comments`, { text }).pipe(
-      map(c => {
-        if (c.createdAt && !c.createdAt.endsWith('Z')) {
-          c.createdAt += 'Z';
-        }
-        return c;
-      })
-    );
-  }
 
-  /**
-   * Deletes a comment from a todo.
-   * Backend endpoint: DELETE /api/v1/todos/{id}/comments/{commentId}
-   */
-  deleteComment(id: string, commentId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}/comments/${commentId}`);
-  }
 
   /**
    * Uploads an attachment to a todo.
@@ -237,21 +215,5 @@ export class TodoService {
     return this.http.delete<void>(`${this.baseUrl}/${id}/attachments/${attachmentId}`);
   }
 
-  /**
-   * Exports all todos as a CSV Blob.
-   * Backend endpoint: GET /api/v1/todos/export
-   */
-  exportTodos(): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/export`, { responseType: 'blob' });
-  }
 
-  /**
-   * Imports todos from a CSV file.
-   * Backend endpoint: POST /api/v1/todos/import
-   */
-  importTodos(file: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-    return this.http.post<any>(`${this.baseUrl}/import`, formData);
-  }
 }

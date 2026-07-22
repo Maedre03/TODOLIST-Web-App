@@ -39,7 +39,6 @@ export interface Todo {
   createdAt: string;
   tags?: Tag[];
   subTasks?: SubTask[];
-  comments?: TodoComment[];
   attachments?: Attachment[];
 }
 
@@ -118,16 +117,7 @@ export interface SubTask {
   displayOrder: number;
 }
 
-/**
- * Comment model
- */
-export interface TodoComment {
-  id: string;
-  text: string;
-  createdAt: string;
-  createdByUserId: string;
-  createdByUserName: string;
-}
+
 
 /**
  * Attachment model
