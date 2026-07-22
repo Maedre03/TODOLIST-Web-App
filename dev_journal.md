@@ -501,6 +501,8 @@ aae69ef style: change tag create button severity to primary for visibility
 - How it was resolved: Discovered that `GetTodoByIdQueryHandler`, `GetAllTodosQueryHandler`, and `GetTodosPagedQueryHandler` were manually mapping `Todo` to `TodoDto`, explicitly ignoring all nested collections. Updated all three query handlers to use `AutoMapper` (`_mapper.Map<TodoDto>(...)`), ensuring all nested collections like `SubTasks` are accurately returned.
 - **SubTask Drag and Drop Styling Bug**: The CDK drag preview had a hardcoded `bg-white` class and a hardcoded `#f8f9fa` placeholder background, which looked completely broken and out-of-place when the app was in dark mode.
 - How it was resolved: Removed the hardcoded colors in `todo-detail.component.html` and `todo-detail.component.css`. Replaced them with PrimeNG's dynamic CSS variables (`var(--surface-card)`, `var(--surface-hover)`) so the dragged items seamlessly blend into whichever theme is active.
+- **SubTask Hover Styling Bug**: The subtask text span had an internal `hover:surface-200` effect that conflicted with the parent list item's `hover:surface-hover` effect, causing a mismatched "double dark box" effect when hovered.
+- How it was resolved: Removed the `hover:surface-200` class from the inner text `<span>`. The row now gracefully shows a single hover effect without conflicting with inner padding.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
