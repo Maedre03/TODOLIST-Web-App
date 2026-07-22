@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TodoService } from '../../../core/services/todo.service';
+import { TagService } from '../../../core/services/tag.service';
 import { Todo, SubTask, TodoComment, Attachment } from '../../../core/models/todo.model';
+import { Tag } from '../../../core/models/tag.model';
+import { TodoFormComponent } from '../components/todo-form.component';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,7 +31,8 @@ import { environment } from '../../../../environments/environment';
     CardModule,
     ToastModule,
     DividerModule,
-    FileUploadModule
+    FileUploadModule,
+    TodoFormComponent
   ],
   providers: [MessageService],
   templateUrl: './todo-detail.component.html',
@@ -39,9 +43,13 @@ export class TodoDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly todoService = inject(TodoService);
   private readonly messageService = inject(MessageService);
+  private readonly tagService = inject(TagService);
 
   todo = signal<Todo | null>(null);
   isLoading = signal<boolean>(true);
+  isSaving = signal<boolean>(false);
+  isFormVisible = false;
+  userTags = signal<Tag[]>([]);
 
   newSubTaskTitle = signal<string>('');
   newCommentText = signal<string>('');
@@ -49,6 +57,8 @@ export class TodoDetailComponent implements OnInit {
   apiUrl = environment.apiUrl.replace('/api/v1', ''); // Get base server URL for downloads
 
   ngOnInit() {
+    this.tagService.getTags().subscribe(tags => this.userTags.set(tags));
+
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -96,6 +106,30 @@ export class TodoDetailComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/todos']);
+  }
+
+  openEditForm() {
+    this.isFormVisible = true;
+  }
+
+  onSaveForm(formValue: any) {
+    const current = this.todo();
+    if (!current) return;
+    
+    this.isSaving.set(true);
+    this.todoService.update(current.id, formValue).subscribe({
+      next: () => {
+        this.isSaving.set(false);
+        this.isFormVisible = false;
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Task updated successfully' });
+        this.loadTodo(current.id); // Reload the task to get updated data
+      },
+      error: (err) => {
+        this.isSaving.set(false);
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update task' });
+      }
+    });
   }
 
   addSubTask() {

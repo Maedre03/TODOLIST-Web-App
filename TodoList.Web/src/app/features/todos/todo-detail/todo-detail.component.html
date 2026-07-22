@@ -22,7 +22,10 @@
             <span *ngIf="t.dueDate"><i class="pi pi-clock mr-1"></i> Due {{ t.dueDate | date:'mediumDate' }}</span>
           </div>
         </div>
-        <p-tag [value]="getPriorityLabel(t.priority)" [severity]="getPrioritySeverity(t.priority)"></p-tag>
+        <div class="flex align-items-center gap-3">
+          <p-button icon="pi pi-pencil" label="Edit" styleClass="p-button-outlined p-button-secondary" (onClick)="openEditForm()"></p-button>
+          <p-tag [value]="getPriorityLabel(t.priority)" [severity]="getPrioritySeverity(t.priority)"></p-tag>
+        </div>
       </div>
 
       <p-card styleClass="mb-5 surface-card shadow-1">
@@ -139,3 +142,14 @@
     </div>
   </div>
 </div>
+
+<!-- Edit Form Dialog -->
+<app-todo-form 
+  *ngIf="todo()"
+  [visible]="isFormVisible" 
+  (visibleChange)="isFormVisible = $event"
+  [todoToEdit]="todo()"
+  [isSaving]="isSaving()"
+  [userTags]="userTags()"
+  (save)="onSaveForm($event)">
+</app-todo-form>
