@@ -145,7 +145,7 @@ import { TooltipModule } from 'primeng/tooltip';
                 </div>
               </ng-template>
             </p-multiselect>
-            <p-button icon="pi pi-plus" (onClick)="showInlineTagForm = true" [text]="true" [rounded]="true" severity="secondary" pTooltip="Create new tag"></p-button>
+            <p-button icon="pi pi-plus" (onClick)="showInlineTagForm = true" [text]="true" [rounded]="true" severity="primary" pTooltip="Create new tag"></p-button>
           </div>
 
           <div *ngIf="showInlineTagForm" class="flex gap-2 align-items-center mt-2 p-2 border-round surface-ground border-1 surface-border">
