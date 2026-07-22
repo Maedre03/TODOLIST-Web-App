@@ -499,3 +499,6 @@ aae69ef style: change tag create button severity to primary for visibility
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
+- **Backend SubTask Creation Error (Part 2)**: The subtask creation still failed with `DbUpdateConcurrencyException` even after removing the default value for `DisplayOrder`. By default, Entity Framework Core configures `Guid` primary keys as `ValueGeneratedOnAdd()`. Because we were manually assigning `Id = Guid.NewGuid()` in the constructor, EF Core interpreted the entity as already existing and attempted to issue an `UPDATE` instead of an `INSERT`, which failed because the row didn't exist.
+- How it was resolved: Added `builder.Property(t => t.Id).ValueGeneratedNever();` to `SubTaskConfiguration` to inform EF Core that we generate the ID explicitly in the application, forcing an `INSERT` statement instead.
+
