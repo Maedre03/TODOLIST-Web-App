@@ -88,7 +88,7 @@
               <span *ngIf="editingSubTaskId() !== st.id" 
                     [class.line-through]="st.isCompleted" 
                     [class.text-secondary]="st.isCompleted" 
-                    class="text-color flex-1 cursor-pointer select-none border-1 border-transparent py-1 px-2 border-round hover:surface-200 transition-colors"
+                    class="text-color flex-1 cursor-pointer select-none border-1 border-transparent py-1 px-2 border-round transition-colors"
                     (dblclick)="startEditSubTask(st)">
                 {{ st.title }}
               </span>
