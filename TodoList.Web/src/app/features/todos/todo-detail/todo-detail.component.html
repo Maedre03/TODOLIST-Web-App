@@ -78,7 +78,7 @@
 
         <ul class="list-none p-0 m-0" cdkDropList (cdkDropListDropped)="dropSubTask($event)">
           <li *ngFor="let st of t.subTasks" cdkDrag
-              class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover transition-colors transition-duration-150 cursor-move bg-white relative">
+              class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover transition-colors transition-duration-150 cursor-move relative">
             <div class="subtask-custom-placeholder" *cdkDragPlaceholder></div>
             <div class="flex align-items-center gap-3 flex-1 w-full overflow-hidden">
               <i class="pi pi-bars text-400 cursor-move" cdkDragHandle></i>
