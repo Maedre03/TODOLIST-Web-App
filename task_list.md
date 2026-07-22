@@ -312,14 +312,14 @@ Phase 7+8 (Security & DevOps) ← Polish before "shipping".
 - [x] Notification Modal/Dropdown in Navbar (Currently only a badge exists, maybe a popup list of notifications is needed)
 
 ### Phase 11 — Tier 2 (Advanced Organization)
-- [x] **Task Comments/Notes**: Allow users to add discussion notes/comments to a task.
+- [ ] ~~**Task Comments/Notes**: Allow users to add discussion notes/comments to a task.~~ (Deleted per user request)
 - [x] **File Attachments**: Upload and link files (PDFs, images) to tasks.
 - [x] **Recurring Tasks**: Mark a task to repeat daily, weekly, or monthly.
 - [x] **Advanced Filtering**: Filter by exact strings (search).
-- [x] **Frontend Integration**: Implement the UI for comments, attachments, recurrence, and search.
+- [x] **Frontend Integration**: Implement the UI for attachments, recurrence, and search.
 
 ## 🚀 PHASE 12 — Extra Features (Tier 3: Productivity & Sync)
 - [x] **Calendar View**: A monthly calendar view to visualize task distribution.
 - [x] **Offline Support (PWA)**: Make the Angular app a Progressive Web App (PWA) so tasks can be viewed offline and synced when reconnected.
 - [x] **Email Notifications**: Send a daily digest of due/overdue tasks using a background worker (e.g., Quartz.NET or Hangfire) and an email provider (SendGrid/SMTP).
-- [x] **Export/Import Tasks**: Ability to export tasks to CSV/PDF or import from other tools.
+- [ ] ~~**Export/Import Tasks**: Ability to export tasks to CSV/PDF or import from other tools.~~ (Deleted per user request)
