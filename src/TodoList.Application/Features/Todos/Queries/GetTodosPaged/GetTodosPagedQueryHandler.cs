@@ -1,4 +1,6 @@
+using AutoMapper;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -16,11 +18,13 @@ public class GetTodosPagedQueryHandler : IRequestHandler<GetTodosPagedQuery, Pag
 {
     private readonly ITodoRepository _todoRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IMapper _mapper;
 
-    public GetTodosPagedQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService)
+    public GetTodosPagedQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService, IMapper mapper)
     {
         _todoRepository = todoRepository;
         _currentUserService = currentUserService;
+        _mapper = mapper;
     }
 
     public async Task<PaginatedList<TodoDto>> Handle(GetTodosPagedQuery request, CancellationToken cancellationToken)
@@ -38,22 +42,7 @@ public class GetTodosPagedQueryHandler : IRequestHandler<GetTodosPagedQuery, Pag
             request.TagId,
             cancellationToken);
 
-        var dtoItems = items.Select(t => new TodoDto
-        {
-            Id = t.Id,
-            Title = t.Title,
-            Description = t.Description,
-            IsCompleted = t.IsCompleted,
-            Priority = t.Priority,
-            DueDate = t.DueDate,
-            CreatedAt = t.CreatedAt,
-            Tags = t.Tags.Select(tag => new TagDto
-            {
-                Id = tag.Id,
-                Name = tag.Name,
-                Color = tag.Color
-            }).ToList()
-        }).ToList();
+        var dtoItems = _mapper.Map<List<TodoDto>>(items);
 
         return new PaginatedList<TodoDto>(dtoItems, totalCount, request.PageNumber, request.PageSize);
     }

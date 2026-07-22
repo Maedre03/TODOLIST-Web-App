@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using System.Linq;
 using System.Collections.Generic;
@@ -16,26 +17,19 @@ public class GetAllTodosQueryHandler : IRequestHandler<GetAllTodosQuery, IReadOn
 {
     private readonly ITodoRepository _todoRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IMapper _mapper;
 
-    public GetAllTodosQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService)
+    public GetAllTodosQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService, IMapper mapper)
     {
         _todoRepository = todoRepository;
         _currentUserService = currentUserService;
+        _mapper = mapper;
     }
 
     public async Task<IReadOnlyList<TodoDto>> Handle(GetAllTodosQuery request, CancellationToken cancellationToken)
     {
         var todos = await _todoRepository.GetByUserIdAsync(_currentUserService.UserId, cancellationToken);
 
-        return todos.Select(t => new TodoDto
-        {
-            Id = t.Id,
-            Title = t.Title,
-            Description = t.Description,
-            IsCompleted = t.IsCompleted,
-            Priority = t.Priority,
-            DueDate = t.DueDate,
-            CreatedAt = t.CreatedAt
-        }).ToList();
+        return _mapper.Map<List<TodoDto>>(todos);
     }
 }

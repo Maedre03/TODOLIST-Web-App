@@ -1,3 +1,4 @@
+using AutoMapper;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,11 +16,13 @@ public class GetTodoByIdQueryHandler : IRequestHandler<GetTodoByIdQuery, TodoDto
 {
     private readonly ITodoRepository _todoRepository;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IMapper _mapper;
 
-    public GetTodoByIdQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService)
+    public GetTodoByIdQueryHandler(ITodoRepository todoRepository, ICurrentUserService currentUserService, IMapper mapper)
     {
         _todoRepository = todoRepository;
         _currentUserService = currentUserService;
+        _mapper = mapper;
     }
 
     public async Task<TodoDto> Handle(GetTodoByIdQuery request, CancellationToken cancellationToken)
@@ -31,15 +34,6 @@ public class GetTodoByIdQueryHandler : IRequestHandler<GetTodoByIdQuery, TodoDto
             throw new TodoNotFoundException(request.Id);
         }
 
-        return new TodoDto
-        {
-            Id = todo.Id,
-            Title = todo.Title,
-            Description = todo.Description,
-            IsCompleted = todo.IsCompleted,
-            Priority = todo.Priority,
-            DueDate = todo.DueDate,
-            CreatedAt = todo.CreatedAt
-        };
+        return _mapper.Map<TodoDto>(todo);
     }
 }
