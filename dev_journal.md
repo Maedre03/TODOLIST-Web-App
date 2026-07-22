@@ -499,6 +499,8 @@ aae69ef style: change tag create button severity to primary for visibility
 
 - **Missing Nested Collections in API Response**: The frontend UI lost the subtasks (as well as tags, comments, etc.) after a page refresh, even though the creation API returned them and they were successfully persisted to the database.
 - How it was resolved: Discovered that `GetTodoByIdQueryHandler`, `GetAllTodosQueryHandler`, and `GetTodosPagedQueryHandler` were manually mapping `Todo` to `TodoDto`, explicitly ignoring all nested collections. Updated all three query handlers to use `AutoMapper` (`_mapper.Map<TodoDto>(...)`), ensuring all nested collections like `SubTasks` are accurately returned.
+- **SubTask Drag and Drop Styling Bug**: The CDK drag preview had a hardcoded `bg-white` class and a hardcoded `#f8f9fa` placeholder background, which looked completely broken and out-of-place when the app was in dark mode.
+- How it was resolved: Removed the hardcoded colors in `todo-detail.component.html` and `todo-detail.component.css`. Replaced them with PrimeNG's dynamic CSS variables (`var(--surface-card)`, `var(--surface-hover)`) so the dragged items seamlessly blend into whichever theme is active.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
