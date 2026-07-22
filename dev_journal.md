@@ -505,6 +505,8 @@ aae69ef style: change tag create button severity to primary for visibility
 - How it was resolved: Changed the subtask list UI from flat rows to distinct card elements (using `subtask-card` class) to match the "classic hover style" used in the main Todo list across the site (`transform: translateY(-2px)`, dynamic border color, and drop shadow).
 - **SubTask Drag Handle Issue**: Users could only drag a subtask by strictly clicking on the left-most 'hamburger' icon (`pi-bars`), which was a very small hit area.
 - How it was resolved: Removed the Angular CDK `cdkDragHandle` directive from the specific icon, which falls back to making the entire `cdkDrag` parent element (the whole subtask card) the drag handle. This allows users to drag the subtask from anywhere on the card.
+- **SubTask Drag Placeholder Bug**: When dragging a subtask, the entire parent container was being filled with a large dark gray block that obscured the other subtasks.
+- How it was resolved: Removed `position: absolute; top: 0; bottom: 0; left: 0; right: 0;` from the `.subtask-custom-placeholder` CSS class. Since the subtask list was changed from a flat `ul` to a flex layout with gaps, the absolute positioning caused the placeholder to expand to the nearest relatively positioned ancestor instead of occupying just its designated spot in the flex flow.
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
