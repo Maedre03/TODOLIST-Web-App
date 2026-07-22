@@ -497,8 +497,9 @@ aae69ef style: change tag create button severity to primary for visibility
 - **Backend SubTask Creation Error**: Clicking "create subtask" threw a 500 Server Error (`DbUpdateConcurrencyException`). EF Core 7/8 has a known behavior where properties configured with `HasDefaultValue` are omitted from `INSERT` statements when the inserted value matches the CLR default (e.g. `0` for `DisplayOrder`), causing an expected row mismatch if the database doesn't correctly return the `OUTPUT` for the generated value. 
 - How it was resolved: Removed `.HasDefaultValue(0)` from EF Core `SubTaskConfiguration`. Updated `AddSubTaskCommandHandler` to explicitly calculate and assign `DisplayOrder = Max + 1` so that newly created subtasks are deliberately appended to the end of the list and fully tracked by EF Core.
 
+- **Missing Nested Collections in API Response**: The frontend UI lost the subtasks (as well as tags, comments, etc.) after a page refresh, even though the creation API returned them and they were successfully persisted to the database.
+- How it was resolved: Discovered that `GetTodoByIdQueryHandler`, `GetAllTodosQueryHandler`, and `GetTodosPagedQueryHandler` were manually mapping `Todo` to `TodoDto`, explicitly ignoring all nested collections. Updated all three query handlers to use `AutoMapper` (`_mapper.Map<TodoDto>(...)`), ensuring all nested collections like `SubTasks` are accurately returned.
+
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
-- **Backend SubTask Creation Error (Part 2)**: The subtask creation still failed with `DbUpdateConcurrencyException` even after removing the default value for `DisplayOrder`. By default, Entity Framework Core configures `Guid` primary keys as `ValueGeneratedOnAdd()`. Because we were manually assigning `Id = Guid.NewGuid()` in the constructor, EF Core interpreted the entity as already existing and attempted to issue an `UPDATE` instead of an `INSERT`, which failed because the row didn't exist.
-- How it was resolved: Added `builder.Property(t => t.Id).ValueGeneratedNever();` to `SubTaskConfiguration` to inform EF Core that we generate the ID explicitly in the application, forcing an `INSERT` statement instead.
 
