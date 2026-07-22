@@ -502,7 +502,7 @@ aae69ef style: change tag create button severity to primary for visibility
 - **SubTask Drag and Drop Styling Bug**: The CDK drag preview had a hardcoded `bg-white` class and a hardcoded `#f8f9fa` placeholder background, which looked completely broken and out-of-place when the app was in dark mode.
 - How it was resolved: Removed the hardcoded colors in `todo-detail.component.html` and `todo-detail.component.css`. Replaced them with PrimeNG's dynamic CSS variables (`var(--surface-card)`, `var(--surface-hover)`) so the dragged items seamlessly blend into whichever theme is active.
 - **SubTask Hover Styling Bug**: The subtask text span had an internal `hover:surface-200` effect that conflicted with the parent list item's `hover:surface-hover` effect, causing a mismatched "double dark box" effect when hovered.
-- How it was resolved: Removed the `hover:surface-200` class from the inner text `<span>`. The row now gracefully shows a single hover effect without conflicting with inner padding.
+- How it was resolved: Changed the subtask list UI from flat rows to distinct card elements (using `subtask-card` class) to match the "classic hover style" used in the main Todo list across the site (`transform: translateY(-2px)`, dynamic border color, and drop shadow).
 
 ### 📌 Tomorrow / Next Session
 - [ ] Any remaining user feature requests.
