@@ -174,7 +174,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
         }
         <!-- Kanban View -->
         @else if (viewMode() === 'kanban') {
-          <div class="kanban-board">
+          <div class="kanban-board" [class.reverse-columns]="isLowestPrioritySort">
             <!-- Critical Priority Column -->
             <div class="kanban-column">
               <div class="column-header">
@@ -441,6 +441,10 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
       padding-bottom: var(--space-4);
     }
 
+    .kanban-board.reverse-columns {
+      flex-direction: row-reverse;
+    }
+
     .kanban-column {
       flex: 1;
       min-width: 0;
@@ -535,6 +539,9 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state.comp
         flex-direction: column;
         align-items: stretch;
       }
+      .kanban-board.reverse-columns {
+        flex-direction: column-reverse;
+      }
       .kanban-column {
         max-height: none;
       }
@@ -624,6 +631,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
     { label: 'Lowest Priority', value: { sortBy: 'Priority', desc: false } }
   ];
   selectedSort = this.sortOptions[0].value;
+
+  get isLowestPrioritySort(): boolean {
+    return this.selectedSort.sortBy === 'Priority' && !this.selectedSort.desc;
+  }
 
   // Form Dialog State
   isFormVisible = false;
