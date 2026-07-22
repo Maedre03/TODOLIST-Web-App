@@ -424,15 +424,16 @@ c646dff journal: Day 3 - update notification fix
 
 ### 🔀 Git Commits / Version
 ```
+9f4c6fc feat: reverse kanban columns on lowest priority sort
+33ed474 journal: Day 3 - priority sort fix update
 0c996a2 fix: correct priority sorting logic in TodoRepository
 33701b9 journal: Day 3 - update priority sort fix
 03635f0 fix: resolve priority sorting issue
-e34eddf journal: Day 3 - update priority sort fix
-4dc397c fix: resolve priority sorting bug by mapping enum strings to integers in EF Core query
 ```
 
 ### ✅ Tasks Completed
 - Phase 12 (Polish) — Addressed a suite of user-reported UI/UX bugs in the Angular frontend.
+- **Feature Update**: Implemented dynamic Kanban board column ordering. When the user sorts by "Lowest Priority", the flex layout reverses using `flex-direction: row-reverse` (or `column-reverse` on mobile), so the columns render visually from Low to Critical (left-to-right) without disrupting the underlying drag-and-drop mechanics.
 - **Bug Fix**: Fixed priority sorting bug in `TodoRepository` again. Previous fixes didn't correctly implement the ternary conditional mapping for EF Core string-to-enum translations, leaving it as an invalid `(int)` cast. Implemented proper `t.Priority == Priority.Critical ? 4 : ...` mapping.
 - Fixed notification bell overlapping with the user profile on smaller screens by increasing flex gap.
 - Fixed empty notification dropdown issue where the list said '3 notifications' but was blank inside the PrimeNG `p-popover`. This was resolved by binding `dueTodos` directly via the component computed property.
