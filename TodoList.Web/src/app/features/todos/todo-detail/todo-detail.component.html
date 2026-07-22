@@ -76,10 +76,10 @@
           No subtasks yet. Add one above to create a checklist.
         </div>
 
-        <ul class="list-none p-0 m-0" cdkDropList (cdkDropListDropped)="dropSubTask($event)">
+        <ul class="flex flex-column gap-2 list-none p-0 m-0" cdkDropList (cdkDropListDropped)="dropSubTask($event)">
           <li *ngFor="let st of t.subTasks" cdkDrag
-              class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border hover:surface-hover transition-colors transition-duration-150 cursor-move relative">
-            <div class="subtask-custom-placeholder" *cdkDragPlaceholder></div>
+              class="subtask-card flex align-items-center justify-content-between p-3 border-1 surface-border border-round surface-card cursor-move relative">
+            <div class="subtask-custom-placeholder border-round" *cdkDragPlaceholder></div>
             <div class="flex align-items-center gap-3 flex-1 w-full overflow-hidden">
               <i class="pi pi-bars text-400 cursor-move" cdkDragHandle></i>
               <p-checkbox [binary]="true" [ngModel]="st.isCompleted" (onChange)="toggleSubTask(st)"></p-checkbox>
@@ -88,7 +88,7 @@
               <span *ngIf="editingSubTaskId() !== st.id" 
                     [class.line-through]="st.isCompleted" 
                     [class.text-secondary]="st.isCompleted" 
-                    class="text-color flex-1 cursor-pointer select-none border-1 border-transparent py-1 px-2 border-round transition-colors"
+                    class="text-color flex-1 cursor-pointer select-none border-1 border-transparent py-1 px-2 transition-colors"
                     (dblclick)="startEditSubTask(st)">
                 {{ st.title }}
               </span>

@@ -46,3 +46,13 @@
 .cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+.subtask-card {
+  transition: all var(--transition-base);
+}
+
+.subtask-card:hover {
+  border-color: var(--primary-color-hover) !important;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
